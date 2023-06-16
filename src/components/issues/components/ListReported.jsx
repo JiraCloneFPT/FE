@@ -1,6 +1,6 @@
 import { Menu, Select } from 'antd';
 import { useEffect, useState } from 'react';
-import { GetIssueService } from '../../../services/IssueService';
+import { GetIssueByUserService } from '../../../services/IssueService';
 
 const handleChange = (value) => {
     console.log(`selected ${value}`);
@@ -42,7 +42,7 @@ export default function ListReported() {
     const [menu, setMenu] = useState([]);
     // const [items, setItems] = useState();
     const handleGetData = async () => {
-        const result = await GetIssueService('1');
+        const result = await GetIssueByUserService('1');
         if (result.status === 200) {
             var items = [];
             result.data.map((item) => {

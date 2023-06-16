@@ -1,24 +1,11 @@
 import { Layout, theme } from 'antd';
-import { useEffect, useState } from 'react';
-import { GetIssueService } from '../../../services/IssueService';
+import HeaderUser from '../../home/Header';
 import Detail from '../components/Detail';
 import HeaderIssue from '../components/HeaderIssue';
-const { Content } = Layout;
-import HeaderUser from '../../home/header';
 import Slider from '../components/Slider';
+const { Content } = Layout;
 
 const AllIssue = () => {
-    // eslint-disable-next-line no-unused-vars
-    const [data, setData] = useState([]);
-    const handleGetData = async () => {
-        const result = await GetIssueService('1');
-        if (result.status === 200) {
-            setData(result.data);
-        }
-    }
-    useEffect(() => {
-        handleGetData();
-    }, []);
     const {
         token: { colorBgContainer },
     } = theme.useToken();
@@ -29,26 +16,30 @@ const AllIssue = () => {
             <Layout
                 style={{
                     minHeight: '100vh',
+                    background: "#fff"
                 }}
             >
                 <Slider id={'0'} />
-                <Layout>
-                    <HeaderIssue name={"All Issues"} />
-                    <Content
-                        style={{
-                            border: '1px solid var(--lineColor--)',
-                            height: '100%',
-                        }}
-                    >
-                        <div
+                <div style={{ width: "100%", padding: "50px" }}>
+                    <Layout>
+                        <HeaderIssue name={"Detail Issues"} />
+                        <Content
                             style={{
-                                background: colorBgContainer,
+                                border: '1px solid var(--lineColor--)',
+                                height: '100%',
                             }}
                         >
-                            <Detail />
-                        </div>
-                    </Content>
-                </Layout>
+                            <div
+                                style={{
+                                    background: colorBgContainer,
+                                }}
+                            >
+                                <Detail />
+                            </div>
+                        </Content>
+                    </Layout>
+                </div>
+
             </Layout>
         </>
 

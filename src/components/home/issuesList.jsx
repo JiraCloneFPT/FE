@@ -3,6 +3,7 @@ import { useState } from 'react';
 
 const columns = [
     {
+        key:'1',
         title: 'T',
         dataIndex: 'T',
         render: () => {
@@ -12,14 +13,17 @@ const columns = [
         }
     },
     {
+        key: '2',
         title: 'Key',
         dataIndex: 'Key',
     },
     {
+        key: '3',
         title: 'Summary',
         dataIndex: 'Summary',
     },
     {
+        key: '4',
         title: 'P',
         dataIndex: 'P',
         defaultSortOrder: 'descend',

@@ -1,22 +1,10 @@
-import { Breadcrumb, Button, Space, Dropdown } from 'antd';
-import { EditOutlined, DownOutlined, ArrowRightOutlined } from '@ant-design/icons';
+import { ArrowRightOutlined, DownOutlined, EditOutlined } from '@ant-design/icons';
+import { Button, Dropdown, Space } from 'antd';
 
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import Details from './Details';
-
-const items2 = [
-    {
-        title: 'Home',
-    },
-    {
-        title: <a href="" style={{ color: '#0065ff' }}>Application Center</a>,
-    },
-    {
-        title: <a href="" style={{ color: '#0065ff' }}>Application List</a>,
-    },
-    {
-        title: 'An Application',
-    },
-]
+import { GetIssueService } from '../../../services/IssueService';
 
 const items = [
     {
@@ -66,6 +54,15 @@ const items = [
 ];
 
 export default function Detail() {
+    const [issue, setIssue] = useState();
+    const { id } = useParams();
+    const handleGetIssue = async () => {
+        const result = await GetIssueService(id);
+        result.status === 200 ? setIssue(result.data) : setIssue()
+    }
+    useEffect(() => {
+        handleGetIssue()
+    }, []);
     return (
         <>
             <div className='d-flex align-center'>
@@ -81,11 +78,7 @@ export default function Detail() {
                     <path className="st3" d="M94.9 44c-8.5-4-19.2-6.3-30.9-6.3-11.9 0-22.8 2.5-31.4 6.6 0 .5-.1.9-.1 1.4V54c.3 9.7 5 16.3 12.3 20.3 5.2 2.8 11.8 4.2 18.8 4.2s13.6-1.4 18.8-4.2c7.3-4 12.3-10.6 12.6-20.3v-8.3c0-.6-.1-1.1-.1-1.7z" /></svg>
 
                 <div style={{ marginLeft: 10 }}>
-                    <Breadcrumb
-                        items={items2}
-                        style={{ color: '#0065ff' }}
-                    />
-                    <h1 style={{ fontSize: 24, fontWeight: '500' }}>Option 1</h1>
+                    <h1 style={{ fontSize: 24, fontWeight: '500' }}>{issue?.summary}</h1>
                 </div>
             </div>
             <Space wrap style={{ margin: '15px 0px' }}>
@@ -111,7 +104,7 @@ export default function Detail() {
                 </Dropdown>
             </Space>
             <div style={{ marginTop: 20 }}></div>
-            <Details />
+            <Details issue={issue} />
         </>
     )
 }
