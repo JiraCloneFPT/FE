@@ -1,0 +1,23 @@
+:where(.css-dev-only-do-not-override-12jzuas).ant-menu-inline-collapsed>.ant-menu-item, :where(.css-dev-only-do-not-override-12jzuas).ant-menu-inline-collapsed>.ant-menu-item-group>.ant-menu-item-group-list>.ant-menu-item, :where(.css-dev-only-do-not-override-12jzuas).ant-menu-inline-collapsed>.ant-menu-item-group>.ant-menu-item-group-list>.ant-menu-submenu>.ant-menu-submenu-title, :where(.css-dev-only-do-not-override-12jzuas).ant-menu-inline-collapsed>.ant-menu-submenu>.ant-menu-submenu-title {
+    display: flex;
+}
+
+:where(.css-dev-only-do-not-override-12jzuas).ant-layout .ant-layout-sider,
+:where(.css-dev-only-do-not-override-12jzuas).ant-layout .ant-layout-sider-trigger {
+    background: #fff;
+    color: #000;
+}
+
+.st1 {
+    fill: #4a2593
+}
+
+.st3 {
+    opacity: .15;
+    fill: #7f4cbf;
+    enable-background: new
+}
+
+.st4 {
+    fill: #fff
+}

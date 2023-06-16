@@ -1,0 +1,14 @@
+export const message001 = (item) => `${item} can not be blank!`;
+export const message002 = (item) => `${item} can not contain numbers or special characters!`;
+export const message003 = (item, min, max) => `${item} must be from ${min} to ${max} digits!`;
+export const message004 = (item, min, max) => `Length of ${item} must be from ${min} to ${max}`;
+export const message005 = (item, length) => `${item} must be ${length} digits!`;
+export const message006 = (item, length) => `${item} must be ${length} characters!`;
+export const message007 = (item1, item2) => `${item1} must be more than or equal to ${item2}`;
+export const message008 = (item) => `Invalid ${item}!`;
+export const message009 = () => `Password is minimum 10 characters, at least one upper letter, one number and one special character!`;
+export const message010 = () => `Confirm password does not match!`;
+export const message011 = () => `Network error. Please try later!`;
+export const message012 = () => `Save successfully!`;
+export const message013 = () => `Delete successfully!`;
+export const message014 = () => `Update successfully!`;

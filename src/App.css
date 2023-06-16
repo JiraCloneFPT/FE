@@ -1,0 +1,265 @@
+* {
+  margin: 0;
+  padding: 0;
+  font-size: 14px;
+  /* overflow: hidden; */
+  font-family: -apple-system, -apple-system,
+    BlinkMacSystemFont, 'Segoe UI', Roboto,
+    Oxygen, Ubuntu, Cantarell, 'Open Sans',
+    'Helvetica Neue', sans-serif;
+}
+
+:root {
+  --aui-appheader-bg-color: #1d70ed;
+  --BackGroundButton--: #0058DB;
+  --lineHeaderBottom--: #c1c7d0;
+  --titleHomePage--: #172b4d;
+  --textBackGroundHomePage--: #0747A6;
+  --lineColor--: rgba(5, 5, 5, 0.06);
+  --progress--: #0052CC;
+  --resolve-cancel--: #00875A;
+  --reOpen--: #DFE1E5;
+  --ds-border: #091E4224;
+}
+
+h3 {
+  font-weight: 500;
+  color: var(--titleHomePage--);
+}
+
+body {
+  background: #F4F5F7;
+}
+
+li {
+  list-style-type: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+.d-flex {
+  display: flex;
+}
+
+.justify-content-center {
+  justify-content: center;
+}
+
+.justify-content-between {
+  justify-content: space-between;
+}
+
+.align-center {
+  align-items: center;
+}
+
+.text-left {
+  text-align: left !important;
+}
+
+.f-16 {
+  font-size: 16px !important;
+}
+
+.f-20 {
+  font-size: 20px !important;
+}
+
+.mr-1 {
+  margin-right: 0.5rem;
+}
+
+.ml-1 {
+  margin-left: 0.5rem;
+}
+
+.ml-2 {
+  margin-left: 1rem;
+}
+
+.mb-2 {
+  margin-bottom: 1rem;
+}
+
+.text-white {
+  color: #fff !important;
+}
+
+.container-fluid {
+  /* width: 100%; */
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto
+}
+
+header {
+  background: var(--aui-appheader-bg-color);
+}
+
+.itemIcon svg {
+  font-size: 10px;
+}
+
+.menuHeader li {
+  padding: 12px;
+}
+
+.itemRightHeader li {
+  padding: 12px 8px;
+}
+
+.menuHeader li a, .itemRightHeader li a {
+  color: #fff;
+}
+
+.backGroundWhiteBorder {
+  background: #fff;
+  border-radius: 50%;
+  height: 30px;
+  width: 30px;
+}
+
+.backGroundWhite {
+  background: #fff;
+
+}
+
+.line {
+  border: 1px solid var(--lineHeaderBottom--);
+  margin-top: 17px;
+}
+
+.titleHomePage {
+  font-size: 24px;
+  font-weight: 500;
+  color: var(--titleHomePage--);
+  padding: 20px 0;
+}
+
+.textHomePage {
+  padding: 4px 10px;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  background: var(--textBackGroundHomePage--);
+}
+
+.backGroundBelowPage {
+  margin-bottom: 20px;
+  background: #fff;
+  border-radius: 4px;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+}
+
+footer {
+  padding: 40px 0 ;
+  width: 100%;
+  text-align: center;
+  bottom: 32px;
+  left: 50%;
+  border-top: 1px solid var(--lineHeaderBottom--);
+}
+.login-form{
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+.menuFooter li {
+  margin: 0 12px 20px;
+}
+.input{
+  width: 200px;
+  
+}
+.button-login{
+  background: transparent;
+  color: #fff;
+}
+.menuFooter li a {
+  font-size: 12px;
+  color: #5e6c84;
+  border-bottom: 1px solid #eee;
+}
+
+.bellSvg svg {
+  font-size: 24px;
+}
+
+.titleTextSlider {
+  font-size: 24px;
+  color: var(--titleHomePage--);
+  font-weight: 500;
+}
+
+.menuProgress-1 {
+  min-width: 120px;
+}
+
+.menuProgress-2 {
+  margin: 0 12px;
+}
+
+.menuProgress-3 {
+  min-width: 100px;
+  color: #fff;
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 11px;
+}
+
+.menuProgress-3 span {
+  text-transform: uppercase;
+}
+
+.menuProgress-3.progress {
+  background: var(--progress--);
+}
+
+.menuProgress-3.resolve, .menuProgress-3.cancel {
+  background: var(--resolve-cancel--);
+}
+
+.menuProgress-3.reopen {
+  background: var(--reOpen--);
+}
+
+.minWidth-100 {
+  min-width: 100px;
+}
+
+.minWidth-80 {
+  min-width: 80px;
+}
+
+.text {
+  color: rgb(107, 119, 140);
+}
+
+.imgUpload svg {
+  font-size: 32px;
+}
+
+.lineDownText {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+  max-width: 200px;
+}
+
+.showMenuShowList {
+  margin-left: 40px;
+  background: #1677ff;
+  padding: 4px;
+  color: #fff;
+  border-radius: 4px;
+}
+
+.positionMenuLists .ant-space-item {
+  position: relative;
+  left: -16px;
+  top: 5px;
+}
