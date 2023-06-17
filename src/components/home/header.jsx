@@ -1,7 +1,8 @@
 import { UnorderedListOutlined, BellFilled, QuestionOutlined } from '@ant-design/icons';
 import { DownOutlined, SearchOutlined } from '@ant-design/icons';
 import { Dropdown, Space, Button, Input } from 'antd';
-import { useContext } from 'react';
+import CreateIssue from '../issues/CreateIssue/CreateIssue';
+import { useContext, useState } from 'react';
 import { UserContext } from '../../contexts/UserContext'
 const items1 = [
     {
@@ -130,9 +131,14 @@ const items5 = [
 
 export default function Header() {
     const { user } = useContext(UserContext)
+    const [opencreateIssueModal, setOpencreateIssueModal] = useState(false);
+    const handleShowCreateIssueModal = () => {
+        setOpencreateIssueModal(true);
+    };
     return (
         <>
             <header>
+            <CreateIssue open={opencreateIssueModal} setOpen={setOpencreateIssueModal} />
                 <div className="d-flex justify-content-between align-center container-fluid">
                     <div className='d-flex align-center'>
                         <Dropdown
@@ -223,7 +229,7 @@ export default function Header() {
                                     </Dropdown>
                                 </li>
                                 <li>
-                                    <Button type="primary" style={{ background: 'var(--BackGroundButton--)' }}>Create</Button>
+                                <Button onClick={handleShowCreateIssueModal} type="primary" style={{ background: 'var(--BackGroundButton--)' }}>Create</Button>
                                 </li>
                             </ul>
                         </div>

@@ -1,0 +1,68 @@
+.modal-create-issue .ant-modal-content{
+    padding: 0 !important;
+}
+
+.modal-create-issue-header {
+    padding: 20px;
+    border-bottom: 2px solid #ebecf0;
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+}
+
+.create-issue-text{
+    font-size: 20px;
+    font-weight: 500px;
+    color: #172b4d;
+}
+
+.modal-create-issue .ant-modal-content .ant-modal-footer{
+    padding: 20px;
+    border-top: 2px solid #ebecf0;
+}
+
+.create-issue-item-label{
+    color: #6b778c; 
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.modal-create-issue .ant-modal-content .ant-modal-body{
+    padding: 20px;
+    min-height: 86px;
+    max-height: 647px;
+    overflow-y: auto;
+}
+
+.form-create-issue{
+    position: relative;
+}
+
+.tox-statusbar{
+    display: none !important;
+}
+
+.tox-tinymce{
+    border: 1px solid #d9d9d9 !important; 
+    border-radius: 3px !important;
+}
+
+.tox-editor-container{
+    width: 600px !important;
+}
+
+.tox-tinymce{
+    height: 280px !important;
+}
+
+.anticon-cloud-upload{
+    font-size: 22px !important;
+}
+
+.ant-upload-drag-icon{
+    margin: 0 !important;
+}
+
+.ant-upload .ant-upload-btn{
+    padding: 8px !important;
+}
