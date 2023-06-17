@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { InboxOutlined, UserOutlined } from '@ant-design/icons';
 import { Col, Collapse, Row, Tabs, Upload, message } from 'antd';
 
@@ -23,7 +24,8 @@ const props = {
     },
 };
 
-const details = () => {
+const details = (issue) => {
+    console.log(issue);
     return (
         <>
             <Row gutter={[16, 8]}>
@@ -34,7 +36,7 @@ const details = () => {
                         </div>
                         <div className='d-flex align-center'>
                             <img width={16} height={16} src='../images/Create Issue - FI2.0/error.png' />
-                            <p className='text ml-1'>Bug</p>
+                            <p className='text ml-1'>{issue?.issueTypeName}</p>
                         </div>
                     </div>
                     <div className='d-flex align-center mb-2'>
@@ -47,7 +49,7 @@ const details = () => {
                                 <path d="M12.545319 5.806152c.5-.3 1.1-.1 1.3.3s.2 1.1-.3 1.4l-5 3c-.3.2-.7.2-1 0l-5-3c-.5-.3-.6-.9-.3-1.4.3-.5.9-.6 1.4-.3l4.4 2.7 4.5-2.7z" fill="#2684ff" />
                                 <path d="M12.545319 1.506152c.5-.3 1.1-.2 1.3.3s.2 1.1-.3 1.4l-5 3c-.3.2-.7.2-1 0l-5-3c-.5-.3-.6-.9-.3-1.4.3-.5.9-.6 1.4-.3l4.4 2.7 4.5-2.7z" fill="#4c9aff" />
                             </svg >
-                            <p className='text ml-1'>Minor</p>
+                            <p className='text ml-1'>{issue?.priorityName}</p>
                         </div>
                     </div>
                     <div className='d-flex align-center mb-2'>
@@ -55,7 +57,7 @@ const details = () => {
                             <p className='text'>Component/s:</p>
                         </div>
                         <div className='d-flex align-center'>
-                            <a style={{ color: '#0052cc' }} className='text ml-1'>DN23.FR.NET.01</a>
+                            <a style={{ color: '#0052cc' }} className='text ml-1'>{issue?.componentName}</a>
                         </div>
                     </div>
                 </Col>
@@ -93,7 +95,7 @@ const details = () => {
                             <p className='text'>Product:</p>
                         </div>
                         <div className='d-flex align-center'>
-                            <p className='text ml-1'>Fsoft Academy Product [FSOFTACADEMY-1]</p>
+                            <p className='text ml-1'>{issue?.productName}</p>
                         </div>
                     </div>
                     <div className='d-flex align-center mb-2'>
@@ -101,7 +103,7 @@ const details = () => {
                             <p className='text'>QC Activity:</p>
                         </div>
                         <div className='d-flex align-center'>
-                            <p className='text ml-1'>Other Review</p>
+                            <p className='text ml-1'>{issue?.qcActivityName}</p>
                         </div>
                     </div>
                     <div className='d-flex align-center mb-2'>
@@ -109,7 +111,7 @@ const details = () => {
                             <p className='text'>Check Result:</p>
                         </div>
                         <div className='d-flex align-center'>
-                            <p className='text ml-1'>OK</p>
+                            <p className='text ml-1'>{issue?.statusIssueName}</p>
                         </div>
                     </div>
                 </Col>
@@ -284,48 +286,48 @@ const actitity = () => {
     )
 }
 
-const items = [
-    {
-        key: '1',
-        label: 'Details',
-        children: details(),
-    },
-    {
-        key: '2',
-        label: 'Description',
-        children: description(),
-    },
-    {
-        key: '3',
-        label: 'Attachments',
-        children: attachments(),
-    },
-    {
-        key: '4',
-        label: 'Activity',
-        children: actitity(),
-    },
-];
 
-const items2 = [
-    {
-        key: '1',
-        label: 'People',
-        children: people(),
-    },
-    {
-        key: '2',
-        label: 'Dates',
-        children: dates(),
-    },
-];
 
-export default function Details() {
-
+// eslint-disable-next-line react/prop-types
+export default function Details({ issue }) {
     const onChange = (key) => {
         console.log(key);
     };
+    const items = [
+        {
+            key: '1',
+            label: 'Details',
+            children: details(issue),
+        },
+        {
+            key: '2',
+            label: 'Description',
+            children: description(issue),
+        },
+        {
+            key: '3',
+            label: 'Attachments',
+            children: attachments(issue),
+        },
+        {
+            key: '4',
+            label: 'Activity',
+            children: actitity(issue),
+        },
+    ];
 
+    const items2 = [
+        {
+            key: '1',
+            label: 'People',
+            children: people(issue),
+        },
+        {
+            key: '2',
+            label: 'Dates',
+            children: dates(issue),
+        },
+    ];
     return (
         <Row gutter={[16, 8]}>
             <Col span={16}>

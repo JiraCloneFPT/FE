@@ -4,11 +4,13 @@ import { Dropdown, Space, Button, Input } from 'antd';
 import CreateIssue from '../issues/CreateIssue/CreateIssue';
 import { useContext, useState } from 'react';
 import { UserContext } from '../../contexts/UserContext'
+import { useNavigate } from 'react-router-dom';
+const link = window.location.origin;
 const items1 = [
     {
         key: '1',
         label: (
-            <a target="_blank" rel="noopener noreferrer" href="#">
+            <a rel="noopener noreferrer" href="#">
                 View System Dashboard
             </a>
         ),
@@ -16,7 +18,7 @@ const items1 = [
     {
         key: '2',
         label: (
-            <a target="_blank" rel="noopener noreferrer" href="#">
+            <a rel="noopener noreferrer" href="#">
                 Manage Dashboard
             </a>
         ),
@@ -26,7 +28,7 @@ const items2 = [
     {
         key: '1',
         label: (
-            <a target="_blank" rel="noopener noreferrer" href="#">
+            <a rel="noopener noreferrer" href="#">
                 Software
             </a>
         ),
@@ -34,7 +36,7 @@ const items2 = [
     {
         key: '2',
         label: (
-            <a target="_blank" rel="noopener noreferrer" href="#">
+            <a rel="noopener noreferrer" href="#">
                 Business
             </a>
         ),
@@ -42,7 +44,7 @@ const items2 = [
     {
         key: '3',
         label: (
-            <a target="_blank" rel="noopener noreferrer" href="#">
+            <a rel="noopener noreferrer" href="#">
                 View all project
             </a>
         ),
@@ -52,7 +54,7 @@ const items3 = [
     {
         key: '1',
         label: (
-            <a target="_blank" rel="noopener noreferrer" href="/issues?filter=2">
+            <a rel="noopener noreferrer" href={`${link}/issues?filter=2`}>
                 My open issue
             </a>
         ),
@@ -60,7 +62,7 @@ const items3 = [
     {
         key: '2',
         label: (
-            <a target="_blank" rel="noopener noreferrer" href="/issues?filter=3">
+            <a rel="noopener noreferrer" href={`${link}/issues?filter=3`}>
                 Report by me
             </a>
         ),
@@ -68,7 +70,7 @@ const items3 = [
     {
         key: '3',
         label: (
-            <a target="_blank" rel="noopener noreferrer" href="/issues?filter=1">
+            <a rel="noopener noreferrer" href={`${link}/issues?filter=1"`}>
                 More ...
             </a>
         ),
@@ -78,7 +80,7 @@ const items4 = [
     {
         key: '1',
         label: (
-            <a target="_blank" rel="noopener noreferrer" href="#">
+            <a rel="noopener noreferrer" href="#">
                 View all boards
             </a>
         ),
@@ -88,7 +90,7 @@ const items = [
     {
         key: '1',
         label: (
-            <a target="_blank" rel="noopener noreferrer" href="/reported-by-me">
+            <a rel="noopener noreferrer" href="/reported-by-me">
                 Reported by me
             </a>
         ),
@@ -98,7 +100,7 @@ const items5 = [
     {
         key: '1',
         label: (
-            <a target="_blank" rel="noopener noreferrer" href="#">
+            <a rel="noopener noreferrer" href="#">
                 Home
             </a>
         ),
@@ -106,7 +108,7 @@ const items5 = [
     {
         key: '2',
         label: (
-            <a target="_blank" rel="noopener noreferrer" href="#">
+            <a rel="noopener noreferrer" href="#">
                 My Information
             </a>
         ),
@@ -114,7 +116,7 @@ const items5 = [
     {
         key: '3',
         label: (
-            <a target="_blank" rel="noopener noreferrer" href="#">
+            <a rel="noopener noreferrer" href="#">
                 QA Eco System
             </a>
         ),
@@ -122,7 +124,7 @@ const items5 = [
     {
         key: '4',
         label: (
-            <a target="_blank" rel="noopener noreferrer" href="#">
+            <a rel="noopener noreferrer" href="#">
                 Help
             </a>
         ),
@@ -131,6 +133,10 @@ const items5 = [
 
 export default function Header() {
     const { user } = useContext(UserContext)
+    const navigate = useNavigate();
+    const onClick = () => {
+        navigate('/')
+    }
     const [opencreateIssueModal, setOpencreateIssueModal] = useState(false);
     const handleShowCreateIssueModal = () => {
         setOpencreateIssueModal(true);
@@ -152,7 +158,7 @@ export default function Header() {
                                 </Space>
                             </a>
                         </Dropdown>
-                        <div className='d-flex align-center ml-2'>
+                        <div className='d-flex align-center ml-2' style={{ cursor: "pointer" }} onClick={onClick}>
                             <img src='../images/System Dashboard - FI2.0/jira-logo-scaled.png' />
                             <span className='ml-1 text-white'>FI2.0</span>
                         </div>

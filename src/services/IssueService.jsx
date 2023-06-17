@@ -3,7 +3,7 @@ export const GetIssuesService = async () => {
     try {
         const respone = await Request({
             method: "get",
-            url: "course/all",
+            url: "issue/all",
             headers: {
                 "Content-Type": "application/json",
             },
@@ -13,7 +13,21 @@ export const GetIssuesService = async () => {
         return e;
     }
 };
-export const GetIssueService = async (idUser) => {
+export const GetIssueService = async (id) => {
+    try {
+        const respone = await Request({
+            method: "get",
+            url: `issue?id=${id}`,
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+        return respone.data;
+    } catch (e) {
+        return e;
+    }
+};
+export const GetIssueByUserService = async (idUser) => {
     try {
         const respone = await Request({
             method: "get",

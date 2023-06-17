@@ -3,7 +3,7 @@ import { SearchOutlined } from '@ant-design/icons';
 import { Button, Input, Space, Table } from 'antd';
 import { useRef, useState } from 'react';
 import Highlighter from 'react-highlight-words';
-
+const link = window.location.origin;
 
 export default function ListIssues({ data }) {
 
@@ -110,7 +110,7 @@ export default function ListIssues({ data }) {
                     textToHighlight={record[dataIndex] ? record[dataIndex].toString() : ''}
                 />
                 :
-                dataIndex === 'summary' ? <a href={`/issues/detail/${record.issueId}`}>{record[dataIndex]}</a> : <>{record[dataIndex]}</>
+                dataIndex === 'summary' ? <a href={`${link}/issues/detail/${record.issueId}`}>{record[dataIndex]}</a> : <>{record[dataIndex]}</>
 
         }
     })
