@@ -79,15 +79,15 @@ const CommonUploadFiles = (props) => {
         // </Upload>
 
 
-        <Dragger {...uploadProps}>
+        <Dragger style={{ maxWidth: 500 }} {...uploadProps}>
             <p className="ant-upload-drag-icon">
                 <InboxOutlined />
             </p>
             <p className="ant-upload-text">Click or drag file to this area to upload</p>
-            <p className="ant-upload-hint">
+            {/* <p className="ant-upload-hint">
                 Support for a single or bulk upload. Strictly prohibited from uploading company data or other
                 banned files.
-            </p>
+            </p> */}
         </Dragger>
     )
 }

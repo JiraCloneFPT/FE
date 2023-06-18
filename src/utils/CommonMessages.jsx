@@ -12,3 +12,5 @@ export const message011 = () => `Network error. Please try later!`;
 export const message012 = () => `Save successfully!`;
 export const message013 = () => `Delete successfully!`;
 export const message014 = () => `Update successfully!`;
+export const messageIssue01 = () => `Create Issue successfully!`;
+export const messageIssue02 = (issue) => `Issue ${issue} has been successfully created!`;
