@@ -1,57 +1,13 @@
+/* eslint-disable no-unused-vars */
 import { ArrowRightOutlined, DownOutlined, EditOutlined } from '@ant-design/icons';
 import { Button, Dropdown, Space } from 'antd';
 
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Details from './Details';
+import ResolveIssue from './ResolveIssue';
+import EditIssue from './EditIssue';
 import { GetIssueService } from '../../../services/IssueService';
-
-const items = [
-    {
-        label:
-            <div className='d-flex align-center'>
-                <span className='menuProgress-1'>Start Progress</span>
-                <ArrowRightOutlined className='menuProgress-2' />
-                <div className='menuProgress-3 progress'>
-                    <span>In Progress</span>
-                </div>
-            </div>,
-        key: '0',
-    },
-    {
-        label:
-            <div className='d-flex align-center'>
-                <span className='menuProgress-1'>Resolve</span>
-                <ArrowRightOutlined className='menuProgress-2' />
-                <div className='menuProgress-3 resolve'>
-                    <span>Resolved</span>
-                </div>
-            </div>,
-        key: '1',
-    },
-    {
-        label:
-            <div className='d-flex align-center'>
-                <span className='menuProgress-1'>Cancel</span>
-                <ArrowRightOutlined className='menuProgress-2' />
-                <div className='menuProgress-3 cancel'>
-                    <span>Cancelled</span>
-                </div>
-            </div>,
-        key: '2',
-    },
-    {
-        label:
-            <div className='d-flex align-center'>
-                <span className='menuProgress-1'>Re-Open</span>
-                <ArrowRightOutlined className='menuProgress-2' />
-                <div className='menuProgress-3 cancel'>
-                    <span>reopened</span>
-                </div>
-            </div>,
-        key: '3',
-    },
-];
 
 export default function Detail() {
     const [issue, setIssue] = useState();
@@ -63,8 +19,72 @@ export default function Detail() {
     useEffect(() => {
         handleGetIssue()
     }, []);
+
+    const [openResolveIssueModal, setOpenResolveIssueModal] = useState(false);
+    const handleShowResolveIssueModal = (e) => {
+        setOpenResolveIssueModal(true);
+    }
+
+    const [openEditIssueModal, setOpenEditIssueModal] = useState(false);
+    const handleShowEditIssueModal = () => {
+        console.log('edit ', );
+        setOpenEditIssueModal(true);
+    }
+
+    const items = [
+        {
+            label:
+                <div className='d-flex align-center'>
+                    <span className='menuProgress-1'>Start Progress</span>
+                    <ArrowRightOutlined className='menuProgress-2' />
+                    <div className='menuProgress-3 progress'>
+                        <span>In Progress</span>
+                    </div>
+                </div>,
+            key: '0',
+        },
+        {
+            label:
+                <div className='d-flex align-center'>
+                    <span className='menuProgress-1'>Resolve</span>
+                    <ArrowRightOutlined className='menuProgress-2' />
+                    <div className='menuProgress-3 resolve'>
+                        <span>Resolved</span>
+                    </div>
+                </div>,
+            key: '1',
+            onClick: (e) => {
+                handleShowResolveIssueModal(e)
+            }
+        },
+        {
+            label:
+                <div className='d-flex align-center'>
+                    <span className='menuProgress-1'>Cancel</span>
+                    <ArrowRightOutlined className='menuProgress-2' />
+                    <div className='menuProgress-3 cancel'>
+                        <span>Cancelled</span>
+                    </div>
+                </div>,
+            key: '2',
+        },
+        {
+            label:
+                <div className='d-flex align-center'>
+                    <span className='menuProgress-1'>Re-Open</span>
+                    <ArrowRightOutlined className='menuProgress-2' />
+                    <div className='menuProgress-3 cancel'>
+                        <span>reopened</span>
+                    </div>
+                </div>,
+            key: '3',
+        },
+    ];
+
     return (
         <>
+        <ResolveIssue open={openResolveIssueModal} setOpen={setOpenResolveIssueModal} />
+        <EditIssue open={openEditIssueModal} setOpen={setOpenEditIssueModal} />
             <div className='d-flex align-center'>
                 <svg id="Default" xmlns="http://www.w3.org/2000/svg" width={48} height={48}
                     viewBox="0 0 128 128">
@@ -82,7 +102,7 @@ export default function Detail() {
                 </div>
             </div>
             <Space wrap style={{ margin: '15px 0px' }}>
-                <Button type="primary" icon={<EditOutlined />}>
+                <Button type="primary" icon={<EditOutlined /> } onClick={handleShowEditIssueModal}>
                     Edit
                 </Button>
                 <Button type="primary">

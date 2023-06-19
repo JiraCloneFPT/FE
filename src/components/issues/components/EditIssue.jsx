@@ -4,7 +4,6 @@
 import {
     Button,
     Modal,
-    Checkbox,
     Form,
     Input,
     Select,
@@ -19,14 +18,18 @@ import {
 } from '@ant-design/icons';
 import { useState, useEffect } from 'react';
 import '../../../assests/css/createIssue.css';
-import EditorTextArea from './EditorTextArea';
+import EditorTextArea from '../CreateIssue/EditorTextArea';
 import CommonUploadFiles from '../../../utils/CommonUploadFiles';
 import axios from 'axios';
+import moment from 'moment';
 import { messageIssue01, messageIssue02 } from '../../../utils/CommonMessages';
 
 const Option = Select.Option;
 
-const CreateIssue = (props) => {
+const EditIssue = (props) => {
+
+    // const idIssue = props.idIssue;
+    const idIssue = 1015;  // hard id test 
 
     const [form] = Form.useForm();
 
@@ -54,10 +57,7 @@ const CreateIssue = (props) => {
     const [causeCategories, setCauseCategories] = useState([]);
     const [leakCauses, setLeakCauses] = useState([]);
 
-    // const [api, contextHolder] = notification.useNotification();
     const [formData, setFormData] = useState({
-        projectId: '',
-        issueTypeId: '',
         summary: '',
         componentId: '',
         productId: '',
@@ -77,7 +77,7 @@ const CreateIssue = (props) => {
         // attachments: '',
         roleIssueId: '',
         reporterId: '',
-        plannedStart: null,
+        plannedStart: '',
         originalEstimate: '',
         remainingEstimate: '',
         estimateEffort: '',
@@ -100,13 +100,14 @@ const CreateIssue = (props) => {
         leakCauseId: '',
         dueTime: '',
         units: '',
-        percentDone: ''
+        percentDone: '',
+        comment: '' // 
     });
 
     useEffect(() => {
         axios.get('https://localhost:7112/api/issue/GetItemsIssue')
             .then(res => {
-                console.log('ress ', res.data.data);
+                console.log('getData ', res.data.data);
                 setAssignees(res.data.data.assignees)
                 setCauseCategories(res.data.data.causeCategories)
                 setComplexities(res.data.data.complexities)
@@ -134,12 +135,59 @@ const CreateIssue = (props) => {
             .catch(error => {
                 console.log(error);
             })
-    }, [])
-
-
-    const onChangeCheckboxCreateAnotherIssue = (e) => {
-        console.log(`checked = ${e.target.checked}`);
-    };
+        axios.get(`https://localhost:7112/api/issue/GetIssueById?id=${idIssue}`)
+            .then(res => {
+                console.log('getIssue ', res.data.data);
+                const issue = res.data.data;
+                setFormData(({
+                    summary: issue.summary ?? '',
+                    componentId: issue.componentId ?? '',
+                    productId: issue.productId ?? '',
+                    description: issue.description ?? '',
+                    descriptionTranslate: issue.descriptionTranslate ?? '',
+                    defectOriginId: issue.defectOriginId ?? '',
+                    priorityId: issue.priorityId ?? '',
+                    severity: issue.severity ?? '',
+                    qcActivityId: issue.qcactivityId ?? '',
+                    causeAnalysis: issue.causeAnalysis ?? '',   
+                    causeAnalysisTranslate: issue.causeAnalysisTranslate ?? '',
+                    correctAction: issue.correctAction ?? '',
+                    correctActionTranslate: issue.correctActionTranslate ?? '',              
+                    technicalCauseId: issue.technicalCauseId ?? '',
+                    environment: issue.environment ?? '',
+                    assigneeId: issue.assigneeId ?? '',
+                    roleIssueId: issue.roleIssueId ?? '',
+                    plannedStart: moment(issue.plannedStart) ?? '',
+                    originalEstimate: issue.originalEstimate ?? '',
+                    remainingEstimate: issue.remainingEstimate ?? '',
+                    estimateEffort: issue.estimateEffort ?? '',
+                    complexity: issue.complexity ?? '',
+                    adjustedVP: issue.adjustedVP ?? '',
+                    dueDate: moment(issue.dueDate) ?? '',  
+                    //attachment
+                    labelsId: issue.labelsId ?? '',
+                    sprint: issue.sprint ?? '',
+                    functionId: issue.functionId ?? '',
+                    testcaseId: issue.testcaseId ?? '',
+                    functionCategory: issue.functionCategory ?? '',
+                    linkedIssuesId: issue.linkedIssuesId ?? '',
+                    //issueId: issue.issueId ?? '',  // discus
+                    epicLink: issue.epicLink ?? '',
+                    closedDate: moment(issue.closedDate) ?? '',
+                    securityLevel: issue.securityLevel ?? '',
+                    defectTypeId: issue.defectTypeId ?? '',
+                    causeCategoryId: issue.causeCategoryId ?? '', 
+                    leakCauseId: issue.leakCauseId ?? '',
+                    dueTime: issue.dueTime ?? '',
+                    units: issue.units ?? '',
+                    percentDone: issue.percentDone ?? '',
+                    //comment
+                }))
+            })
+            .catch(error => {
+                console.log(error);
+            })
+    }, [props.open])
 
     const handleOnChange = (name, value) => {
         setFormData({
@@ -149,11 +197,9 @@ const CreateIssue = (props) => {
         console.log('name ', name, ' value ', value);
     }
 
-    const handleCreateIssue = () => {
+    const handleUpdateIssue = () => {
         console.log('form ', formData);
         let dataRequest = {
-            projectId: formData.projectId,
-            issueTypeId: formData.issueTypeId,
             summary: formData.summary,
             componentId: formData.componentId,
             productId: formData.productId,
@@ -196,44 +242,15 @@ const CreateIssue = (props) => {
             dueTime: formData.dueTime,
             units: formData.units,
             percentDone: formData.percentDone
+            // comment: formData.,
         }
         console.log('dataRequest ', dataRequest);
-        axios.post('https://localhost:7112/api/issue/add' , dataRequest,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    // 'Authorization': `Bearer ${token}`
-                }
-            })
-            .then(res => {
-                props.setOpen(false);
-                form.resetFields();
-                if (res.data.code === 200) {
-                    successNotification(messageIssue01, messageIssue02('FSOFTACADEMY-0034'));
-                }
-            })
-            .catch(error => {
-                console.log(error);
-            })
     }
-
-    const successNotification = (msg, desc) => {
-        notification.success({
-            message: msg,
-            description: desc,
-            placement: 'topRight',
-            duration: 5,
-            style: {
-                width: 400,
-            },
-        });
-    };
-
 
     const Header = () => {
         return (
             <div className='modal-create-issue-header'>
-                <h2 className='create-issue-text'>Create Issue</h2>
+                <h2 className='create-issue-text'> Edit Issue</h2>
                 <Button
                     style={{ background: '#ebedf0', border: 'none' }}
                     icon={<SettingOutlined />}
@@ -246,17 +263,12 @@ const CreateIssue = (props) => {
 
     const Footer = () => {
         return (<>
-            <Checkbox
-                onChange={onChangeCheckboxCreateAnotherIssue}
-            >
-                Create another
-            </Checkbox>
             <Button
                 type="primary"
                 style={{ background: '#0052cc' }}
-                onClick={handleCreateIssue}
+                onClick={handleUpdateIssue}
             >
-                Create
+                Update
             </Button>
             <Button onClick={() => props.setOpen(false)}>Cancel</Button>
         </>)
@@ -274,6 +286,7 @@ const CreateIssue = (props) => {
             className='modal-create-issue'
             footer={<Footer />}
         >
+        <p style={{ fontSize: 12, color: '#6b778c', margin: '-10px 0 10px' }}>All fields marked with an asterisk (*) are required</p>
             <Form
                 labelCol={{ flex: '140px' }}
                 wrapperCol={{ flex: 1, }}
@@ -282,30 +295,6 @@ const CreateIssue = (props) => {
                 colon={false}
                 className='form-create-issue'
             >
-                <p style={{ fontSize: 12, color: '#6b778c', margin: '-10px 0 10px' }}>All fields marked with an asterisk (*) are required</p>
-                <Form.Item
-                    label={<label className='create-issue-item-label'>Project</label>}
-                    name="projectId"
-                    rules={[
-                        {
-                            required: true,
-                        },
-                    ]}
-                >
-                    <Select
-                        style={{ maxWidth: 250 }}
-                        name="projectId"
-                        allowClear
-                        onChange={(e) => handleOnChange('projectId', e)}
-                    >
-                        {projects?.map(item => (
-                            <Option value={item.projectId} key={item.projectId} name='projectId' >
-                                {item.projectName}
-                            </Option>
-                        ))}
-                    </Select>
-                </Form.Item>
-
                 <Form.Item
                     label={<label className='create-issue-item-label'>Issue Type</label>}
                     name="issueTypeId"
@@ -315,26 +304,8 @@ const CreateIssue = (props) => {
                         },
                     ]}
                 >
-                    <Select
-                        style={{ maxWidth: 250 }}
-                        name="issueTypeId"
-                        allowClear
-                        onChange={(e) => handleOnChange('issueTypeId', e)}
-
-                    >
-                        {issueTypes?.map(item => (
-                            <Option value={item.issueTypeId} key={item.issueTypeId} name='issueTypeId' >
-                                {item.issueTypeName}
-                            </Option>
-                        ))}
-                    </Select>
-                    {" "}
-                    <Tooltip color={'#172b4d'} placement="bottom" title={<p style={{ fontSize: 12 }}>Get local help about Issue Type</p>}>
-                        <QuestionCircleOutlined style={{ color: "#6b778c" }} />
-                    </Tooltip>
+                    <p style={{ fontSize: 11, color: '#6b778c', margin: '5px 0 0' }}></p>
                 </Form.Item>
-
-                <div style={{ borderBottom: '1px solid #dddddd', marginBottom: 15 }}></div>
 
                 <Form.Item
                     label={<label className='create-issue-item-label'>Summary</label>}
@@ -348,6 +319,7 @@ const CreateIssue = (props) => {
                     <Input
                         style={{ maxWidth: 500 }}
                         onChange={(e) => handleOnChange(e.target.id, e.target.value)}
+                        defaultValue={formData.summary}
                     />
                 </Form.Item>
 
@@ -366,6 +338,7 @@ const CreateIssue = (props) => {
                         name="componentId"
                         allowClear
                         onChange={(e) => handleOnChange('componentId', e)}
+                        defaultValue={formData.componentId}
                     >
                         {components?.map(item => (
                             <Option value={item.componentId} key={item.componentId} name='componentId'>
@@ -390,6 +363,7 @@ const CreateIssue = (props) => {
                         name="productId"
                         allowClear
                         onChange={(e) => handleOnChange('productId', e)}
+                        defaultValue={formData.productId}
                     >
                         {products?.map(item => (
                             <Option value={item.productId} key={item.productId} name='productId'>
@@ -408,7 +382,11 @@ const CreateIssue = (props) => {
                         },
                     ]}
                 >
-                    <EditorTextArea name='description' handleEditorContent={handleOnChange} />
+                    <EditorTextArea 
+                        name='description' 
+                        handleEditorContent={handleOnChange} 
+                        defaultValue={formData.description}
+                    />
                 </Form.Item>
 
                 <Form.Item
@@ -416,7 +394,8 @@ const CreateIssue = (props) => {
                     name="descriptionTranslate"
                     extra={<p style={{ fontSize: 11, color: '#6b778c', margin: '5px 0 0' }}>Use for Comtor to translate bug</p>}
                 >
-                    <EditorTextArea name='descriptionTranslate' handleEditorContent={handleOnChange} />
+                    <EditorTextArea name='descriptionTranslate' handleEditorContent={handleOnChange} 
+                        defaultValue={formData.descriptionTranslate}/>
                 </Form.Item>
 
                 <Form.Item
@@ -436,6 +415,7 @@ const CreateIssue = (props) => {
                         name="defectOriginId"
                         allowClear
                         onChange={(e) => handleOnChange('defectOriginId', e)}
+                        defaultValue={formData.defectOriginId}
                     >
                         {defectOrigins?.map(item => (
                             <Option value={item.defectOriginId} key={item.defectOriginId} name='defectOriginId'>
@@ -454,6 +434,7 @@ const CreateIssue = (props) => {
                         name="priorityId"
                         allowClear
                         onChange={(e) => handleOnChange('priorityId', e)}
+                        defaultValue={formData.priorityId}
                     >
                         {priorities?.map(item => (
                             <Option value={item.priorityId} key={item.priorityId} name='priorityId'>
@@ -473,6 +454,7 @@ const CreateIssue = (props) => {
                         name="severity"
                         allowClear
                         onChange={(e) => handleOnChange('severity', e)}
+                        defaultValue={formData.severity}
                     >
                         {severities?.map(item => (
                             <Option value={item.value} key={item.id} name='severity'>
@@ -497,6 +479,7 @@ const CreateIssue = (props) => {
                         name="qcActivityId"
                         allowClear
                         onChange={(e) => handleOnChange('qcActivityId', e)}
+                        defaultValue={formData.qcActivityId}
                     >
                         {qCActivities?.map(item => (
                             <Option value={item.qcactivityId} key={item.qcactivityId} name='qcActivityId'>
@@ -518,7 +501,8 @@ const CreateIssue = (props) => {
                     name="causeAnalysis"
                     extra={<p style={{ fontSize: 11, color: '#6b778c', margin: '5px 0 0' }}>Store the root cause of bug</p>}
                 >
-                    <EditorTextArea name='causeAnalysis' handleEditorContent={handleOnChange} />
+                    <EditorTextArea name='causeAnalysis' handleEditorContent={handleOnChange} 
+                        defaultValue={formData.causeAnalysis}/>
                 </Form.Item>
 
                 <Form.Item
@@ -526,7 +510,8 @@ const CreateIssue = (props) => {
                     name="causeAnalysisTranslate"
                     extra={<p style={{ fontSize: 11, color: '#6b778c', margin: '5px 0 0' }}>Use for Comtor to translate the Cause Analysis.</p>}
                 >
-                    <EditorTextArea name='causeAnalysisTranslate' handleEditorContent={handleOnChange} />
+                    <EditorTextArea name='causeAnalysisTranslate' handleEditorContent={handleOnChange} 
+                        defaultValue={formData.causeAnalysisTranslate}/>
                 </Form.Item>
 
                 <Form.Item
@@ -534,7 +519,8 @@ const CreateIssue = (props) => {
                     name="correctAction"
                     extra={<p style={{ fontSize: 11, color: '#6b778c', margin: '5px 0 0' }}>How to fix or correct this bug</p>}
                 >
-                    <EditorTextArea name='correctAction' handleEditorContent={handleOnChange} />
+                    <EditorTextArea name='correctAction' handleEditorContent={handleOnChange} 
+                        defaultValue={formData.correctAction}/>
                 </Form.Item>
 
                 <Form.Item
@@ -542,7 +528,8 @@ const CreateIssue = (props) => {
                     name="correctActionTranslate"
                     extra={<p style={{ fontSize: 11, color: '#6b778c', margin: '5px 0 0' }}>Use for comter to translate the Corrective Action field.</p>}
                 >
-                    <EditorTextArea name='correctActionTranslate' handleEditorContent={handleOnChange} />
+                    <EditorTextArea name='correctActionTranslate' handleEditorContent={handleOnChange} 
+                        defaultValue={formData.correctActionTranslate}/>
                 </Form.Item>
 
                 <Form.Item
@@ -554,6 +541,7 @@ const CreateIssue = (props) => {
                         name="technicalCauseId"
                         allowClear
                         onChange={(e) => handleOnChange('technicalCauseId', e)}
+                        defaultValue={formData.technicalCauseId}
                     >
                         {technicalCauses?.map(item => (
                             <Option value={item.technicalCauseId} key={item.technicalCauseId} name='technicalCauseId'>
@@ -568,7 +556,8 @@ const CreateIssue = (props) => {
                     name="environment"
                     extra={<p style={{ fontSize: 11, color: '#6b778c', margin: '5px 0 0' }}>For example operating system, software platform and/or hardware specifications (include as appropriate for the issue).</p>}
                 >
-                    <EditorTextArea name='environment' handleEditorContent={handleOnChange} />
+                    <EditorTextArea name='environment' handleEditorContent={handleOnChange} 
+                        defaultValue={formData.environment}/>
                 </Form.Item>
 
                 <Form.Item
@@ -585,6 +574,7 @@ const CreateIssue = (props) => {
                         name="assigneeId"
                         allowClear
                         onChange={(e) => handleOnChange('assigneeId', e)}
+                        defaultValue={formData.assigneeId}
                     >
                         {assignees?.map(item => (
                             <Option value={item.userId} key={item.userId} name='assigneeId'>
@@ -592,7 +582,7 @@ const CreateIssue = (props) => {
                             </Option>
                         ))}
                     </Select>
-                    <a style={{ color: '#0052cc' }}>Assign to me</a>
+                    {/* <a style={{ color: '#0052cc' }}>Assign to me</a> */}
                 </Form.Item>
 
                 <Form.Item
@@ -605,6 +595,7 @@ const CreateIssue = (props) => {
                         name="roleIssueId"
                         allowClear
                         onChange={(e) => handleOnChange('roleIssueId', e)}
+                        defaultValue={formData.roleIssueId}
                     >
                         {roles?.map(item => (
                             <Option value={item.roleId} key={item.roleId} name='roleIssueId'>
@@ -629,6 +620,7 @@ const CreateIssue = (props) => {
                         name="reporterId"
                         allowClear
                         onChange={(e) => handleOnChange('reporterId', e)}
+                        defaultValue={formData.reporterId}
                     >
                         {reporters?.map(item => (
                             <Option value={item.userId} key={item.userId} name='reporterId'>
@@ -646,6 +638,7 @@ const CreateIssue = (props) => {
                     <DatePicker
                         name='plannedStart'
                         onChange={(date, dateString) => handleOnChange('plannedStart', dateString)}
+                        defaultValue={formData.plannedStart}
                     />
                 </Form.Item>
 
@@ -658,6 +651,7 @@ const CreateIssue = (props) => {
                         name='originalEstimate'
                         style={{ maxWidth: 80 }}
                         onChange={(e) => handleOnChange(e.target.name, e.target.value)}
+                        defaultValue={formData.originalEstimate}
                     /> {" "}
                     <span style={{ display: 'inline-block', paddingTop: 5, color: '#172b4d' }}>(eg. 3w 4d 12h)</span>{" "}
                     <Tooltip color={'#172b4d'} placement="bottom" title={<p style={{ fontSize: 12 }}>Get local help about Time Tracking</p>}>
@@ -674,6 +668,7 @@ const CreateIssue = (props) => {
                         name="remainingEstimate"
                         style={{ maxWidth: 80 }}
                         onChange={(e) => handleOnChange(e.target.name, e.target.value)}
+                        defaultValue={formData.remainingEstimate}
                     /> {" "}
                     <span style={{ display: 'inline-block', paddingTop: 5, color: '#172b4d' }}>(eg. 3w 4d 12h)</span>{" "}
                     <Tooltip color={'#172b4d'} placement="bottom" title={<p style={{ fontSize: 12 }}>Get local help about Time Tracking</p>}>
@@ -689,6 +684,7 @@ const CreateIssue = (props) => {
                     <Input
                         style={{ maxWidth: 250 }}
                         onChange={(e) => handleOnChange(e.target.id, e.target.value)}
+                        defaultValue={formData.estimateEffort}
                     />
                 </Form.Item>
 
@@ -702,6 +698,7 @@ const CreateIssue = (props) => {
                         name="complexity"
                         allowClear
                         onChange={(e) => handleOnChange('complexity', e)}
+                        defaultValue={formData.complexity}
                     >
                         {complexities?.map(item => (
                             <Option value={item.id} key={item.id} name='complexity'>
@@ -726,6 +723,7 @@ const CreateIssue = (props) => {
                     <Input
                         style={{ maxWidth: 250 }}
                         onChange={(e) => handleOnChange(e.target.id, e.target.value)}
+                        defaultValue={formData.adjustedVP}
                     />
                 </Form.Item>
 
@@ -736,6 +734,7 @@ const CreateIssue = (props) => {
                     <DatePicker
                         name='dueDate'
                         onChange={(date, dateString) => handleOnChange('dueDate', dateString)}
+                        defaultValue={formData.dueDate}
                     />
                 </Form.Item>
 
@@ -756,6 +755,7 @@ const CreateIssue = (props) => {
                         name="labels"
                         allowClear
                         onChange={(e) => handleOnChange('labels', e)}
+                        defaultValue={formData.labelsId}
                     >
                         {labels?.map(item => (
                             <Option value={item.value} key={item.id} name='labels'>
@@ -773,6 +773,7 @@ const CreateIssue = (props) => {
                         name="sprint"
                         allowClear
                         onChange={(e) => handleOnChange('sprint', e)}
+                        defaultValue={formData.sprint}
                     >
                         {sprints?.map(item => (
                             <Option value={item.value} key={item.id} name='sprint'>
@@ -789,6 +790,7 @@ const CreateIssue = (props) => {
                     <Input
                         style={{ maxWidth: 500 }}
                         onChange={(e) => handleOnChange(e.target.id, e.target.value)}
+                        defaultValue={formData.functionId}
                     />
                 </Form.Item>
 
@@ -800,6 +802,7 @@ const CreateIssue = (props) => {
                     <Input
                         style={{ maxWidth: 500 }}
                         onChange={(e) => handleOnChange(e.target.id, e.target.value)}
+                        defaultValue={formData.testcaseId}
                     />
                 </Form.Item>
                 <Form.Item
@@ -821,6 +824,7 @@ const CreateIssue = (props) => {
                         name="functionCategory"
                         allowClear
                         onChange={(e) => handleOnChange('functionCategory', e)}
+                        defaultValue={formData.functionCategory}
                     >
                         {functionCategories?.map(item => (
                             <Option value={item.value} key={item.id} name='functionCategory'>
@@ -838,6 +842,7 @@ const CreateIssue = (props) => {
                         name="linkedIssuesId"
                         allowClear
                         onChange={(e) => handleOnChange('linkedIssuesId', e)}
+                        defaultValue={formData.linkedIssuesId}
                     >
                         {linkedIssues?.map(item => (
                             <Option value={item.value} key={item.id} name='linkedIssuesId'>
@@ -856,6 +861,7 @@ const CreateIssue = (props) => {
                         name="issueId"
                         allowClear
                         onChange={(e) => handleOnChange('issueId', e)}
+                        defaultValue={formData.issueId}
                     >
                         {issues?.map(item => (
                             <Option value={item.issueId} key={item.issueId} name='issueId'>
@@ -875,6 +881,7 @@ const CreateIssue = (props) => {
                         name="epicLink"
                         allowClear
                         onChange={(e) => handleOnChange('epicLink', e)}
+                        defaultValue={formData.epicLink}
                     >
                         {epicLinks?.map(item => (
                             <Option value={item.value} key={item.id} name='epicLink'>
@@ -891,6 +898,7 @@ const CreateIssue = (props) => {
                     <DatePicker
                         name='closedDate'
                         onChange={(date, dateString) => handleOnChange('closedDate', dateString)}
+                        defaultValue={formData.closedDate}
                     />
                 </Form.Item>
                 <Form.Item
@@ -902,6 +910,7 @@ const CreateIssue = (props) => {
                         name="securityLevel"
                         allowClear
                         onChange={(e) => handleOnChange('securityLevel', e)}
+                        defaultValue={formData.securityLevel}
                     >
                         {securityLevels?.map(item => (
                             <Option value={item.value} key={item.id} name='securityLevel'>
@@ -923,6 +932,7 @@ const CreateIssue = (props) => {
                         name="defectTypeId"
                         allowClear
                         onChange={(e) => handleOnChange('defectTypeId', e)}
+                        defaultValue={formData.defectOriginId}
                     >
                         {defectTypes?.map(item => (
                             <Option value={item.defectTypeId} key={item.defectTypeId} name='defectTypeId'>
@@ -941,6 +951,7 @@ const CreateIssue = (props) => {
                         name="causeCategoryId"
                         allowClear
                         onChange={(e) => handleOnChange('causeCategoryId', e)}
+                        defaultValue={formData.causeCategoryId}
                     >
                         {causeCategories?.map(item => (
                             <Option value={item.causeCategoryId} key={item.causeCategoryId} name='causeCategoryId'>
@@ -949,6 +960,7 @@ const CreateIssue = (props) => {
                         ))}
                     </Select>
                 </Form.Item>
+
                 <Form.Item
                     label={<label className='create-issue-item-label'>Leak Cause</label>}
                     name="leakCauseId"
@@ -959,6 +971,7 @@ const CreateIssue = (props) => {
                         name="leakCauseId"
                         allowClear
                         onChange={(e) => handleOnChange('leakCauseId', e)}
+                        defaultValue={formData.leakCauseId}
                     >
                         {leakCauses?.map(item => (
                             <Option value={item.leakCauseId} key={item.leakCauseId} name='leakCauseId'>
@@ -974,6 +987,7 @@ const CreateIssue = (props) => {
                     <Input
                         style={{ maxWidth: 500 }}
                         onChange={(e) => handleOnChange(e.target.id, e.target.value)}
+                        defaultValue={formData.dueTime}
                     />
                 </Form.Item>
                 <Form.Item
@@ -984,6 +998,7 @@ const CreateIssue = (props) => {
                     <Input
                         style={{ maxWidth: 500 }}
                         onChange={(e) => handleOnChange(e.target.id, e.target.value)}
+                        defaultValue={formData.units}
                     />
                 </Form.Item>
                 <Form.Item
@@ -993,11 +1008,32 @@ const CreateIssue = (props) => {
                     <Input
                         style={{ maxWidth: 500 }}
                         onChange={(e) => handleOnChange(e.target.id, e.target.value)}
+                        defaultValue={formData.percentDone}
                     />
                 </Form.Item>
+
+                <Form.Item
+                    label={<label className='create-issue-item-label'>Check Result Message</label>}
+                    name="valuePoint"
+                >
+                    <p style={{ fontSize: 11, color: '#6b778c', margin: '5px 0 0' }}></p>
+                </Form.Item>
+
+                <Form.Item
+                    label={<label className='create-issue-item-label'>Comment</label>}
+                    name="Comment"
+                    extra={<p style={{ fontSize: 11, color: '#6b778c', margin: '5px 0 0' }}>...</p>}
+                >
+                    <EditorTextArea 
+                        name='Comment' 
+                        handleEditorContent={handleOnChange} 
+                        defaultValue={formData.comment} 
+                    />
+                </Form.Item>
+
             </Form>
         </Modal>
     );
 }
 
-export default CreateIssue;
+export default EditIssue;
