@@ -1,13 +1,13 @@
 /* eslint-disable react/jsx-key */
 /* eslint-disable react/prop-types */
 import { Layout } from 'antd';
+import { useLocation } from "react-router-dom";
 import HeaderUser from "../home/Header";
 import Slider from "./components/Slider";
-import { useLocation } from "react-router-dom";
+import AllIssue from './pages/AllIssue';
+import MyIssue from './pages/MyIssue';
 import Report from './pages/Report';
 import Search from './pages/SearchNew';
-import MyIssue from './pages/MyIssue';
-import AllIssue from './pages/AllIssue';
 const pages = [
     <Search />,
     <MyIssue />,

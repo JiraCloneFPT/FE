@@ -27,11 +27,11 @@ export const GetIssueService = async (id) => {
         return e;
     }
 };
-export const GetIssueByUserService = async (idUser) => {
+export const GetIssueByUserService = async (idUser, idComponent) => {
     try {
         const respone = await Request({
             method: "get",
-            url: `issue/report?idUser=${idUser}`,
+            url: `issue/user?idUser=${idUser}&idComponent=${idComponent}`,
             headers: {
                 "Content-Type": "application/json",
             },
