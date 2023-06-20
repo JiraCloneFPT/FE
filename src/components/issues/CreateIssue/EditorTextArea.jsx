@@ -9,7 +9,7 @@ export default function EditorTextArea(props) {
             <Editor                
                 apiKey='ufcb3pb1v6yrmtp2pd42m9ey6agt0rjhtbcplxdm9afjzcxe'
                 onInit={(evt, editor) => editorRef.current = editor}
-                initialValue=""
+                initialValue={props.defaultValue}
                 init={{
                     height: 500,
                     width: 600,
