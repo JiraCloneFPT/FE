@@ -70,7 +70,7 @@ const items3 = [
     {
         key: '3',
         label: (
-            <a rel="noopener noreferrer" href={`${link}/issues?filter=1"`}>
+            <a rel="noopener noreferrer" href={`${link}/issues?filter=1`}>
                 More ...
             </a>
         ),
@@ -144,7 +144,7 @@ export default function Header() {
     return (
         <>
             <header>
-            <CreateIssue open={opencreateIssueModal} setOpen={setOpencreateIssueModal} />
+                <CreateIssue open={opencreateIssueModal} setOpen={setOpencreateIssueModal} />
                 <div className="d-flex justify-content-between align-center container-fluid">
                     <div className='d-flex align-center'>
                         <Dropdown
@@ -235,7 +235,7 @@ export default function Header() {
                                     </Dropdown>
                                 </li>
                                 <li>
-                                <Button onClick={handleShowCreateIssueModal} type="primary" style={{ background: 'var(--BackGroundButton--)' }}>Create</Button>
+                                    <Button onClick={handleShowCreateIssueModal} type="primary" style={{ background: 'var(--BackGroundButton--)' }}>Create</Button>
                                 </li>
                             </ul>
                         </div>

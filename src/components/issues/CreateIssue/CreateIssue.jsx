@@ -106,7 +106,6 @@ const CreateIssue = (props) => {
     useEffect(() => {
         axios.get('https://localhost:7112/api/issue/GetItemsIssue')
             .then(res => {
-                console.log('ress ', res.data.data);
                 setAssignees(res.data.data.assignees)
                 setCauseCategories(res.data.data.causeCategories)
                 setComplexities(res.data.data.complexities)
@@ -183,9 +182,9 @@ const CreateIssue = (props) => {
             labelsId: formData.labelsId,
             sprint: formData.sprint,
             functionId: formData.functionId,
-            testcaseId: formData.testcaseId ,
-            functionCategory: formData.functionCategory ,
-            linkedIssuesId: formData.linkedIssuesId ,
+            testcaseId: formData.testcaseId,
+            functionCategory: formData.functionCategory,
+            linkedIssuesId: formData.linkedIssuesId,
             issueId: formData.issueId,
             epicLink: formData.epicLink,
             closedDate: formData.closedDate === '' || undefined ? null : formData.closedDate,
@@ -198,7 +197,7 @@ const CreateIssue = (props) => {
             percentDone: formData.percentDone
         }
         console.log('dataRequest ', dataRequest);
-        axios.post('https://localhost:7112/api/issue/add' , dataRequest,
+        axios.post('https://localhost:7112/api/issue/add', dataRequest,
             {
                 headers: {
                     'Content-Type': 'application/json',

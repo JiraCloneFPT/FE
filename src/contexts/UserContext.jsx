@@ -5,12 +5,16 @@ export const UserContext = createContext();
 const UserContextProvider = (props) => {
     const [user, setUser] = useState("hello");
     const [render, setRender] = useState("");
+    const [data, setData] = useState([]);
     const [component, setComponent] = useState("");
     const onSetComponent = (value) => {
         setComponent(value);
     }
     const onSetUser = (value) => {
         setUser(value);
+    };
+    const onSetData = (value) => {
+        setData(value);
     };
     const onSetRender = (value) => {
         setRender(value);
@@ -20,7 +24,9 @@ const UserContextProvider = (props) => {
             user,
             render,
             component,
+            data,
             onSetComponent,
+            onSetData,
             onSetUser,
             onSetRender
         }}>

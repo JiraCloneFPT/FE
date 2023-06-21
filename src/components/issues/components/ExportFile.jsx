@@ -1,25 +1,30 @@
 import { DownOutlined } from '@ant-design/icons';
 import { Button, Dropdown, Space } from 'antd';
+import { useContext } from 'react';
+import { UserContext } from '../../../contexts/UserContext';
 
 const items = [
     {
         label: 'Excel',
-        key: '1',
+        key: 'excel',
     },
     {
         label: 'HTML',
-        key: '2',
+        key: 'html',
     },
     {
         label: 'Word',
-        key: '3',
+        key: 'word',
     },
 ]
 
 export default function ExportFile() {
-
-    const handleMenuClick = (e) => {
-        console.log('click', e);
+    const { data } = useContext(UserContext);
+    const handleMenuClick = async (e) => {
+        if (e.key !== 'worf') {
+            
+        }
+        console.log(e.key);
     };
 
     const menuProps = {

@@ -45,7 +45,6 @@ export default function ListReported() {
     console.log(component);
     const handleGetData = async () => {
         const result = await GetIssueByUserService('1', component ? component : '-1');
-        console.log(result);
         if (result.status === 200) {
             var items = [];
             result.data.map((item) => {

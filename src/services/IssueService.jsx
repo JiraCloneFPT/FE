@@ -86,3 +86,45 @@ export const DeleteIssueService = async (id) => {
         return e;
     }
 };
+export const MyOpenIssue = async (idUser) => {
+    try {
+        const respone = await Request({
+            method: "get",
+            url: `issue/myopenissue?idUser=${idUser}`,
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+        return respone.data;
+    } catch (e) {
+        return e;
+    }
+}
+export const ReportedByMe = async (idUser) => {
+    try {
+        const respone = await Request({
+            method: "get",
+            url: `issue/reportbyme?idUser=${idUser}`,
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+        return respone.data;
+    } catch (e) {
+        return e;
+    }
+}
+export const AllIssueByUser = async (idUser) => {
+    try {
+        const respone = await Request({
+            method: "get",
+            url: `issue/allissue?idUser=${idUser}`,
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+        return respone.data;
+    } catch (e) {
+        return e;
+    }
+}

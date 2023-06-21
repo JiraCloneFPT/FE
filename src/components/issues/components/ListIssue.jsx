@@ -124,7 +124,7 @@ export default function ListIssues({ data }) {
         {
             title: 'Assignee',
             width: '20%',
-            ...getColumnSearchProps('fullName'),
+            ...getColumnSearchProps('assigneeName'),
         },
         {
             title: 'Summary',
