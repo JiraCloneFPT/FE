@@ -1,14 +1,19 @@
-/* eslint-disable react/no-unescaped-entities */
+import React from 'react';
 import { Col, Row } from 'antd';
 
-import IssuesList from './IssuesList';
+import IssuesList from './issuesList';
+import Login from '../auth/Login';
 import { useContext } from 'react';
 import { UserContext } from '../../contexts/UserContext';
-import Login from '../auth/Login';
+
+
+
+
 export default function Body() {
-    const { user } = useContext(UserContext);
+    const user = JSON.parse(sessionStorage.getItem('user'));
+
     return (
-        <div className='container-fluid' style={{ minHeight: "100vh" }}>
+        <div className='container-fluid'>
             <h1 className='titleHomePage'>System Dashboard</h1>
             <div style={{ padding: '0 20px' }}>
                 <Row gutter={[24, 16]}>
@@ -26,9 +31,8 @@ export default function Body() {
                     </Col>
                     <Col span={12}>
                         <div className='backGroundBelowPage'>
-                            <h3 className='textHomePage'>{user ? 'Assigned to Me' : 'Login'}</h3>
+                            <h3 className='textHomePage'>Assigned to Me</h3>
                             <div className='d-flex' style={{ padding: 24 }}>
-
                                 {
                                     user ? <IssuesList /> : <Login />
                                 }
