@@ -1,6 +1,7 @@
 import { Menu, Select } from 'antd';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { GetIssueByUserService } from '../../../services/IssueService';
+import { UserContext } from '../../../contexts/UserContext';
 
 const handleChange = (value) => {
     console.log(`selected ${value}`);
@@ -38,11 +39,13 @@ const elements = (item) => {
 }
 
 export default function ListReported() {
-
+    const { component } = useContext(UserContext);
     const [menu, setMenu] = useState([]);
     // const [items, setItems] = useState();
+    console.log(component);
     const handleGetData = async () => {
-        const result = await GetIssueByUserService('1');
+        const result = await GetIssueByUserService('1', component ? component : '-1');
+        console.log(result);
         if (result.status === 200) {
             var items = [];
             result.data.map((item) => {

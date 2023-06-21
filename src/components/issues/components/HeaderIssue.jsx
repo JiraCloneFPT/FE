@@ -1,11 +1,12 @@
 /* eslint-disable react/prop-types */
 import { Layout, Select, theme } from 'antd';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { GetComponentsService } from '../../../services/ComponentService';
 import ExportFile from "../components/ExportFile";
+import { UserContext } from '../../../contexts/UserContext';
 const { Header } = Layout;
 const HeaderIssue = ({ name }) => {
-    const [component, setComponent] = useState();
+    const { component, onSetComponent } = useContext(UserContext);
     const [components, setComponents] = useState([]);
     const handleGetProjects = async () => {
         const result = await GetComponentsService();
@@ -16,7 +17,10 @@ const HeaderIssue = ({ name }) => {
     } = theme.useToken();
     useEffect(() => {
         handleGetProjects();
-    }, [])
+    }, []);
+    const handleChangeCombobox = (value) => {
+        onSetComponent(value);
+    };
     return (
         <Header
             style={{
@@ -31,7 +35,7 @@ const HeaderIssue = ({ name }) => {
                 <Select
                     placeholder="Component: All"
                     value={component}
-                    onChange={setComponent}
+                    onChange={(value) => handleChangeCombobox(value)}
                     style={{
                         width: '20%',
                     }}

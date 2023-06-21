@@ -11,9 +11,10 @@ import {
     FileDoneOutlined
 } from '@ant-design/icons';
 import { Layout, Menu } from 'antd';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import '../../../assests/css/slider.css'
 import { useNavigate } from 'react-router-dom';
+import { UserContext } from '../../../contexts/UserContext';
 
 const { Sider } = Layout;
 
@@ -41,7 +42,9 @@ const items = [
 export default function Slider({ id }) {
     const [collapsed, setCollapsed] = useState(false);
     const navigate = useNavigate();
+    const { onSetComponent } = useContext(UserContext)
     const onChange = (key) => {
+        onSetComponent('');
         navigate(`?filter=${key}`);
     }
     return (
