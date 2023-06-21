@@ -17,11 +17,11 @@ import EditorTextArea from '../CreateIssue/EditorTextArea';
 import CommonUploadFiles from '../../../utils/CommonUploadFiles';
 import axios from 'axios';
 import moment from 'moment';
-import { messageIssue01, messageIssue02 } from '../../../utils/CommonMessages';
+import { messageIssue03, messageIssue04 } from '../../../utils/CommonMessages';
 
 const Option = Select.Option;
 
-const ResolveIssue = (props) => {
+const CancelIssue = (props) => {
 
     const idIssue = props.id;  
 
@@ -40,7 +40,7 @@ const ResolveIssue = (props) => {
     const [complexities, setComplexities] = useState([]);
 
     const [formData, setFormData] = useState({
-        resolutionResolve: '',
+        resolutionCancel: '',
         severity: '',
         qcActivityId: '',
         leakCauseId: '',
@@ -69,7 +69,7 @@ const ResolveIssue = (props) => {
         axios.get('https://localhost:7112/api/issue/GetItemsIssue')
             .then(res => {
                 console.log('getData ', res.data.data);
-                setResolution(res.data.data.resolutionResolve)
+                setResolution(res.data.data.resolutionCancel)
                 setAssignees(res.data.data.assignees)
                 setCauseCategories(res.data.data.causeCategories)
                 setComplexities(res.data.data.complexities)
@@ -158,7 +158,7 @@ const ResolveIssue = (props) => {
     const Header = () => {
         return (
             <div className='modal-create-issue-header'>
-                <h2 className='create-issue-text'>Resolve</h2>
+                <h2 className='create-issue-text'>Cancel</h2>
             </div>
         );
     }
@@ -170,7 +170,7 @@ const ResolveIssue = (props) => {
                 style={{ background: '#f0f0f0', color: '#000000', marginRight: '10px'  }}
                 onClick={handleCreateIssue}
             >
-                Resolve
+                Cancel
             </Button>
             <a onClick={() => props.setOpen(false)}>Cancel</a>
         </>)
@@ -211,7 +211,7 @@ const ResolveIssue = (props) => {
                         allowClear
                         onChange={(e) => handleOnChange('resolutionId', e)}
                         placeholder={'Please select...'}
-                        defaultValue={formData.resolutionResolve}
+                        defaultValue={formData.resolutionCancel}
                     >
                         {resolution?.map(item => (
                             <Option value={item.id} key={item.id} name='projectId' >
@@ -629,4 +629,4 @@ const ResolveIssue = (props) => {
     );
 }
 
-export default ResolveIssue;
+export default CancelIssue;

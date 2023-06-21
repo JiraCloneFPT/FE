@@ -1,7 +1,16 @@
 /* eslint-disable react/jsx-key */
 /* eslint-disable react/prop-types */
 import { Layout } from 'antd';
+<<<<<<< HEAD
 import HeaderUser from "../home/header";
+=======
+
+import { useLocation } from "react-router-dom";
+
+
+import HeaderUser from "../home/header";
+// >>>>>>> 8eabbb8aa230fec733ee7a812393a12dcad88356
+>>>>>>> ef0054c5bf40204039b231fcd06143d8e540c001
 import Slider from "./components/Slider";
 import AllIssue from './pages/AllIssue';
 import MyIssue from './pages/MyIssue';

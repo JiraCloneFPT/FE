@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+       .main-table {
+        border: solid 1px gray;
+        border-collapse: collapse;
+      }
+      th,
+      td {
+        padding: 10px;
+        color: rgb(70, 68, 68);
+      }
+      .status{
+        background-color: rgb(171, 169, 169);
+        color: black;
+      }
+    </style>
+  </head>
+  <body>
+    <table class="small-table">
+        <tr>
+            <td>This issue has been <b style="color: rgb(97, 97, 243) ;">CREATED</b></td>
+        </tr>
+        <tr>
+            <td>This issue is now <b>assigned to you</b> </td>
+        </tr>
+        
+    </table>
+    <table class="main-table">
+      <tbody>
+        <tr>
+          <td colspan="2" style="color: rgb(97, 97, 243)">
+            "+nameProject +" / "+ issue.IssueId +" <b class="status">"+nameStatusIssue+"</b> 
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2" style="font-size: 30px"><b>Test Jira 3</b></td>`
+        </tr>
+        <tr>
+          <td colspan="2">
+            <a href="http://127.0.0.1:3000/issues/detail/"+issue.IssueId+"">View Issue</a>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2" style="font-size: large">Issue created</td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <b>"+issue.Reporter.FullName+" </b>  created this issue on 19/Jun/23
+            9:01 PM
+          </td>
+        </tr>
+        <tr>
+          <td>Summary:</td>
+          <td>"+ issue.Summary +"</td>
+        </tr>
+        <tr>
+          <td>Issue Type:</td>
+          <td>"+ issue.IssueType.IssueTypeName+"</td>
+        </tr>
+        <tr>
+          <td>Assignee:</td>
+          <td>"+ issue.Assignee.FullName+"</td>
+        </tr>
+        <tr>
+          <td>Components:</td>
+          <td>"+ issue.Component+ "</td>
+        </tr>
+        <tr>
+          <td>Created:</td>
+          <td>"+ issue.CreateTime+ "</td>
+        </tr>
+        <tr>
+          <td>Priority:</td>
+          <td>"+issue.Priority.PriorityName+"</td>
+        </tr>
+        <tr>
+          <td>Reporter:</td>
+          <td>"+issue.Reporter.FullName+"</td>
+        </tr>
+        <tr>
+          <td>Security Level:</td>
+          <td>
+            "+issue.SecurityLevel+" 
+          </td>
+        </tr>
+        <tr>
+          <td>Check Result:</td>
+          <td>OK</td>
+        </tr>
+        <tr>
+          <td>Product:</td>
+          <td>6868227</td>
+        </tr>
+        <tr>
+          <td>QC Activity:</td>
+          <td>"+issue.Qcactivity.QcactivityName+"</td>
+        </tr>
+        <tr>
+          <td>Description:</td>
+          <td>"+issue.Description+"</td>
+        </tr>
+      </tbody>
+    </table>
+  </body>
+</html>
