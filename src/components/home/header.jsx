@@ -132,7 +132,10 @@ const items5 = [
 ];
 
 export default function Header() {
-    const { user } = useContext(UserContext)
+    const { user } = useContext(UserContext);
+    // const userId = (JSON.parse(localStorage.getItem('user'))).userId;
+    const userId = 1;
+
     const navigate = useNavigate();
     const onClick = () => {
         navigate('/')
@@ -144,7 +147,7 @@ export default function Header() {
     return (
         <>
             <header>
-            <CreateIssue open={opencreateIssueModal} setOpen={setOpencreateIssueModal} />
+            <CreateIssue userId={userId} open={opencreateIssueModal} setOpen={setOpencreateIssueModal} />
                 <div className="d-flex justify-content-between align-center container-fluid">
                     <div className='d-flex align-center'>
                         <Dropdown

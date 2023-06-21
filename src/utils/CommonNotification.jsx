@@ -7,3 +7,15 @@ export const CommonNotification = (message, description, type, placement = 'topR
         placement: placement
     });
 };
+
+export const successNotification = (msg, desc) => {
+    notification.success({
+        message: msg,
+        description: desc,
+        placement: 'topRight',
+        duration: 5,
+        style: {
+            width: 400,
+        },
+    });
+}; 

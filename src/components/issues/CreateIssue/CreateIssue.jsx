@@ -10,25 +10,32 @@ import {
     Select,
     Tooltip,
     DatePicker,
-    notification
+    Upload
 } from 'antd';
 import {
     SettingOutlined,
     QuestionCircleOutlined,
-    PlusOutlined
+    PlusOutlined,
+    UploadOutlined
 } from '@ant-design/icons';
 import { useState, useEffect } from 'react';
 import '../../../assests/css/createIssue.css';
 import EditorTextArea from './EditorTextArea';
 import CommonUploadFiles from '../../../utils/CommonUploadFiles';
+import { successNotification } from '../../../utils/CommonNotification';
 import axios from 'axios';
 import { messageIssue01, messageIssue02 } from '../../../utils/CommonMessages';
+import { ListIssueType } from '../../../utils/CommonIcon';
 
 const Option = Select.Option;
 
 const CreateIssue = (props) => {
 
     const [form] = Form.useForm();
+    const userId = props.userId;
+
+    //#region States
+    const [errors, setErrors] = useState({})
 
     const [projects, setProjects] = useState([]);
     const [issueTypes, setIssureTypes] = useState([]);
@@ -53,8 +60,8 @@ const CreateIssue = (props) => {
     const [defectTypes, setDefectTypes] = useState([]);
     const [causeCategories, setCauseCategories] = useState([]);
     const [leakCauses, setLeakCauses] = useState([]);
+    //#endregion
 
-    // const [api, contextHolder] = notification.useNotification();
     const [formData, setFormData] = useState({
         projectId: '',
         issueTypeId: '',
@@ -74,17 +81,16 @@ const CreateIssue = (props) => {
         technicalCauseId: '',
         environment: '',
         assigneeId: '',
-        // attachments: '',
         roleIssueId: '',
         reporterId: '',
-        plannedStart: null,
+        plannedStart: '',
         originalEstimate: '',
         remainingEstimate: '',
         estimateEffort: '',
         complexity: '',
         adjustedVP: '',
         dueDate: '',
-        attachments: '',
+        attachments: '',//
         labelsId: '',
         sprint: '',
         functionId: '',
@@ -102,6 +108,41 @@ const CreateIssue = (props) => {
         units: '',
         percentDone: ''
     });
+
+
+    const formValidate = () => {
+        let errors = {};
+        console.log(formData.projectId);
+        if (!formData.projectId) {
+            errors.projectId = "projectId is required"
+        }
+        if (!formData.issueTypeId) {
+            errors.issueTypeId = "issueTypeId is required"
+        }
+        if (!formData.summary) {
+            errors.summary = "summary is required"
+        }
+        if (!formData.componentId) {
+            errors.componentId = "componentId is required"
+        }
+        if (!formData.productId) {
+            errors.productId = "productId is required"
+        }
+        if (!formData.description) {
+            errors.description = "description is required"
+        }
+        if (!formData.qcActivityId) {
+            errors.qcActivityId = "qcActivityId is required"
+        }
+        if (!formData.assigneeId) {
+            errors.assigneeId = "assigneeId is required"
+        }
+        if (!formData.reporterId) {
+            errors.reporterId = "reporterId is required"
+        }
+        Object.keys(errors).length === 0 ? setErrors({}) : setErrors(errors);
+        return Object.keys(errors).length === 0;
+    }
 
     useEffect(() => {
         axios.get('https://localhost:7112/api/issue/GetItemsIssue')
@@ -136,7 +177,6 @@ const CreateIssue = (props) => {
             })
     }, [])
 
-
     const onChangeCheckboxCreateAnotherIssue = (e) => {
         console.log(`checked = ${e.target.checked}`);
     };
@@ -149,86 +189,141 @@ const CreateIssue = (props) => {
         console.log('name ', name, ' value ', value);
     }
 
-    const handleCreateIssue = () => {
-        console.log('form ', formData);
-        let dataRequest = {
-            projectId: formData.projectId,
-            issueTypeId: formData.issueTypeId,
-            summary: formData.summary,
-            componentId: formData.componentId,
-            productId: formData.productId,
-            description: formData.description,
-            descriptionTranslate: formData.descriptionTranslate,
-            defectOriginId: formData.defectOriginId === '' || undefined ? null : formData.defectOriginId,
-            priorityId: formData.priorityId === '' || undefined ? null : formData.priorityId,
-            severity: formData.severity,
-            qcActivityId: formData.qcActivityId,
-            causeAnalysis: formData.causeAnalysis,
-            causeAnalysisTranslate: formData.causeAnalysisTranslate,
-            correctAction: formData.correctAction,
-            correctActionTranslate: formData.correctActionTranslate,
-            technicalCauseId: formData.technicalCauseId === '' || undefined ? null : formData.technicalCauseId,
-            environment: formData.environment,
-            assigneeId: formData.assigneeId,
-            roleIssueId: formData.roleIssueId === '' || undefined ? null : formData.roleIssueId,
-            reporterId: formData.reporterId,
-            plannedStart: formData.plannedStart === '' || undefined ? null : formData.plannedStart,
-            originalEstimate: formData.originalEstimate,
-            remainingEstimate: formData.remainingEstimate,
-            estimateEffort: formData.estimateEffort,
-            complexity: formData.complexity === '' || undefined ? null : formData.complexity,
-            adjustedVP: formData.adjustedVP,
-            dueDate: formData.dueDate === '' || undefined ? null : formData.dueDate,
-            // attachments: formData.,
-            labelsId: formData.labelsId,
-            sprint: formData.sprint,
-            functionId: formData.functionId,
-            testcaseId: formData.testcaseId ,
-            functionCategory: formData.functionCategory ,
-            linkedIssuesId: formData.linkedIssuesId ,
-            issueId: formData.issueId,
-            epicLink: formData.epicLink,
-            closedDate: formData.closedDate === '' || undefined ? null : formData.closedDate,
-            securityLevel: formData.securityLevel,
-            defectTypeId: formData.defectTypeId === '' || undefined ? null : formData.defectTypeId,
-            causeCategoryId: formData.causeCategoryId === '' || undefined ? null : formData.causeCategoryId,
-            leakCauseId: formData.leakCauseId === '' || undefined ? null : formData.leakCauseId,
-            dueTime: formData.dueTime,
-            units: formData.units,
-            percentDone: formData.percentDone
-        }
-        console.log('dataRequest ', dataRequest);
-        axios.post('https://localhost:7112/api/issue/add' , dataRequest,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    // 'Authorization': `Bearer ${token}`
-                }
-            })
-            .then(res => {
-                props.setOpen(false);
-                form.resetFields();
-                if (res.data.code === 200) {
-                    successNotification(messageIssue01, messageIssue02('FSOFTACADEMY-0034'));
-                }
-            })
-            .catch(error => {
-                console.log(error);
-            })
+    const handleAssignToMe = () => {
+        setFormData({
+            ...formData,
+            assigneeId: userId,
+        });
     }
 
-    const successNotification = (msg, desc) => {
-        notification.success({
-            message: msg,
-            description: desc,
-            placement: 'topRight',
-            duration: 5,
-            style: {
-                width: 400,
-            },
+    const handleFileChange = (info) => {
+        console.log(info.file);
+        setFormData({
+            ...formData,
+            attachments: info.file.originFileObj,
         });
     };
 
+    const handleReset = () => {
+        props.setOpen(false);
+        setFormData({
+            projectId: '',
+            issueTypeId: '',
+            summary: '',
+            componentId: '',
+            productId: '',
+            description: '',
+            descriptionTranslate: '',
+            defectOriginId: '',
+            priorityId: '',
+            severity: '',
+            qcActivityId: '',
+            causeAnalysis: '',
+            causeAnalysisTranslate: '',
+            correctAction: '',
+            correctActionTranslate: '',
+            technicalCauseId: '',
+            environment: '',
+            assigneeId: '',
+            roleIssueId: '',
+            reporterId: '',
+            plannedStart: '',
+            originalEstimate: '',
+            remainingEstimate: '',
+            estimateEffort: '',
+            complexity: '',
+            adjustedVP: '',
+            dueDate: '',
+            attachments: '',//
+            labelsId: '',
+            sprint: '',
+            functionId: '',
+            testcaseId: '',
+            functionCategory: '',
+            linkedIssuesId: '',
+            issueId: '',
+            epicLink: '',
+            closedDate: '',
+            securityLevel: '',
+            defectTypeId: '',
+            causeCategoryId: '',
+            leakCauseId: '',
+            dueTime: '',
+            units: '',
+            percentDone: ''
+        });
+        form.resetFields();
+        setErrors({})
+    }
+
+    const handleCreateIssue = () => {
+        //#region FormData
+        const formDataRequest = new FormData();
+        formDataRequest.append('attachFile', formData.attachments);
+        formDataRequest.append('projectId', formData.projectId);
+        formDataRequest.append('issueTypeId', formData.issueTypeId);
+        formDataRequest.append('summary', formData.summary);
+        formDataRequest.append('componentId', formData.componentId);
+        formDataRequest.append('productId', formData.productId);
+        formDataRequest.append('description', formData.description);
+        formDataRequest.append('descriptionTranslate', formData.descriptionTranslate);
+        formDataRequest.append('defectOriginId', formData.defectOriginId === '' || undefined ? '' : formData.defectOriginId);
+        formDataRequest.append('priorityId', formData.priorityId === '' || undefined ? '' : formData.priorityId);
+        formDataRequest.append('severity', formData.severity === '' || undefined ? '' : formData.severity);
+        formDataRequest.append('qcActivityId', formData.qcActivityId);
+        formDataRequest.append('causeAnalysis', formData.causeAnalysis);
+        formDataRequest.append('causeAnalysisTranslate', formData.causeAnalysisTranslate);
+        formDataRequest.append('correctAction', formData.correctAction);
+        formDataRequest.append('correctActionTranslate', formData.correctActionTranslate);
+        formDataRequest.append('technicalCauseId', formData.technicalCauseId === '' || undefined ? '' : formData.technicalCauseId);
+        formDataRequest.append('environment', formData.environment);
+        formDataRequest.append('assigneeId', formData.assigneeId);
+        formDataRequest.append('roleIssueId', formData.roleIssueId === '' || undefined ? '' : formData.roleIssueId);
+        formDataRequest.append('reporterId', formData.reporterId);
+        formDataRequest.append('plannedStart', formData.plannedStart === '' || undefined ? '' : formData.plannedStart);
+        formDataRequest.append('originalEstimate	', formData.originalEstimate);
+        formDataRequest.append('remainingEstimate', formData.remainingEstimate);
+        formDataRequest.append('estimateEffort', formData.estimateEffort);
+        formDataRequest.append('complexity', formData.complexity === '' || undefined ? '' : formData.complexity);
+        formDataRequest.append('adjustedVP', formData.adjustedVP);
+        formDataRequest.append('dueDate', formData.dueDate === '' || undefined ? '' : formData.dueDate);
+        formDataRequest.append('labelsId', formData.labelsId === '' || undefined ? '' : formData.labelsId);
+        formDataRequest.append('sprint', formData.sprint === '' || undefined ? '' : formData.sprint);
+        formDataRequest.append('functionId', formData.functionId);
+        formDataRequest.append('testcaseId', formData.testcaseId);
+        formDataRequest.append('functionCategory', formData.functionCategory === '' || undefined ? '' : formData.functionCategory);
+        formDataRequest.append('linkedIssuesId', formData.linkedIssuesId === '' || undefined ? '' : formData.linkedIssuesId);
+        formDataRequest.append('issueId', formData.issueId === '' || undefined ? '' : formData.issueId);
+        formDataRequest.append('epicLink', formData.epicLink === '' || undefined ? '' : formData.epicLink);
+        formDataRequest.append('closedDate', formData.closedDate === '' || undefined ? '' : formData.closedDate);
+        formDataRequest.append('securityLevel', formData.securityLevel === '' || undefined ? '' : formData.securityLevel);
+        formDataRequest.append('defectTypeId', formData.defectTypeId === '' || undefined ? '' : formData.defectTypeId);
+        formDataRequest.append('causeCategoryId', formData.causeCategoryId === '' || undefined ? '' : formData.causeCategoryId);
+        formDataRequest.append('leakCauseId', formData.leakCauseId === '' || undefined ? '' : formData.leakCauseId);
+        formDataRequest.append('dueTime', formData.dueTime);
+        formDataRequest.append('units', formData.units);
+        formDataRequest.append('percentDone', formData.percentDone);
+        //#endregion
+        console.log('formDataRequest ', formDataRequest);
+        if (formValidate()) {
+            axios.post('https://localhost:7112/api/issue/addWithFile', formDataRequest,
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                        // 'Authorization': `Bearer ${token}`
+                    }
+                })
+                .then(res => {
+                    handleReset()
+                    if (res.data.code === 200) {
+                        successNotification(messageIssue01, messageIssue02(''));
+                    }
+                })
+                .catch(error => {
+                    console.log(error);
+                })
+        }
+    }
 
     const Header = () => {
         return (
@@ -253,14 +348,18 @@ const CreateIssue = (props) => {
             </Checkbox>
             <Button
                 type="primary"
-                style={{ background: '#0052cc' }}
-                onClick={handleCreateIssue}
+                style={{ background: '#0052cc', marginRight: 10 }}
+                onClick={() => { handleCreateIssue() }}
             >
                 Create
             </Button>
-            <Button onClick={() => props.setOpen(false)}>Cancel</Button>
+            <Button onClick={() => { handleReset() }}>
+                Cancel
+            </Button>
         </>)
     }
+
+    const colorRequired = { color : 'red'} 
 
     return (
         <Modal
@@ -268,7 +367,7 @@ const CreateIssue = (props) => {
             centered
             open={props.open}
             onOk={() => props.setOpen(false)}
-            onCancel={() => props.setOpen(false)}
+            onCancel={() => { handleReset() }}
             width={800}
             closable={false}
             className='modal-create-issue'
@@ -282,21 +381,16 @@ const CreateIssue = (props) => {
                 colon={false}
                 className='form-create-issue'
             >
-                <p style={{ fontSize: 12, color: '#6b778c', margin: '-10px 0 10px' }}>All fields marked with an asterisk (*) are required</p>
+                <p style={{ fontSize: 12, color: '#6b778c', margin: '-10px 0 10px' }}>All fields marked with an asterisk (<span style={colorRequired}>*</span>) are required</p>
                 <Form.Item
-                    label={<label className='create-issue-item-label'>Project</label>}
-                    name="projectId"
-                    rules={[
-                        {
-                            required: true,
-                        },
-                    ]}
+                    label={<label className='create-issue-item-label'>Project <span style={colorRequired}>*</span> </label>}
                 >
                     <Select
                         style={{ maxWidth: 250 }}
                         name="projectId"
                         allowClear
                         onChange={(e) => handleOnChange('projectId', e)}
+                        value={formData?.projectId}
                     >
                         {projects?.map(item => (
                             <Option value={item.projectId} key={item.projectId} name='projectId' >
@@ -304,61 +398,47 @@ const CreateIssue = (props) => {
                             </Option>
                         ))}
                     </Select>
+                    {errors.projectId && <div className="invalid-feedback" style={{ display: "block", color: 'red' }}>{errors.projectId}</div>}
                 </Form.Item>
 
                 <Form.Item
-                    label={<label className='create-issue-item-label'>Issue Type</label>}
-                    name="issueTypeId"
-                    rules={[
-                        {
-                            required: true,
-                        },
-                    ]}
+                    label={<label className='create-issue-item-label'>Issue Type<span style={colorRequired}>*</span></label>}
                 >
                     <Select
                         style={{ maxWidth: 250 }}
                         name="issueTypeId"
                         allowClear
                         onChange={(e) => handleOnChange('issueTypeId', e)}
-
+                        value={formData?.issueTypeId}
                     >
-                        {issueTypes?.map(item => (
-                            <Option value={item.issueTypeId} key={item.issueTypeId} name='issueTypeId' >
-                                {item.issueTypeName}
+                        {ListIssueType?.map(item => (
+                            <Option value={item.id} key={item.id} name='issueTypeId' >
+                                {item.render()}
                             </Option>
                         ))}
                     </Select>
-                    {" "}
                     <Tooltip color={'#172b4d'} placement="bottom" title={<p style={{ fontSize: 12 }}>Get local help about Issue Type</p>}>
                         <QuestionCircleOutlined style={{ color: "#6b778c" }} />
                     </Tooltip>
+                    {errors.issueTypeId && <div className="invalid-feedback" style={{ display: "block", color: 'red' }}>{errors.issueTypeId}</div>}
                 </Form.Item>
 
                 <div style={{ borderBottom: '1px solid #dddddd', marginBottom: 15 }}></div>
 
                 <Form.Item
-                    label={<label className='create-issue-item-label'>Summary</label>}
-                    name="summary"
-                    rules={[
-                        {
-                            required: true,
-                        },
-                    ]}
+                    label={<label className='create-issue-item-label'>Summary<span style={colorRequired}>*</span></label>}
                 >
                     <Input
+                        name="summary"
                         style={{ maxWidth: 500 }}
-                        onChange={(e) => handleOnChange(e.target.id, e.target.value)}
+                        onChange={(e) => handleOnChange(e.target.name, e.target.value)}
+                        value={formData?.summary}
                     />
+                    {errors.summary && <div className="invalid-feedback" style={{ display: "block", color: 'red' }}>{errors.summary}</div>}
                 </Form.Item>
 
                 <Form.Item
-                    label={<label className='create-issue-item-label'>Component/s</label>}
-                    name="componentId"
-                    rules={[
-                        {
-                            required: true,
-                        },
-                    ]}
+                    label={<label className='create-issue-item-label'>Component/s<span style={colorRequired}>*</span></label>}
                     extra={<p style={{ fontSize: 11, color: '#6b778c', margin: '5px 0 0' }}>Start typing to get a list of possible matches or press down to select.</p>}
                 >
                     <Select
@@ -366,6 +446,7 @@ const CreateIssue = (props) => {
                         name="componentId"
                         allowClear
                         onChange={(e) => handleOnChange('componentId', e)}
+                        value={formData?.componentId}
                     >
                         {components?.map(item => (
                             <Option value={item.componentId} key={item.componentId} name='componentId'>
@@ -373,16 +454,11 @@ const CreateIssue = (props) => {
                             </Option>
                         ))}
                     </Select>
+                    {errors.componentId && <div className="invalid-feedback" style={{ display: "block", color: 'red' }}>{errors.componentId}</div>}
                 </Form.Item>
 
                 <Form.Item
-                    label={<label className='create-issue-item-label'>Product</label>}
-                    name="productId"
-                    rules={[
-                        {
-                            required: true,
-                        },
-                    ]}
+                    label={<label className='create-issue-item-label'>Product<span style={colorRequired}>*</span></label>}
                     extra={<p style={{ fontSize: 11, color: '#6b778c', margin: '5px 0 0' }}>For all issue type, except Product</p>}
                 >
                     <Select
@@ -390,6 +466,7 @@ const CreateIssue = (props) => {
                         name="productId"
                         allowClear
                         onChange={(e) => handleOnChange('productId', e)}
+                        value={formData?.productId}
                     >
                         {products?.map(item => (
                             <Option value={item.productId} key={item.productId} name='productId'>
@@ -397,38 +474,37 @@ const CreateIssue = (props) => {
                             </Option>
                         ))}
                     </Select>
+                    {errors.productId && <div className="invalid-feedback" style={{ display: "block", color: 'red' }}>{errors.productId}</div>}
                 </Form.Item>
 
                 <Form.Item
-                    label={<label className='create-issue-item-label'>Description</label>}
-                    name="description"
-                    rules={[
-                        {
-                            required: true,
-                        },
-                    ]}
+                    label={<label className='create-issue-item-label'>Description<span style={colorRequired}>*</span></label>}
                 >
-                    <EditorTextArea name='description' handleEditorContent={handleOnChange} />
+                    <EditorTextArea
+                        name='description'
+                        defaultValue={formData?.description}
+                        handleEditorContent={handleOnChange} />
+                    {errors.description && <div className="invalid-feedback" style={{ display: "block", color: 'red' }}>{errors.description}</div>}
                 </Form.Item>
 
                 <Form.Item
                     label={<label className='create-issue-item-label'>Description (Translated)</label>}
-                    name="descriptionTranslate"
                     extra={<p style={{ fontSize: 11, color: '#6b778c', margin: '5px 0 0' }}>Use for Comtor to translate bug</p>}
                 >
-                    <EditorTextArea name='descriptionTranslate' handleEditorContent={handleOnChange} />
+                    <EditorTextArea 
+                        name='descriptionTranslate' 
+                        defaultValue={formData?.descriptionTranslate} 
+                        handleEditorContent={handleOnChange} />
                 </Form.Item>
 
                 <Form.Item
                     label={<label className='create-issue-item-label'>Fix Version/s</label>}
-                    name="fixVersion"
                 >
                     <span style={{ display: 'inline-block', fontWeight: 700, paddingTop: 5, color: '#172b4d' }}>None</span>
                 </Form.Item>
 
                 <Form.Item
                     label={<label className='create-issue-item-label'>Defect Origin</label>}
-                    name="defectOriginId"
                     extra={<p style={{ fontSize: 11, color: '#6b778c', margin: '5px 0 0' }}>Original of defect</p>}
                 >
                     <Select
@@ -436,6 +512,7 @@ const CreateIssue = (props) => {
                         name="defectOriginId"
                         allowClear
                         onChange={(e) => handleOnChange('defectOriginId', e)}
+                        value={formData?.defectOriginId}
                     >
                         {defectOrigins?.map(item => (
                             <Option value={item.defectOriginId} key={item.defectOriginId} name='defectOriginId'>
@@ -447,13 +524,13 @@ const CreateIssue = (props) => {
 
                 <Form.Item
                     label={<label className='create-issue-item-label'>Priority</label>}
-                    name="priorityId"
                 >
                     <Select
                         style={{ maxWidth: 250 }}
                         name="priorityId"
                         allowClear
                         onChange={(e) => handleOnChange('priorityId', e)}
+                        value={formData?.priorityId}
                     >
                         {priorities?.map(item => (
                             <Option value={item.priorityId} key={item.priorityId} name='priorityId'>
@@ -465,7 +542,6 @@ const CreateIssue = (props) => {
 
                 <Form.Item
                     label={<label className='create-issue-item-label'>Severity</label>}
-                    name="severity"
                     extra={<p style={{ fontSize: 11, color: '#6b778c', margin: '5px 0 0' }}>Default configuration schema generated by JIRA</p>}
                 >
                     <Select
@@ -473,6 +549,7 @@ const CreateIssue = (props) => {
                         name="severity"
                         allowClear
                         onChange={(e) => handleOnChange('severity', e)}
+                        value={formData?.severity}
                     >
                         {severities?.map(item => (
                             <Option value={item.value} key={item.id} name='severity'>
@@ -483,13 +560,7 @@ const CreateIssue = (props) => {
                 </Form.Item>
 
                 <Form.Item
-                    label={<label className='create-issue-item-label'>QC Activity</label>}
-                    name="qcActivityId"
-                    rules={[
-                        {
-                            required: true,
-                        },
-                    ]}
+                    label={<label className='create-issue-item-label'>QC Activity<span style={colorRequired}>*</span></label>}
                     extra={<p style={{ fontSize: 11, color: '#6b778c', margin: '5px 0 0' }}>The activity of Quality Control process</p>}
                 >
                     <Select
@@ -497,6 +568,7 @@ const CreateIssue = (props) => {
                         name="qcActivityId"
                         allowClear
                         onChange={(e) => handleOnChange('qcActivityId', e)}
+                        value={formData?.qcActivityId}
                     >
                         {qCActivities?.map(item => (
                             <Option value={item.qcactivityId} key={item.qcactivityId} name='qcActivityId'>
@@ -504,56 +576,64 @@ const CreateIssue = (props) => {
                             </Option>
                         ))}
                     </Select>
+                    {errors.qcActivityId && <div className="invalid-feedback" style={{ display: "block", color: 'red' }}>{errors.qcActivityId}</div>}
                 </Form.Item>
 
                 <Form.Item
                     label={<label className='create-issue-item-label'>Affects Version/s</label>}
-                    name="affectsVersion"
                 >
                     <span style={{ display: 'inline-block', fontWeight: 700, paddingTop: 5, color: '#172b4d' }}>None</span>
                 </Form.Item>
 
                 <Form.Item
                     label={<label className='create-issue-item-label'>Cause Analysis</label>}
-                    name="causeAnalysis"
                     extra={<p style={{ fontSize: 11, color: '#6b778c', margin: '5px 0 0' }}>Store the root cause of bug</p>}
                 >
-                    <EditorTextArea name='causeAnalysis' handleEditorContent={handleOnChange} />
+                    <EditorTextArea 
+                        name='causeAnalysis' 
+                        defaultValue={formData?.causeAnalysis} 
+                        handleEditorContent={handleOnChange} />
                 </Form.Item>
 
                 <Form.Item
                     label={<label className='create-issue-item-label'>Cause Analysis (Translated)</label>}
-                    name="causeAnalysisTranslate"
                     extra={<p style={{ fontSize: 11, color: '#6b778c', margin: '5px 0 0' }}>Use for Comtor to translate the Cause Analysis.</p>}
                 >
-                    <EditorTextArea name='causeAnalysisTranslate' handleEditorContent={handleOnChange} />
+                    <EditorTextArea 
+                        name='causeAnalysisTranslate' 
+                        defaultValue={formData?.causeAnalysisTranslate} 
+                        handleEditorContent={handleOnChange} />
                 </Form.Item>
 
                 <Form.Item
                     label={<label className='create-issue-item-label'>Correct Action</label>}
-                    name="correctAction"
                     extra={<p style={{ fontSize: 11, color: '#6b778c', margin: '5px 0 0' }}>How to fix or correct this bug</p>}
                 >
-                    <EditorTextArea name='correctAction' handleEditorContent={handleOnChange} />
+                    <EditorTextArea 
+                        name='correctAction'
+                        defaultValue={formData?.correctAction}  
+                        handleEditorContent={handleOnChange} />
                 </Form.Item>
 
                 <Form.Item
                     label={<label className='create-issue-item-label'>Correct Action (Translated)</label>}
-                    name="correctActionTranslate"
                     extra={<p style={{ fontSize: 11, color: '#6b778c', margin: '5px 0 0' }}>Use for comter to translate the Corrective Action field.</p>}
                 >
-                    <EditorTextArea name='correctActionTranslate' handleEditorContent={handleOnChange} />
+                    <EditorTextArea 
+                        name='correctActionTranslate' 
+                        defaultValue={formData?.correctActionTranslate}  
+                        handleEditorContent={handleOnChange} />
                 </Form.Item>
 
                 <Form.Item
                     label={<label className='create-issue-item-label'>Technical Cause</label>}
-                    name="technicalCauseId"
                 >
                     <Select
                         style={{ maxWidth: 250 }}
                         name="technicalCauseId"
                         allowClear
                         onChange={(e) => handleOnChange('technicalCauseId', e)}
+                        value={formData?.technicalCauseId}
                     >
                         {technicalCauses?.map(item => (
                             <Option value={item.technicalCauseId} key={item.technicalCauseId} name='technicalCauseId'>
@@ -565,26 +645,23 @@ const CreateIssue = (props) => {
 
                 <Form.Item
                     label={<label className='create-issue-item-label'>Environment</label>}
-                    name="environment"
                     extra={<p style={{ fontSize: 11, color: '#6b778c', margin: '5px 0 0' }}>For example operating system, software platform and/or hardware specifications (include as appropriate for the issue).</p>}
                 >
-                    <EditorTextArea name='environment' handleEditorContent={handleOnChange} />
+                    <EditorTextArea 
+                        name='environment' 
+                        defaultValue={formData?.environment}
+                        handleEditorContent={handleOnChange} />
                 </Form.Item>
 
                 <Form.Item
-                    label={<label className='create-issue-item-label'>Assignee</label>}
-                    name="assigneeId"
-                    rules={[
-                        {
-                            required: true,
-                        },
-                    ]}
+                    label={<label className='create-issue-item-label'>Assignee<span style={colorRequired}>*</span></label>}
                 >
                     <Select
                         style={{ maxWidth: 500 }}
                         name="assigneeId"
                         allowClear
                         onChange={(e) => handleOnChange('assigneeId', e)}
+                        value={formData?.assigneeId}
                     >
                         {assignees?.map(item => (
                             <Option value={item.userId} key={item.userId} name='assigneeId'>
@@ -592,12 +669,12 @@ const CreateIssue = (props) => {
                             </Option>
                         ))}
                     </Select>
-                    <a style={{ color: '#0052cc' }}>Assign to me</a>
+                    <a style={{ marginLeft: 10, color: '#0052cc' }} onClick={handleAssignToMe}>Assign to me</a>
+                    {errors.assigneeId && <div className="invalid-feedback" style={{ display: "block", color: 'red' }}>{errors.assigneeId}</div>}
                 </Form.Item>
 
                 <Form.Item
                     label={<label className='create-issue-item-label'>Role</label>}
-                    name="roleIssueId"
                     extra={<p style={{ fontSize: 11, color: '#6b778c', margin: '5px 0 0' }}>Role of person who detects bug</p>}
                 >
                     <Select
@@ -605,6 +682,7 @@ const CreateIssue = (props) => {
                         name="roleIssueId"
                         allowClear
                         onChange={(e) => handleOnChange('roleIssueId', e)}
+                        value={formData?.roleIssueId}
                     >
                         {roles?.map(item => (
                             <Option value={item.roleId} key={item.roleId} name='roleIssueId'>
@@ -615,13 +693,7 @@ const CreateIssue = (props) => {
                 </Form.Item>
 
                 <Form.Item
-                    label={<label className='create-issue-item-label'>Reporter</label>}
-                    name="reporterId"
-                    rules={[
-                        {
-                            required: true,
-                        },
-                    ]}
+                    label={<label className='create-issue-item-label'>Reporter<span style={colorRequired}>*</span></label>}
                     extra={<p style={{ fontSize: 11, color: '#6b778c', margin: '5px 0 0' }}>Start typing to get a list of possible matches.</p>}
                 >
                     <Select
@@ -629,6 +701,7 @@ const CreateIssue = (props) => {
                         name="reporterId"
                         allowClear
                         onChange={(e) => handleOnChange('reporterId', e)}
+                        value={formData?.reporterId}
                     >
                         {reporters?.map(item => (
                             <Option value={item.userId} key={item.userId} name='reporterId'>
@@ -636,11 +709,11 @@ const CreateIssue = (props) => {
                             </Option>
                         ))}
                     </Select>
+                    {errors.reporterId && <div className="invalid-feedback" style={{ display: "block", color: 'red' }}>{errors.reporterId}</div>}
                 </Form.Item>
 
                 <Form.Item
                     label={<label className='create-issue-item-label'>Planned Start</label>}
-                    name="plannedStart"
                     extra={<p style={{ fontSize: 11, color: '#6b778c', margin: '5px 0 0' }}>Use the dd/MMM/yy h:mm a date format</p>}
                 >
                     <DatePicker
@@ -651,14 +724,14 @@ const CreateIssue = (props) => {
 
                 <Form.Item
                     label={<label className='create-issue-item-label'>Original Estimate</label>}
-                    name="originalEstimate"
                     extra={<p style={{ fontSize: 11, color: '#6b778c', margin: '5px 0 0' }}>The original estimate of how much work is involved in resolving this issue.</p>}
                 >
                     <Input
                         name='originalEstimate'
                         style={{ maxWidth: 80 }}
                         onChange={(e) => handleOnChange(e.target.name, e.target.value)}
-                    /> {" "}
+                        value={formData?.originalEstimate}
+                    />
                     <span style={{ display: 'inline-block', paddingTop: 5, color: '#172b4d' }}>(eg. 3w 4d 12h)</span>{" "}
                     <Tooltip color={'#172b4d'} placement="bottom" title={<p style={{ fontSize: 12 }}>Get local help about Time Tracking</p>}>
                         <QuestionCircleOutlined style={{ color: "#6b778c" }} />
@@ -667,14 +740,14 @@ const CreateIssue = (props) => {
 
                 <Form.Item
                     label={<label className='create-issue-item-label'>Remaining Estimate</label>}
-                    name="remainingEstimate"
                     extra={<p style={{ fontSize: 11, color: '#6b778c', margin: '5px 0 0' }}>An estimate of how much work remains until this issue will be resolved.</p>}
                 >
                     <Input
                         name="remainingEstimate"
                         style={{ maxWidth: 80 }}
                         onChange={(e) => handleOnChange(e.target.name, e.target.value)}
-                    /> {" "}
+                        value={formData?.remainingEstimate}
+                    />
                     <span style={{ display: 'inline-block', paddingTop: 5, color: '#172b4d' }}>(eg. 3w 4d 12h)</span>{" "}
                     <Tooltip color={'#172b4d'} placement="bottom" title={<p style={{ fontSize: 12 }}>Get local help about Time Tracking</p>}>
                         <QuestionCircleOutlined style={{ color: "#6b778c" }} />
@@ -683,18 +756,18 @@ const CreateIssue = (props) => {
 
                 <Form.Item
                     label={<label className='create-issue-item-label'>Estimated effort (h)</label>}
-                    name="estimateEffort"
                     extra={<p style={{ fontSize: 11, color: '#6b778c', margin: '5px 0 0' }}>Estimated Effort for FSCoin (hours)</p>}
                 >
                     <Input
+                        name="estimateEffort"
                         style={{ maxWidth: 250 }}
-                        onChange={(e) => handleOnChange(e.target.id, e.target.value)}
+                        onChange={(e) => handleOnChange(e.target.name, e.target.value)}
+                        value={formData?.estimateEffort}
                     />
                 </Form.Item>
 
                 <Form.Item
                     label={<label className='create-issue-item-label'>Complexity</label>}
-                    name="complexity"
                     extra={<p style={{ fontSize: 11, color: '#6b778c', margin: '5px 0 0' }}>Complexity for FSCoin</p>}
                 >
                     <Select
@@ -702,6 +775,7 @@ const CreateIssue = (props) => {
                         name="complexity"
                         allowClear
                         onChange={(e) => handleOnChange('complexity', e)}
+                        value={formData?.complexity}
                     >
                         {complexities?.map(item => (
                             <Option value={item.id} key={item.id} name='complexity'>
@@ -713,25 +787,24 @@ const CreateIssue = (props) => {
 
                 <Form.Item
                     label={<label className='create-issue-item-label'>Value Point</label>}
-                    name="valuePoint"
                 >
                     <p style={{ fontSize: 11, color: '#6b778c', margin: '5px 0 0' }}>Value Point for FSCoin</p>
                 </Form.Item>
 
                 <Form.Item
                     label={<label className='create-issue-item-label'>Adjusted VP</label>}
-                    name="adjustedVP"
                     extra={<p style={{ fontSize: 11, color: '#6b778c', margin: '5px 0 0' }}>To adjust Value Point of Task. Adjusted VP(%) must be between -20 and 20</p>}
                 >
                     <Input
+                        name='adjustedVP'
                         style={{ maxWidth: 250 }}
-                        onChange={(e) => handleOnChange(e.target.id, e.target.value)}
+                        onChange={(e) => handleOnChange(e.target.name, e.target.value)}
+                        value={formData?.adjustedVP}
                     />
                 </Form.Item>
 
                 <Form.Item
                     label={<label className='create-issue-item-label'>Due Date</label>}
-                    name="dueDate"
                 >
                     <DatePicker
                         name='dueDate'
@@ -741,14 +814,18 @@ const CreateIssue = (props) => {
 
                 <Form.Item
                     label={<label className='create-issue-item-label'>Attachment</label>}
-                    name="attachments"
                 >
-                    <CommonUploadFiles />
+                    {/* <CommonUploadFiles /> */}
+                    <Upload.Dragger onChange={handleFileChange}>
+                        <p className="ant-upload-drag-icon">
+                            <UploadOutlined />
+                        </p>
+                        <p className="ant-upload-text">Click or drag file to this area to upload</p>
+                    </Upload.Dragger>
                 </Form.Item>
 
                 <Form.Item
                     label={<label className='create-issue-item-label'>Labels</label>}
-                    name="labels"
                     extra={<p style={{ fontSize: 11, color: '#6b778c', margin: '5px 0 0' }}>Begin typing to find and create labels or press down to select a suggested label.</p>}
                 >
                     <Select
@@ -756,6 +833,7 @@ const CreateIssue = (props) => {
                         name="labels"
                         allowClear
                         onChange={(e) => handleOnChange('labels', e)}
+                        value={formData?.labels}
                     >
                         {labels?.map(item => (
                             <Option value={item.value} key={item.id} name='labels'>
@@ -766,13 +844,13 @@ const CreateIssue = (props) => {
                 </Form.Item>
                 <Form.Item
                     label={<label className='create-issue-item-label'>Sprint</label>}
-                    name="sprint"
                 >
                     <Select
                         style={{ maxWidth: 500 }}
                         name="sprint"
                         allowClear
                         onChange={(e) => handleOnChange('sprint', e)}
+                        value={formData?.sprint}
                     >
                         {sprints?.map(item => (
                             <Option value={item.value} key={item.id} name='sprint'>
@@ -783,28 +861,29 @@ const CreateIssue = (props) => {
                 </Form.Item>
                 <Form.Item
                     label={<label className='create-issue-item-label'>Function ID</label>}
-                    name="functionId"
                     extra={<p style={{ fontSize: 11, color: '#6b778c', margin: '5px 0 0' }}>Function ID for Bug and Task</p>}
                 >
                     <Input
+                        name='functionId'
                         style={{ maxWidth: 500 }}
                         onChange={(e) => handleOnChange(e.target.id, e.target.value)}
+                        value={formData?.sprint}
                     />
                 </Form.Item>
 
                 <Form.Item
                     label={<label className='create-issue-item-label'>Testcase ID</label>}
-                    name="testcaseId"
                     extra={<p style={{ fontSize: 11, color: '#6b778c', margin: '5px 0 0' }}>Store of Testcase ID that produce the bug</p>}
                 >
                     <Input
+                        name='testcaseId'
                         style={{ maxWidth: 500 }}
                         onChange={(e) => handleOnChange(e.target.id, e.target.value)}
+                        value={formData?.testcaseId}
                     />
                 </Form.Item>
                 <Form.Item
                     label={<label className='create-issue-item-label'>Function Category</label>}
-                    name="functionCategory"
                     extra={
                         <>
                             <div style={{ fontSize: 11, color: '#6b778c', margin: '5px 0 0' }}>
@@ -821,6 +900,7 @@ const CreateIssue = (props) => {
                         name="functionCategory"
                         allowClear
                         onChange={(e) => handleOnChange('functionCategory', e)}
+                        value={formData?.functionCategory}
                     >
                         {functionCategories?.map(item => (
                             <Option value={item.value} key={item.id} name='functionCategory'>
@@ -831,13 +911,13 @@ const CreateIssue = (props) => {
                 </Form.Item>
                 <Form.Item
                     label={<label className='create-issue-item-label'>Linked Issues</label>}
-                    name="linkedIssuesId"
                 >
                     <Select
                         style={{ maxWidth: 250 }}
                         name="linkedIssuesId"
                         allowClear
                         onChange={(e) => handleOnChange('linkedIssuesId', e)}
+                        value={formData?.linkedIssuesId}
                     >
                         {linkedIssues?.map(item => (
                             <Option value={item.value} key={item.id} name='linkedIssuesId'>
@@ -848,7 +928,6 @@ const CreateIssue = (props) => {
                 </Form.Item>
                 <Form.Item
                     label={<label className='create-issue-item-label'>Issue</label>}
-                    name="issueId"
                     extra={<p style={{ fontSize: 11, color: '#6b778c', margin: '5px 0 0' }}>Begin typing to search for issues to link. If you leave it blank, no link will be made.</p>}
                 >
                     <Select
@@ -856,6 +935,7 @@ const CreateIssue = (props) => {
                         name="issueId"
                         allowClear
                         onChange={(e) => handleOnChange('issueId', e)}
+                        value={formData?.issueId}
                     >
                         {issues?.map(item => (
                             <Option value={item.issueId} key={item.issueId} name='issueId'>
@@ -867,7 +947,6 @@ const CreateIssue = (props) => {
                 </Form.Item>
                 <Form.Item
                     label={<label className='create-issue-item-label'>Epic Link</label>}
-                    name="epicLink"
                     extra={<p style={{ fontSize: 11, color: '#6b778c', margin: '5px 0 0' }}>Choose an epic to assign this issue to.</p>}
                 >
                     <Select
@@ -875,6 +954,7 @@ const CreateIssue = (props) => {
                         name="epicLink"
                         allowClear
                         onChange={(e) => handleOnChange('epicLink', e)}
+                        value={formData?.epicLink}
                     >
                         {epicLinks?.map(item => (
                             <Option value={item.value} key={item.id} name='epicLink'>
@@ -885,7 +965,6 @@ const CreateIssue = (props) => {
                 </Form.Item>
                 <Form.Item
                     label={<label className='create-issue-item-label'>Closed Date</label>}
-                    name="closedDate"
                     extra={<p style={{ fontSize: 11, color: '#6b778c', margin: '5px 0 0' }}>Use the d/MMM/yy date format</p>}
                 >
                     <DatePicker
@@ -895,13 +974,13 @@ const CreateIssue = (props) => {
                 </Form.Item>
                 <Form.Item
                     label={<label className='create-issue-item-label'>Security Level</label>}
-                    name="securityLevel"
                 >
                     <Select
                         style={{ maxWidth: 250 }}
                         name="securityLevel"
                         allowClear
                         onChange={(e) => handleOnChange('securityLevel', e)}
+                        value={formData?.securityLevel}
                     >
                         {securityLevels?.map(item => (
                             <Option value={item.value} key={item.id} name='securityLevel'>
@@ -915,7 +994,6 @@ const CreateIssue = (props) => {
                 </Form.Item>
                 <Form.Item
                     label={<label className='create-issue-item-label'>Defect Type</label>}
-                    name="defectTypeId"
                     extra={<p style={{ fontSize: 11, color: '#6b778c', margin: '5px 0 0' }}>Type of bug: <a style={{ fontSize: 11 }}>Guideline</a></p>}
                 >
                     <Select
@@ -923,6 +1001,7 @@ const CreateIssue = (props) => {
                         name="defectTypeId"
                         allowClear
                         onChange={(e) => handleOnChange('defectTypeId', e)}
+                        value={formData?.defectTypeId}
                     >
                         {defectTypes?.map(item => (
                             <Option value={item.defectTypeId} key={item.defectTypeId} name='defectTypeId'>
@@ -933,7 +1012,6 @@ const CreateIssue = (props) => {
                 </Form.Item>
                 <Form.Item
                     label={<label className='create-issue-item-label'>Cause Category</label>}
-                    name="causeCategoryId"
                     extra={<p style={{ fontSize: 11, color: '#6b778c', margin: '5px 0 0' }}>The root cause of 1 bug: <a style={{ fontSize: 11 }}>Guideline</a></p>}
                 >
                     <Select
@@ -941,6 +1019,7 @@ const CreateIssue = (props) => {
                         name="causeCategoryId"
                         allowClear
                         onChange={(e) => handleOnChange('causeCategoryId', e)}
+                        value={formData?.causeCategoryId}
                     >
                         {causeCategories?.map(item => (
                             <Option value={item.causeCategoryId} key={item.causeCategoryId} name='causeCategoryId'>
@@ -951,7 +1030,6 @@ const CreateIssue = (props) => {
                 </Form.Item>
                 <Form.Item
                     label={<label className='create-issue-item-label'>Leak Cause</label>}
-                    name="leakCauseId"
                     extra={<p style={{ width: 600, fontSize: 11, color: '#6b778c', margin: '5px 0 0' }}>Leak cause define the reason why the defect are leaked to latter phase. Why the Quality Control of the previous phase did not find out that defect</p>}
                 >
                     <Select
@@ -959,6 +1037,7 @@ const CreateIssue = (props) => {
                         name="leakCauseId"
                         allowClear
                         onChange={(e) => handleOnChange('leakCauseId', e)}
+                        value={formData?.leakCauseId}
                     >
                         {leakCauses?.map(item => (
                             <Option value={item.leakCauseId} key={item.leakCauseId} name='leakCauseId'>
@@ -969,30 +1048,33 @@ const CreateIssue = (props) => {
                 </Form.Item>
                 <Form.Item
                     label={<label className='create-issue-item-label'>Due Time</label>}
-                    name="dueTime"
                 >
                     <Input
+                        name='dueTime'
                         style={{ maxWidth: 500 }}
-                        onChange={(e) => handleOnChange(e.target.id, e.target.value)}
+                        onChange={(e) => handleOnChange(e.target.name, e.target.value)}
+                        value={formData?.dueTime}
                     />
                 </Form.Item>
                 <Form.Item
                     label={<label className='create-issue-item-label'>Units</label>}
-                    name="units"
                     extra={<p style={{ width: 600, fontSize: 11, color: '#6b778c', margin: '5px 0 0' }}>The field Estimate is a full time estimation. A person can be assigned to a task in partial time. This field is for such purpose. The value is a percentage from 1 to 100.</p>}
                 >
                     <Input
+                        name='units'
                         style={{ maxWidth: 500 }}
-                        onChange={(e) => handleOnChange(e.target.id, e.target.value)}
+                        onChange={(e) => handleOnChange(e.target.name, e.target.value)}
+                        value={formData?.units}
                     />
                 </Form.Item>
                 <Form.Item
                     label={<label className='create-issue-item-label'>PercentDone</label>}
-                    name="percentDone"
                 >
                     <Input
+                        name='percentDone'
                         style={{ maxWidth: 500 }}
-                        onChange={(e) => handleOnChange(e.target.id, e.target.value)}
+                        onChange={(e) => handleOnChange(e.target.name, e.target.value)}
+                        value={formData?.percentDone}
                     />
                 </Form.Item>
             </Form>

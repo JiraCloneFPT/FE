@@ -7,6 +7,8 @@ import { useParams } from 'react-router-dom';
 import Details from './Details';
 import ResolveIssue from './ResolveIssue';
 import EditIssue from './EditIssue';
+import CancelIssue from './CancelIssue';
+import CloseIssue from './CloseIssue';
 import { GetIssueService } from '../../../services/IssueService';
 
 export default function Detail() {
@@ -21,14 +23,23 @@ export default function Detail() {
     }, []);
 
     const [openResolveIssueModal, setOpenResolveIssueModal] = useState(false);
-    const handleShowResolveIssueModal = (e) => {
+    const handleShowResolveIssueModal = () => {
         setOpenResolveIssueModal(true);
     }
 
     const [openEditIssueModal, setOpenEditIssueModal] = useState(false);
     const handleShowEditIssueModal = () => {
-        console.log('edit ', );
         setOpenEditIssueModal(true);
+    }
+
+    const [openCancelIssueModal, setOpenCancelIssueModal] = useState(false);
+    const handleShowCancelIssueModal = () => {
+        setOpenCancelIssueModal(true);
+    }
+
+    const [openCloseIssueModal, setOpenCloseIssueModal] = useState(false);
+    const handleShowCloseIssueModal = () => {
+        setOpenCloseIssueModal(true);
     }
 
     const items = [
@@ -38,7 +49,7 @@ export default function Detail() {
                     <span className='menuProgress-1'>Start Progress</span>
                     <ArrowRightOutlined className='menuProgress-2' />
                     <div className='menuProgress-3 progress'>
-                        <span>In Progress</span>
+                        <span>IN PROGRESS</span>
                     </div>
                 </div>,
             key: '0',
@@ -49,13 +60,11 @@ export default function Detail() {
                     <span className='menuProgress-1'>Resolve</span>
                     <ArrowRightOutlined className='menuProgress-2' />
                     <div className='menuProgress-3 resolve'>
-                        <span>Resolved</span>
+                        <span>RESOLVED</span>
                     </div>
                 </div>,
             key: '1',
-            onClick: (e) => {
-                handleShowResolveIssueModal(e)
-            }
+            onClick: handleShowResolveIssueModal
         },
         {
             label:
@@ -63,10 +72,11 @@ export default function Detail() {
                     <span className='menuProgress-1'>Cancel</span>
                     <ArrowRightOutlined className='menuProgress-2' />
                     <div className='menuProgress-3 cancel'>
-                        <span>Cancelled</span>
+                        <span>CANCELLED</span>
                     </div>
                 </div>,
             key: '2',
+            onClick: handleShowCancelIssueModal
         },
         {
             label:
@@ -74,17 +84,31 @@ export default function Detail() {
                     <span className='menuProgress-1'>Re-Open</span>
                     <ArrowRightOutlined className='menuProgress-2' />
                     <div className='menuProgress-3 cancel'>
-                        <span>reopened</span>
+                        <span>REOPENED</span>
                     </div>
                 </div>,
             key: '3',
+        },
+        {
+            label:
+                <div className='d-flex align-center'>
+                    <span className='menuProgress-1'>Close</span>
+                    <ArrowRightOutlined className='menuProgress-2' />
+                    <div className='menuProgress-3 cancel'>
+                        <span>CLOSED</span>
+                    </div>
+                </div>,
+            key: '4',
+            onClick: handleShowCloseIssueModal
         },
     ];
 
     return (
         <>
-        <ResolveIssue open={openResolveIssueModal} setOpen={setOpenResolveIssueModal} />
-        <EditIssue open={openEditIssueModal} setOpen={setOpenEditIssueModal} />
+        <ResolveIssue id={id} open={openResolveIssueModal} setOpen={setOpenResolveIssueModal} />
+        <EditIssue id={id} open={openEditIssueModal} setOpen={setOpenEditIssueModal} />
+        <CancelIssue id={id} open={openCancelIssueModal} setOpen={setOpenCancelIssueModal} />
+        <CloseIssue id={id} open={openCloseIssueModal} setOpen={setOpenCloseIssueModal} />
             <div className='d-flex align-center'>
                 <svg id="Default" xmlns="http://www.w3.org/2000/svg" width={48} height={48}
                     viewBox="0 0 128 128">
