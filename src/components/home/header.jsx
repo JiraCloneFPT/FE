@@ -1,7 +1,12 @@
+/* eslint-disable no-undef */
+/* eslint-disable no-unused-vars */
 import { UnorderedListOutlined, BellFilled, QuestionOutlined } from '@ant-design/icons';
 import { DownOutlined, SearchOutlined } from '@ant-design/icons';
 import { Dropdown, Space, Button, Input } from 'antd';
-
+import CreateIssue from '../issues/CreateIssue/CreateIssue';
+import { useContext, useState } from 'react';
+import { UserContext } from '../../contexts/UserContext'
+import { useNavigate } from 'react-router-dom';
 const items = [
     {
         key: '1',
@@ -60,9 +65,22 @@ export default function Header() {
 
     const user = JSON.parse(sessionStorage.getItem('user'));
 
+    // const { user } = useContext(UserContext);
+    // const userId = (JSON.parse(localStorage.getItem('user'))).userId;
+    const userId = user.userId;
+
+    const navigate = useNavigate();
+    const onClick = () => {
+        navigate('/')
+    }
+    const [opencreateIssueModal, setOpencreateIssueModal] = useState(false);
+    const handleShowCreateIssueModal = () => {
+        setOpencreateIssueModal(true);
+    };
     return (
         <>
             <header>
+            <CreateIssue userId={userId} open={opencreateIssueModal} setOpen={setOpencreateIssueModal} />
                 <div className="d-flex justify-content-between align-center container-fluid">
                     <div className='d-flex align-center'>
                         <Dropdown

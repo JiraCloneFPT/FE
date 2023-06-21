@@ -20,17 +20,17 @@ import { useState, useEffect } from 'react';
 import '../../../assests/css/createIssue.css';
 import EditorTextArea from '../CreateIssue/EditorTextArea';
 import CommonUploadFiles from '../../../utils/CommonUploadFiles';
+import { successNotification } from '../../../utils/CommonNotification';
+import { bugIconSrc, ListIssueType } from '../../../utils/CommonIcon';
 import axios from 'axios';
 import moment from 'moment';
-import { messageIssue01, messageIssue02 } from '../../../utils/CommonMessages';
+import { messageIssue03, messageIssue04 } from '../../../utils/CommonMessages';
 
 const Option = Select.Option;
 
 const EditIssue = (props) => {
 
-    // const idIssue = props.idIssue;
-    const idIssue = 1015;  // hard id test 
-
+    const idIssue = props.id;
     const [form] = Form.useForm();
 
     const [projects, setProjects] = useState([]);
@@ -58,6 +58,8 @@ const EditIssue = (props) => {
     const [leakCauses, setLeakCauses] = useState([]);
 
     const [formData, setFormData] = useState({
+        issueId: idIssue,
+        issueTypeId: '',
         summary: '',
         componentId: '',
         productId: '',
@@ -91,7 +93,7 @@ const EditIssue = (props) => {
         testcaseId: '',
         functionCategory: '',
         linkedIssuesId: '',
-        issueId: '',
+        mockIssueId: '',
         epicLink: '',
         closedDate: '',
         securityLevel: '',
@@ -140,6 +142,7 @@ const EditIssue = (props) => {
                 console.log('getIssue ', res.data.data);
                 const issue = res.data.data;
                 setFormData(({
+                    issueTypeId: issue.issueTypeId ?? '',
                     summary: issue.summary ?? '',
                     componentId: issue.componentId ?? '',
                     productId: issue.productId ?? '',
@@ -149,21 +152,22 @@ const EditIssue = (props) => {
                     priorityId: issue.priorityId ?? '',
                     severity: issue.severity ?? '',
                     qcActivityId: issue.qcactivityId ?? '',
-                    causeAnalysis: issue.causeAnalysis ?? '',   
+                    causeAnalysis: issue.causeAnalysis ?? '',
                     causeAnalysisTranslate: issue.causeAnalysisTranslate ?? '',
                     correctAction: issue.correctAction ?? '',
-                    correctActionTranslate: issue.correctActionTranslate ?? '',              
+                    correctActionTranslate: issue.correctActionTranslate ?? '',
                     technicalCauseId: issue.technicalCauseId ?? '',
                     environment: issue.environment ?? '',
                     assigneeId: issue.assigneeId ?? '',
                     roleIssueId: issue.roleIssueId ?? '',
+                    reporterId: issue.reporterId ?? '',
                     plannedStart: moment(issue.plannedStart) ?? '',
                     originalEstimate: issue.originalEstimate ?? '',
                     remainingEstimate: issue.remainingEstimate ?? '',
                     estimateEffort: issue.estimateEffort ?? '',
                     complexity: issue.complexity ?? '',
                     adjustedVP: issue.adjustedVP ?? '',
-                    dueDate: moment(issue.dueDate) ?? '',  
+                    dueDate: moment(issue.dueDate) ?? '',
                     //attachment
                     labelsId: issue.labelsId ?? '',
                     sprint: issue.sprint ?? '',
@@ -171,12 +175,12 @@ const EditIssue = (props) => {
                     testcaseId: issue.testcaseId ?? '',
                     functionCategory: issue.functionCategory ?? '',
                     linkedIssuesId: issue.linkedIssuesId ?? '',
-                    //issueId: issue.issueId ?? '',  // discus
+                    //mockIssueId: issue ?? '',  // discus
                     epicLink: issue.epicLink ?? '',
                     closedDate: moment(issue.closedDate) ?? '',
                     securityLevel: issue.securityLevel ?? '',
                     defectTypeId: issue.defectTypeId ?? '',
-                    causeCategoryId: issue.causeCategoryId ?? '', 
+                    causeCategoryId: issue.causeCategoryId ?? '',
                     leakCauseId: issue.leakCauseId ?? '',
                     dueTime: issue.dueTime ?? '',
                     units: issue.units ?? '',
@@ -189,6 +193,9 @@ const EditIssue = (props) => {
             })
     }, [props.open])
 
+    
+    const issueType = ListIssueType.filter(e=>e.id === formData.issueTypeId);
+
     const handleOnChange = (name, value) => {
         setFormData({
             ...formData,
@@ -198,8 +205,8 @@ const EditIssue = (props) => {
     }
 
     const handleUpdateIssue = () => {
-        console.log('form ', formData);
         let dataRequest = {
+            issueId: idIssue,
             summary: formData.summary,
             componentId: formData.componentId,
             productId: formData.productId,
@@ -207,7 +214,7 @@ const EditIssue = (props) => {
             descriptionTranslate: formData.descriptionTranslate,
             defectOriginId: formData.defectOriginId === '' || undefined ? null : formData.defectOriginId,
             priorityId: formData.priorityId === '' || undefined ? null : formData.priorityId,
-            severity: formData.severity,
+            severity: formData.severity === '' || undefined ? null : formData.severity,//
             qcActivityId: formData.qcActivityId,
             causeAnalysis: formData.causeAnalysis,
             causeAnalysisTranslate: formData.causeAnalysisTranslate,
@@ -226,16 +233,16 @@ const EditIssue = (props) => {
             adjustedVP: formData.adjustedVP,
             dueDate: formData.dueDate === '' || undefined ? null : formData.dueDate,
             // attachments: formData.,
-            labelsId: formData.labelsId,
-            sprint: formData.sprint,
+            labelsId: formData.labelsId === '' || undefined ? null : formData.labelsId,//
+            sprint: formData.sprint === '' || undefined ? null : formData.sprint,//
             functionId: formData.functionId,
-            testcaseId: formData.testcaseId ,
-            functionCategory: formData.functionCategory ,
-            linkedIssuesId: formData.linkedIssuesId ,
-            issueId: formData.issueId,
-            epicLink: formData.epicLink,
+            testcaseId: formData.testcaseId,
+            functionCategory: formData.functionCategory === '' || undefined ? null : formData.functionCategory,//
+            //linkedIssuesId: formData.linkedIssuesId ,
+            mockIssueId: formData.mockIssueId, // id issue mock
+            epicLink: formData.epicLink === '' || undefined ? null : formData.epicLink,//
             closedDate: formData.closedDate === '' || undefined ? null : formData.closedDate,
-            securityLevel: formData.securityLevel,
+            securityLevel: formData.securityLevel === '' || undefined ? null : formData.securityLevel,//
             defectTypeId: formData.defectTypeId === '' || undefined ? null : formData.defectTypeId,
             causeCategoryId: formData.causeCategoryId === '' || undefined ? null : formData.causeCategoryId,
             leakCauseId: formData.leakCauseId === '' || undefined ? null : formData.leakCauseId,
@@ -245,6 +252,24 @@ const EditIssue = (props) => {
             // comment: formData.,
         }
         console.log('dataRequest ', dataRequest);
+        axios.post('https://localhost:7112/api/issue/edit', dataRequest,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    // 'Authorization': `Bearer ${token}`
+                }
+            })
+            .then(res => {
+                props.setOpen(false);
+                form.resetFields();
+                console.log('edited', res.data);
+                if (res.data.code === 200) {
+                    successNotification(messageIssue03, messageIssue04(''));
+                }
+            })
+            .catch(error => {
+                console.log(error);
+            })
     }
 
     const Header = () => {
@@ -265,12 +290,13 @@ const EditIssue = (props) => {
         return (<>
             <Button
                 type="primary"
-                style={{ background: '#0052cc' }}
-                onClick={handleUpdateIssue}
+                style={{ background: '#0052cc', marginRight: 10 }}
+                // onClick={()=>{ form.validateFields().then(handleUpdateIssue)}}
+                onClick={() => { handleUpdateIssue() }}
             >
                 Update
             </Button>
-            <Button onClick={() => props.setOpen(false)}>Cancel</Button>
+            <a onClick={() => props.setOpen(false)}>Cancel</a>
         </>)
     }
 
@@ -286,7 +312,7 @@ const EditIssue = (props) => {
             className='modal-create-issue'
             footer={<Footer />}
         >
-        <p style={{ fontSize: 12, color: '#6b778c', margin: '-10px 0 10px' }}>All fields marked with an asterisk (*) are required</p>
+            <p style={{ fontSize: 12, color: '#6b778c', margin: '-10px 0 10px' }}>All fields marked with an asterisk (*) are required</p>
             <Form
                 labelCol={{ flex: '140px' }}
                 wrapperCol={{ flex: 1, }}
@@ -303,8 +329,12 @@ const EditIssue = (props) => {
                             required: true,
                         },
                     ]}
+                    extra={<>
+                        <p style={{ fontSize: 11, color: '#6b778c', margin: '5px 0 0' }}>There are no issue types with compatible field configuration and/or workflow associations.</p>
+                        <p style={{ fontSize: 11, color: '#6b778c', margin: '5px 0 0' }}>The issue type can only be changed by <a style={{fontSize: 11,color: '#0052cc'}}>moving</a> this issue.</p>
+                    </>}
                 >
-                    <p style={{ fontSize: 11, color: '#6b778c', margin: '5px 0 0' }}></p>
+                    <>{ formData.issueTypeId !== '' ? issueType[0].render() : <></> }</>
                 </Form.Item>
 
                 <Form.Item
@@ -382,9 +412,9 @@ const EditIssue = (props) => {
                         },
                     ]}
                 >
-                    <EditorTextArea 
-                        name='description' 
-                        handleEditorContent={handleOnChange} 
+                    <EditorTextArea
+                        name='description'
+                        handleEditorContent={handleOnChange}
                         defaultValue={formData.description}
                     />
                 </Form.Item>
@@ -394,8 +424,8 @@ const EditIssue = (props) => {
                     name="descriptionTranslate"
                     extra={<p style={{ fontSize: 11, color: '#6b778c', margin: '5px 0 0' }}>Use for Comtor to translate bug</p>}
                 >
-                    <EditorTextArea name='descriptionTranslate' handleEditorContent={handleOnChange} 
-                        defaultValue={formData.descriptionTranslate}/>
+                    <EditorTextArea name='descriptionTranslate' handleEditorContent={handleOnChange}
+                        defaultValue={formData.descriptionTranslate} />
                 </Form.Item>
 
                 <Form.Item
@@ -501,8 +531,8 @@ const EditIssue = (props) => {
                     name="causeAnalysis"
                     extra={<p style={{ fontSize: 11, color: '#6b778c', margin: '5px 0 0' }}>Store the root cause of bug</p>}
                 >
-                    <EditorTextArea name='causeAnalysis' handleEditorContent={handleOnChange} 
-                        defaultValue={formData.causeAnalysis}/>
+                    <EditorTextArea name='causeAnalysis' handleEditorContent={handleOnChange}
+                        defaultValue={formData.causeAnalysis} />
                 </Form.Item>
 
                 <Form.Item
@@ -510,8 +540,8 @@ const EditIssue = (props) => {
                     name="causeAnalysisTranslate"
                     extra={<p style={{ fontSize: 11, color: '#6b778c', margin: '5px 0 0' }}>Use for Comtor to translate the Cause Analysis.</p>}
                 >
-                    <EditorTextArea name='causeAnalysisTranslate' handleEditorContent={handleOnChange} 
-                        defaultValue={formData.causeAnalysisTranslate}/>
+                    <EditorTextArea name='causeAnalysisTranslate' handleEditorContent={handleOnChange}
+                        defaultValue={formData.causeAnalysisTranslate} />
                 </Form.Item>
 
                 <Form.Item
@@ -519,8 +549,8 @@ const EditIssue = (props) => {
                     name="correctAction"
                     extra={<p style={{ fontSize: 11, color: '#6b778c', margin: '5px 0 0' }}>How to fix or correct this bug</p>}
                 >
-                    <EditorTextArea name='correctAction' handleEditorContent={handleOnChange} 
-                        defaultValue={formData.correctAction}/>
+                    <EditorTextArea name='correctAction' handleEditorContent={handleOnChange}
+                        defaultValue={formData.correctAction} />
                 </Form.Item>
 
                 <Form.Item
@@ -528,8 +558,8 @@ const EditIssue = (props) => {
                     name="correctActionTranslate"
                     extra={<p style={{ fontSize: 11, color: '#6b778c', margin: '5px 0 0' }}>Use for comter to translate the Corrective Action field.</p>}
                 >
-                    <EditorTextArea name='correctActionTranslate' handleEditorContent={handleOnChange} 
-                        defaultValue={formData.correctActionTranslate}/>
+                    <EditorTextArea name='correctActionTranslate' handleEditorContent={handleOnChange}
+                        defaultValue={formData.correctActionTranslate} />
                 </Form.Item>
 
                 <Form.Item
@@ -556,8 +586,8 @@ const EditIssue = (props) => {
                     name="environment"
                     extra={<p style={{ fontSize: 11, color: '#6b778c', margin: '5px 0 0' }}>For example operating system, software platform and/or hardware specifications (include as appropriate for the issue).</p>}
                 >
-                    <EditorTextArea name='environment' handleEditorContent={handleOnChange} 
-                        defaultValue={formData.environment}/>
+                    <EditorTextArea name='environment' handleEditorContent={handleOnChange}
+                        defaultValue={formData.environment} />
                 </Form.Item>
 
                 <Form.Item
@@ -853,15 +883,15 @@ const EditIssue = (props) => {
                 </Form.Item>
                 <Form.Item
                     label={<label className='create-issue-item-label'>Issue</label>}
-                    name="issueId"
+                    name="mockIssueId"
                     extra={<p style={{ fontSize: 11, color: '#6b778c', margin: '5px 0 0' }}>Begin typing to search for issues to link. If you leave it blank, no link will be made.</p>}
                 >
                     <Select
                         style={{ maxWidth: 500 }}
-                        name="issueId"
+                        name="mockIssueId"
                         allowClear
-                        onChange={(e) => handleOnChange('issueId', e)}
-                        defaultValue={formData.issueId}
+                        onChange={(e) => handleOnChange('mockIssueId', e)}
+                        defaultValue={formData.mockIssueId}
                     >
                         {issues?.map(item => (
                             <Option value={item.issueId} key={item.issueId} name='issueId'>
@@ -1024,10 +1054,10 @@ const EditIssue = (props) => {
                     name="Comment"
                     extra={<p style={{ fontSize: 11, color: '#6b778c', margin: '5px 0 0' }}>...</p>}
                 >
-                    <EditorTextArea 
-                        name='Comment' 
-                        handleEditorContent={handleOnChange} 
-                        defaultValue={formData.comment} 
+                    <EditorTextArea
+                        name='Comment'
+                        handleEditorContent={handleOnChange}
+                        defaultValue={formData.comment}
                     />
                 </Form.Item>
 

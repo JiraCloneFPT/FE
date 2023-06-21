@@ -1,18 +1,15 @@
-import {
-  ArrowRightOutlined,
-  DownOutlined,
-  EditOutlined,
-  CommentOutlined,
-} from "@ant-design/icons";
-import { Button, Dropdown, Space } from "antd";
+/* eslint-disable no-unused-vars */
+import { ArrowRightOutlined, DownOutlined, EditOutlined, CommentOutlined } from '@ant-design/icons';
+import { Button, Dropdown, Space } from 'antd';
 import { Col, Row } from "antd";
-
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import Details from "./Details";
-import EditIssue from "./EditIssue";
-import ResolveIssue from "./ResolveIssue";
-import { GetIssueService } from "../../../services/IssueService";
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import Details from './Details';
+import ResolveIssue from './ResolveIssue';
+import EditIssue from './EditIssue';
+import CancelIssue from './CancelIssue';
+import CloseIssue from './CloseIssue';
+import { GetIssueService } from '../../../services/IssueService';
 import ExportFileDetail from "../components/ExportFileDetail";
 
 export default function Detail() {
@@ -25,77 +22,97 @@ export default function Detail() {
   useEffect(() => {
     handleGetIssue();
   }, []);
-  const [openResolveIssueModal, setOpenResolveIssueModal] = useState(false);
-  const handleShowResolveIssueModal = () => {
-    setOpenResolveIssueModal(true);
-  };
 
-  const [openEditIssueModal, setOpenEditIssueModal] = useState(false);
-  const handleShowEditIssueModal = () => {
-    console.log("edit ");
-    setOpenEditIssueModal(true);
-  };
-  const items = [
-    {
-      label: (
-        <div className="d-flex align-center">
-          <span className="menuProgress-1">Start Progress</span>
-          <ArrowRightOutlined className="menuProgress-2" />
-          <div className="menuProgress-3 progress">
-            <span>In Progress</span>
-          </div>
-        </div>
-      ),
-      key: "0",
-    },
-    {
-      label: (
-        <div className="d-flex align-center">
-          <span className="menuProgress-1">Resolve</span>
-          <ArrowRightOutlined className="menuProgress-2" />
-          <div className="menuProgress-3 resolve">
-            <span>Resolved</span>
-          </div>
-        </div>
-      ),
-      key: "1",
-      onClick: () => {
-        handleShowResolveIssueModal();
-      },
-    },
-    {
-      label: (
-        <div className="d-flex align-center">
-          <span className="menuProgress-1">Cancel</span>
-          <ArrowRightOutlined className="menuProgress-2" />
-          <div className="menuProgress-3 cancel">
-            <span>Cancelled</span>
-          </div>
-        </div>
-      ),
-      key: "2",
-    },
-    {
-      label: (
-        <div className="d-flex align-center">
-          <span className="menuProgress-1">Re-Open</span>
-          <ArrowRightOutlined className="menuProgress-2" />
-          <div className="menuProgress-3 cancel">
-            <span>reopened</span>
-          </div>
-        </div>
-      ),
-      key: "3",
-    },
-  ];
+    const [openResolveIssueModal, setOpenResolveIssueModal] = useState(false);
+    const handleShowResolveIssueModal = () => {
+        setOpenResolveIssueModal(true);
+    }
+
+    const [openEditIssueModal, setOpenEditIssueModal] = useState(false);
+    const handleShowEditIssueModal = () => {
+        setOpenEditIssueModal(true);
+    }
+
+    const [openCancelIssueModal, setOpenCancelIssueModal] = useState(false);
+    const handleShowCancelIssueModal = () => {
+        setOpenCancelIssueModal(true);
+    }
+
+    const [openCloseIssueModal, setOpenCloseIssueModal] = useState(false);
+    const handleShowCloseIssueModal = () => {
+        setOpenCloseIssueModal(true);
+    }
+
+    const items = [
+        {
+            label:
+                <div className='d-flex align-center'>
+                    <span className='menuProgress-1'>Start Progress</span>
+                    <ArrowRightOutlined className='menuProgress-2' />
+                    <div className='menuProgress-3 progress'>
+                        <span>IN PROGRESS</span>
+                    </div>
+                </div>,
+            key: '0',
+        },
+        {
+            label:
+                <div className='d-flex align-center'>
+                    <span className='menuProgress-1'>Resolve</span>
+                    <ArrowRightOutlined className='menuProgress-2' />
+                    <div className='menuProgress-3 resolve'>
+                        <span>RESOLVED</span>
+                    </div>
+                </div>,
+            key: '1',
+            onClick: handleShowResolveIssueModal
+        },
+        {
+            label:
+                <div className='d-flex align-center'>
+                    <span className='menuProgress-1'>Cancel</span>
+                    <ArrowRightOutlined className='menuProgress-2' />
+                    <div className='menuProgress-3 cancel'>
+                        <span>CANCELLED</span>
+                    </div>
+                </div>,
+            key: '2',
+            onClick: handleShowCancelIssueModal
+        },
+        {
+            label:
+                <div className='d-flex align-center'>
+                    <span className='menuProgress-1'>Re-Open</span>
+                    <ArrowRightOutlined className='menuProgress-2' />
+                    <div className='menuProgress-3 cancel'>
+                        <span>REOPENED</span>
+                    </div>
+                </div>,
+            key: '3',
+        },
+        {
+            label:
+                <div className='d-flex align-center'>
+                    <span className='menuProgress-1'>Close</span>
+                    <ArrowRightOutlined className='menuProgress-2' />
+                    <div className='menuProgress-3 cancel'>
+                        <span>CLOSED</span>
+                    </div>
+                </div>,
+            key: '4',
+            onClick: handleShowCloseIssueModal
+        },
+    ];
 
   return (
     <>
-      <ResolveIssue
+      <ResolveIssue id={id}
         open={openResolveIssueModal}
         setOpen={setOpenResolveIssueModal}
       />
-      <EditIssue open={openEditIssueModal} setOpen={setOpenEditIssueModal} />
+      <EditIssue id={id} open={openEditIssueModal} setOpen={setOpenEditIssueModal} />
+        <CancelIssue id={id} open={openCancelIssueModal} setOpen={setOpenCancelIssueModal} />
+        <CloseIssue id={id} open={openCloseIssueModal} setOpen={setOpenCloseIssueModal} />
       <div className="d-flex align-center">
         <svg
           id="Default"

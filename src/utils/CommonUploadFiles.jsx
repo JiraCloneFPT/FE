@@ -1,5 +1,7 @@
-import { React } from 'react';
-import { Button, Upload } from 'antd';
+/* eslint-disable react/prop-types */
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-undef */
+import { Upload, message } from 'antd';
 import { InboxOutlined } from '@ant-design/icons';
 
 const { Dragger } = Upload;
