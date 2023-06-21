@@ -1,8 +1,7 @@
-import { Button, Checkbox, Form, Input, notification } from 'antd';
-import React, { useContext, useState } from 'react';
-import { loginService } from '../../services/UserService';
-import { useNavigate } from 'react-router-dom';
-import { UserContext } from '../../contexts/UserContext';
+import { Button, Checkbox, Form, Input, notification } from "antd";
+import { useContext } from "react";
+import { UserContext } from "../../contexts/UserContext";
+import { loginService } from "../../services/UserService";
 
 export default function Login() {
     const openNotificationDisable = (placement) => {
@@ -15,7 +14,6 @@ export default function Login() {
 
     const [api, contextHolder] = notification.useNotification();
     const { onSetUser } = useContext(UserContext);
-    const navigate = useNavigate();
 
     const onFinish = async (values) => {
         delete values.remember;
@@ -24,13 +22,13 @@ export default function Login() {
             onSetUser(result);
             switch (result.data.roleId) {
                 case 1:
-                    window.location.href = '/admin/manageUser';
+                    window.location.href = "/admin/manageUser";
                     break;
                 case 2:
-                    window.location.href = '/';
+                    window.location.href = "/";
                     break;
                 default:
-                    window.location.href = "/"
+                    window.location.href = "/";
                     break;
             }
         } else {
@@ -38,7 +36,7 @@ export default function Login() {
         }
     };
     return (
-        <div className='login-form'>
+        <div className="login-form">
             {contextHolder}
             <Form
                 style={{ width: "100%" }}
@@ -60,11 +58,16 @@ export default function Login() {
                     rules={[
                         {
                             required: true,
-                            message: 'Please input your username!',
+                            message: "Please input your username!",
                         },
                     ]}
                 >
-                    <Input name='account' autoComplete='off' className='input' placeholder='Account' />
+                    <Input
+                        name="account"
+                        autoComplete="off"
+                        className="input"
+                        placeholder="Account"
+                    />
                 </Form.Item>
 
                 <Form.Item
@@ -73,11 +76,16 @@ export default function Login() {
                     rules={[
                         {
                             required: true,
-                            message: 'Please input your password!',
+                            message: "Please input your password!",
                         },
                     ]}
                 >
-                    <Input.Password autoComplete='off' name='password' className='input' placeholder='Password'/>
+                    <Input.Password
+                        autoComplete="off"
+                        name="password"
+                        className="input"
+                        placeholder="Password"
+                    />
                 </Form.Item>
 
                 <Form.Item
@@ -86,19 +94,24 @@ export default function Login() {
                         span: 16,
                     }}
                 >
-                    <Checkbox name="remember" >Remember my login on this computer</Checkbox>
-                    <p style={{ marginTop: "5px" }}>Not a member? To request an account, please contact your <a>Jira administrators</a>.</p>
+                    <Checkbox name="remember">
+                        Remember my login on this computer
+                    </Checkbox>
+                    <p style={{ marginTop: "5px" }}>
+                        Not a member? To request an account, please contact your{" "}
+                        <a>Jira administrators</a>.
+                    </p>
                 </Form.Item>
                 <Form.Item
                     wrapperCol={{
                         offset: 8,
                     }}
                 >
-                    <Button type="primary" htmlType='submit'>
+                    <Button type="primary" htmlType="submit">
                         Login
                     </Button>
                 </Form.Item>
             </Form>
         </div>
-    )
+    );
 }

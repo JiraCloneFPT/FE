@@ -1,14 +1,13 @@
 /* eslint-disable react/prop-types */
-import { SearchOutlined } from '@ant-design/icons';
-import { Button, Input, Space, Table } from 'antd';
-import { useRef, useState } from 'react';
-import Highlighter from 'react-highlight-words';
+import { SearchOutlined } from "@ant-design/icons";
+import { Button, Input, Space, Table } from "antd";
+import { useRef, useState } from "react";
+import Highlighter from "react-highlight-words";
 const link = window.location.origin;
 
 export default function ListIssues({ data }) {
-
-    const [searchText, setSearchText] = useState('');
-    const [searchedColumn, setSearchedColumn] = useState('');
+    const [searchText, setSearchText] = useState("");
+    const [searchedColumn, setSearchedColumn] = useState("");
     const searchInput = useRef(null);
     const handleSearch = (selectedKeys, confirm, dataIndex) => {
         confirm();
@@ -17,10 +16,16 @@ export default function ListIssues({ data }) {
     };
     const handleReset = (clearFilters) => {
         clearFilters();
-        setSearchText('');
+        setSearchText("");
     };
     const getColumnSearchProps = (dataIndex) => ({
-        filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters, close }) => (
+        filterDropdown: ({
+            setSelectedKeys,
+            selectedKeys,
+            confirm,
+            clearFilters,
+            close,
+        }) => (
             <div
                 style={{
                     padding: 8,
@@ -31,17 +36,23 @@ export default function ListIssues({ data }) {
                     ref={searchInput}
                     placeholder={`Search ${dataIndex}`}
                     value={selectedKeys[0]}
-                    onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
-                    onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
+                    onChange={(e) =>
+                        setSelectedKeys(e.target.value ? [e.target.value] : [])
+                    }
+                    onPressEnter={() =>
+                        handleSearch(selectedKeys, confirm, dataIndex)
+                    }
                     style={{
                         marginBottom: 8,
-                        display: 'block',
+                        display: "block",
                     }}
                 />
                 <Space>
                     <Button
                         type="primary"
-                        onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
+                        onClick={() =>
+                            handleSearch(selectedKeys, confirm, dataIndex)
+                        }
                         icon={<SearchOutlined />}
                         size="small"
                         style={{
@@ -51,26 +62,20 @@ export default function ListIssues({ data }) {
                         Search
                     </Button>
                     <Button
-                        onClick={() => clearFilters && handleReset(clearFilters)}
-                        size="small"
-                        style={{
-                            width: 90,
-                        }}
-                    >
-                        Reset
-                    </Button>
-                    <Button
-                        type="link"
-                        size="small"
                         onClick={() => {
+                            clearFilters && handleReset(clearFilters);
                             confirm({
                                 closeDropdown: false,
                             });
                             setSearchText(selectedKeys[0]);
                             setSearchedColumn(dataIndex);
                         }}
+                        size="small"
+                        style={{
+                            width: 90,
+                        }}
                     >
-                        Filter
+                        Reset
                     </Button>
                     <Button
                         type="link"
@@ -87,56 +92,64 @@ export default function ListIssues({ data }) {
         filterIcon: (filtered) => (
             <SearchOutlined
                 style={{
-                    color: filtered ? '#1677ff' : undefined,
+                    color: filtered ? "#1677ff" : undefined,
                 }}
             />
         ),
         onFilter: (value, record) =>
-            record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
+            record[dataIndex]
+                .toString()
+                .toLowerCase()
+                .includes(value.toLowerCase()),
         onFilterDropdownOpenChange: (visible) => {
             if (visible) {
                 setTimeout(() => searchInput.current?.select(), 100);
             }
         },
         render: (record) => {
-            return searchedColumn === dataIndex ?
+            return searchedColumn === dataIndex ? (
                 <Highlighter
                     highlightStyle={{
-                        backgroundColor: '#ffc069',
+                        backgroundColor: "#ffc069",
                         padding: 0,
                     }}
                     searchWords={[searchText]}
                     autoEscape
-                    textToHighlight={record[dataIndex] ? record[dataIndex].toString() : ''}
+                    textToHighlight={
+                        record[dataIndex] ? record[dataIndex].toString() : ""
+                    }
                 />
-                :
-                dataIndex === 'summary' ? <a href={`${link}/issues/detail/${record.issueId}`}>{record[dataIndex]}</a> : <>{record[dataIndex]}</>
-
-        }
-    })
-        ;
+            ) : dataIndex === "summary" ? (
+                <a href={`${link}/issues/detail/${record.issueId}`}>
+                    {record[dataIndex]}
+                </a>
+            ) : (
+                <>{record[dataIndex]}</>
+            );
+        },
+    });
     const columns = [
         {
-            title: 'Key',
-            width: '20%',
-            ...getColumnSearchProps('issueId'),
+            title: "Key",
+            width: "20%",
+            ...getColumnSearchProps("issueId"),
         },
         {
-            title: 'Assignee',
-            width: '20%',
-            ...getColumnSearchProps('assigneeName'),
+            title: "Assignee",
+            width: "20%",
+            ...getColumnSearchProps("assigneeName"),
         },
         {
-            title: 'Summary',
-            ...getColumnSearchProps('summary'),
+            title: "Summary",
+            ...getColumnSearchProps("summary"),
         },
         {
-            title: 'Sub-Tasks',
-            dataIndex: 'Sub-Tasks',
+            title: "Sub-Tasks",
+            dataIndex: "Sub-Tasks",
         },
         {
-            title: 'Development',
-            dataIndex: 'Development',
+            title: "Development",
+            dataIndex: "Development",
         },
     ];
 

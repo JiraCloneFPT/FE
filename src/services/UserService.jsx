@@ -3,7 +3,6 @@ import RequestApi from "../utils/RequestUser"
 
 // Fuction Login by user includes: email and password
 export const loginService = async (user) => {
-    console.log(user);
     try {
         const respone = await RequestApi({
             method: "post",
@@ -13,7 +12,6 @@ export const loginService = async (user) => {
             },
             data: JSON.stringify(user)
         });
-        console.log(respone);
         return respone.data
     } catch (e) {
         return e;

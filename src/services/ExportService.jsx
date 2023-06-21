@@ -1,10 +1,11 @@
-import Request from '../utils/Request';
+import Request from "../utils/Request";
 
-export const ExportService = async (data, type) => {
+export const ExportFileService = async (data, type) => {
     try {
         const respone = await Request({
             method: "post",
             url: `export/list/${type}`,
+            responseType: "blob",
             headers: {
                 "Content-Type": "application/json",
             },

@@ -1,10 +1,7 @@
-import React from 'react';
+/* eslint-disable react/no-unescaped-entities */
 import { Col, Row } from 'antd';
-
-import IssuesList from './issuesList';
 import Login from '../auth/Login';
-import { useContext } from 'react';
-import { UserContext } from '../../contexts/UserContext';
+import IssuesList from './IssuesList';
 
 
 
