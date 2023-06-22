@@ -1,16 +1,20 @@
-import { Fragment, useState, useEffect } from "react";
+/* eslint-disable no-unused-vars */
+import { Fragment, useState, useEffect, useContext } from "react";
 import { UserOutlined, DesktopOutlined, LogoutOutlined } from '@ant-design/icons';
 import { Layout, theme, Dropdown, Space } from 'antd';
 import "../../assests/css/admin.css"
+import { UserContext } from "../../contexts/UserContext";
+import { useNavigate } from "react-router-dom";
 
 const { Header } = Layout;
 
 export default function HeaderAdmin() {
-    var user = localStorage.getItem('user');
+    const { user } = useContext(UserContext);
+    const navigate = useNavigate();
     const [avatar, setAvatar] = useState('../img/1x/Asset 1.png');
 
     useEffect(() => {
-        setAvatar(JSON.parse(user).avatar);
+        setAvatar(user?.avatar);
     }, [user]);
 
     function getItem(label, key, icon, children) {
@@ -21,14 +25,13 @@ export default function HeaderAdmin() {
             label,
         };
     }
-    
-    const onLogOut = () =>{
+
+    const onLogOut = () => {
         sessionStorage.clear();
-        localStorage.clear();
-        window.location.href = '/login';
+        navigate('/');
     }
     const items = [
-        getItem(<a onClick={() =>onLogOut()}>Log out</a>, '3', <LogoutOutlined />),
+        getItem(<a onClick={() => onLogOut()}>Log out</a>, '3', <LogoutOutlined />),
     ];
 
     const {
@@ -55,8 +58,8 @@ export default function HeaderAdmin() {
                 >
                     <Space>
                         <a className="d-flex align-items-center" href="#">
-                            <img src="https://insight.fsoft.com.vn/jira3/images/icons/ico_add_avatar.png" alt="" style={{ cursor: "pointer", borderRadius: "50%"  }} width="50" height="50"
-                                className="" />                            
+                            <img src="https://insight.fsoft.com.vn/jira3/images/icons/ico_add_avatar.png" alt="" style={{ cursor: "pointer", borderRadius: "50%" }} width="50" height="50"
+                                className="" />
                         </a>
                     </Space>
                 </Dropdown>

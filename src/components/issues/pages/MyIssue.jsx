@@ -10,8 +10,7 @@ const { Content } = Layout;
 const MyIssue = () => {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
-    const { component, onSetData } = useContext(UserContext);
-    const user = JSON.parse(sessionStorage.getItem("user"));
+    const { component, onSetData, user } = useContext(UserContext);
     const handleGetData = async () => {
         const result = await MyOpenIssue(user?.userId);
         if (result.status === 200) {
@@ -22,7 +21,7 @@ const MyIssue = () => {
     };
     useEffect(() => {
         handleGetData();
-    }, []);
+    }, [user]);
     const {
         token: { colorBgContainer },
     } = theme.useToken();

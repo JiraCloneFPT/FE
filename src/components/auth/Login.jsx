@@ -1,9 +1,13 @@
 import { Button, Checkbox, Form, Input, notification } from "antd";
-import { useContext } from "react";
-import { UserContext } from "../../contexts/UserContext";
 import { loginService } from "../../services/UserService";
+import { useContext, useState } from "react";
+import { UserContext } from "../../contexts/UserContext";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
+    const { onSetUser } = useContext(UserContext);
+    const [isSave, setIsSave] = useState(false);
+    const navigate = useNavigate();
     const openNotificationDisable = (placement) => {
         api.error({
             message: `Notification`,
@@ -13,24 +17,15 @@ export default function Login() {
     };
 
     const [api, contextHolder] = notification.useNotification();
-    const { onSetUser } = useContext(UserContext);
 
     const onFinish = async (values) => {
-        delete values.remember;
         const result = await loginService(values);
         if (result.status === 200) {
             onSetUser(result);
-            switch (result.data.roleId) {
-                case 1:
-                    window.location.href = "/admin/manageUser";
-                    break;
-                case 2:
-                    window.location.href = "/";
-                    break;
-                default:
-                    window.location.href = "/";
-                    break;
+            if (isSave) {
+                sessionStorage.setItem('token', JSON.stringify(result.token));
             }
+            navigate('/');
         } else {
             openNotificationDisable("topRight");
         }
@@ -46,9 +41,6 @@ export default function Login() {
                 }}
                 wrapperCol={{
                     span: 16,
-                }}
-                initialValues={{
-                    remember: true,
                 }}
                 onFinish={onFinish}
             >
@@ -94,7 +86,7 @@ export default function Login() {
                         span: 16,
                     }}
                 >
-                    <Checkbox name="remember">
+                    <Checkbox onChange={(e) => setIsSave(e.target.checked)}>
                         Remember my login on this computer
                     </Checkbox>
                     <p style={{ marginTop: "5px" }}>

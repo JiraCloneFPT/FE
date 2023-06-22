@@ -6,9 +6,10 @@ import {
     UnorderedListOutlined,
 } from "@ant-design/icons";
 import { Button, Dropdown, Input, Space } from "antd";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CreateIssue from "../issues/CreateIssue/CreateIssue";
+import { UserContext } from "../../contexts/UserContext";
 const link = window.location.origin;
 const items1 = [
     {
@@ -180,7 +181,7 @@ const onLogOut = () => {
 
 
 export default function Header() {
-    const user = sessionStorage.getItem("user");
+    const { user } = useContext(UserContext);
     const navigate = useNavigate();
     const onClick = () => {
         navigate("/");
