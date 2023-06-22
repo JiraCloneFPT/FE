@@ -56,7 +56,6 @@ const IssuesList = () => {
 
     const getData = () => {
         const cleanedUrl = 'https://localhost:7112/api/issue/GetAllIsseByUserId?userId=' + user.userId
-        console.log("123" + cleanedUrl);
         axios
             .get(cleanedUrl)
             .then((result) => {

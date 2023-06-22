@@ -26,9 +26,8 @@ export default function ExportFile() {
             const blobURL = URL.createObjectURL(new Blob([result]));
             const a = document.createElement("a");
             a.href = blobURL;
-            a.download = `${new Date()}${
-                e.key === "excel" ? ".xlsx" : ".html"
-            }`;
+            a.download = `${new Date().toLocaleDateString()}|${new Date().toLocaleTimeString()}${e.key === "excel" ? ".xlsx" : ".html"
+                }`;
             a.click();
         }
     };
@@ -41,7 +40,7 @@ export default function ExportFile() {
     return (
         <>
             <Dropdown menu={menuProps}>
-                <Button>
+                <Button style={{ width: "200px" }}>
                     <Space>
                         Export
                         <DownOutlined />

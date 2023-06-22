@@ -17,7 +17,7 @@ export default function ExportFileDetail() {
         const blobURL = URL.createObjectURL(new Blob([result]));
         const a = document.createElement("a");
         a.href = blobURL;
-        a.download = `${new Date()}.docx`;
+        a.download = `${new Date().toLocaleDateString()}|${new Date().toLocaleTimeString()}.docx`;
         a.click();
     };
 

@@ -186,15 +186,10 @@ export default function Detail() {
                     />
                 </svg>
 
-                <div style={{ marginLeft: 10 }}>
-                    <h1 style={{ fontSize: 24, fontWeight: "500" }}>
-                        {issue?.summary}
-                    </h1>
-                </div>
-                <p style={{ color: "#0052CC" }}>
-                    Fsoft Academy Training Course / FSOFTACADEMY-14087 <br></br>
+                <p style={{ color: "#0052CC", marginLeft: "10px" }}>
+                    {issue?.productName} / <br></br>
                     <h1 style={{ fontSize: "25px", color: "black" }}>
-                        Test Jira 2.1
+                        {issue?.summary}
                     </h1>
                 </p>
                 <br></br>
