@@ -1,7 +1,7 @@
 /* eslint-disable react/no-unescaped-entities */
 import { Col, Row } from 'antd';
 import Login from '../auth/Login';
-import IssuesList from './IssuesList';
+import IssuesList from './issuesList';
 
 
 

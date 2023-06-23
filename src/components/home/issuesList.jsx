@@ -1,6 +1,7 @@
 import { Table } from 'antd';
 import { useState, useEffect } from 'react';
 import axios from "axios";
+import { ListIssueType } from '../../utils/CommonIcon';
 
 
 
@@ -16,6 +17,7 @@ const IssuesList = () => {
             dataIndex: 'T',
             width: 100,
             render: () => {
+
                 return (
                     <img src='../images/Create Issue - FI2.0/forbidden.png' />
                 )

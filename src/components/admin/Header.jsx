@@ -7,11 +7,11 @@ const { Header } = Layout;
 
 export default function HeaderAdmin() {
     var user = localStorage.getItem('user');
-    const [avatar, setAvatar] = useState('../img/1x/Asset 1.png');
+    const [avatar, setAvatar] = useState('../img/Logo.png');
 
-    useEffect(() => {
-        setAvatar(JSON.parse(user).avatar);
-    }, [user]);
+    // useEffect(() => {
+    //     setAvatar(JSON.parse(user).avatar);
+    // }, [user]);
 
     function getItem(label, key, icon, children) {
         return {

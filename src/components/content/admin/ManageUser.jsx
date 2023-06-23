@@ -280,6 +280,7 @@ export default function ManageUser() {
     const handleClose = () => setShow(false);
     const [showAddNew, setShowAddNew] = useState(false);
 
+
     //useState input cho form Modal
     const [editData, setEditData] = useState({
         editID: "",
@@ -355,7 +356,10 @@ export default function ManageUser() {
             });
     };
 
-    getEmailList();
+    useEffect(() => {
+        getEmailList();
+    }, []);
+
 
     //call api lấy danh sách guest
     const getData = () => {
@@ -366,6 +370,7 @@ export default function ManageUser() {
             .get(cleanedUrl)
             .then((result) => {
                 setDataSource(result.data);
+                console.log(dataSource);
             })
             .catch((error) => {
                 console.log(error);
@@ -531,7 +536,7 @@ export default function ManageUser() {
                         <Button type="primary" onClick={() => setShowAddNew(true)} style={{ marginBottom: '20px', marginRight: '10px' }}>
                             Create a new user
                         </Button>
-                        <CreateUserExcel/>
+                        <CreateUserExcel />
                         <Table
                             columns={columns}
                             dataSource={dataSource}
@@ -593,7 +598,7 @@ export default function ManageUser() {
                                     <Col>
                                         <Row>
                                             <label>BirthDay:</label>
- 
+
                                             <DatePicker
                                                 className="form-control"
                                                 style={{ width: "100%" }}

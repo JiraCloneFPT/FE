@@ -128,3 +128,47 @@ export const AllIssueByUser = async (idUser) => {
         return e;
     }
 }
+
+export const CountWatcher = async (issueId) => {
+    try {
+        const respone = await Request({
+            method: "get",
+            url: `issue/countWatcher?issueId=${issueId}`,
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+        return respone.data;
+    } catch (e) {
+        return e;
+    }
+}
+
+export const CheckWatcher = async (userId, issueId) => {
+    try {
+        const respone = await Request({
+            method: "get",
+            url: `issue/checkWatcher?userId=${userId}&issueId=${issueId}`,
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+        return respone.data;
+    } catch (e) {
+        return e;
+    }
+}
+export const StartWatcher = async (userId,issueId) => {
+    try {
+        const respone = await Request({
+            method: "post",
+            url: `issue/startWatcher?userId=${userId}&issueId=${issueId}`,
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+        return respone.data;
+    } catch (e) {
+        return e;
+    }
+}
