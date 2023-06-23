@@ -56,15 +56,31 @@ export const CreateIssueService = async (data) => {
         return e;
     }
 };
+// Used by TuNT37
 export const EditIssueService = async (data) => {
     try {
         const respone = await Request({
             method: "put",
-            url: "account/edit",
+            url: "issue/edit",
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+            data: data
+        });
+        return respone.data;
+    } catch (e) {
+        return e;
+    }
+};
+// Used by TuNT37
+export const GetIssueByIdService = async (id) => {
+    try {
+        const respone = await Request({
+            method: "get",
+            url: `issue/GetIssueById?id=${id}`, 
             headers: {
                 "Content-Type": "application/json",
             },
-            data: JSON.stringify(data),
         });
         return respone.data;
     } catch (e) {
@@ -80,6 +96,21 @@ export const DeleteIssueService = async (id) => {
                 "Content-Type": "application/json",
             },
             data: JSON.stringify(id),
+        });
+        return respone.data;
+    } catch (e) {
+        return e;
+    }
+};
+// Used by TuNT37
+export const GetItemsIssue = async () => {
+    try {
+        const respone = await Request({
+            method: "get",
+            url: "issue/GetItemsIssue",
+            headers: {
+                "Content-Type": "application/json",
+            },
         });
         return respone.data;
     } catch (e) {
