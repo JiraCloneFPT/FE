@@ -187,7 +187,7 @@ export default function Detail() {
                 </svg>
 
                 <p style={{ color: "#0052CC", marginLeft: "10px" }}>
-                    {issue?.productName} / <br></br>
+                    {issue?.projectName} / {issue?.shortNameProject}-{issue?.issueId} <br></br>
                     <h1 style={{ fontSize: "25px", color: "black" }}>
                         {issue?.summary}
                     </h1>

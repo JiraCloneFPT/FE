@@ -14,9 +14,10 @@ export default function EditorTextArea(props) {
                     height: 500,
                     width: 600,
                     menubar: false,
-                    forced_root_block : 'p',
-                    force_br_newlines : true,
-                    force_p_newlines : false,
+                    // forced_root_block : 'p',
+                    // force_br_newlines : true,
+                    // force_p_newlines : false,
+                    directionality: 'ltr',
                     plugins: [
                         'advlist autolink lists link image charmap print preview anchor',
                         'searchreplace visualblocks code fullscreen',
