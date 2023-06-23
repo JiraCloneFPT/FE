@@ -47,7 +47,7 @@ export default function Detail() {
     const handleShowCloseIssueModal = () => {
         setOpenCloseIssueModal(true);
     };
-
+    
     const items = [
         {
             label: (

@@ -1,14 +1,91 @@
 import Header from "./Header";
 import Footer from "./Footer";
 import "../../assests/css/profile.css";
+import { Modal, Form, Input, notification } from "antd";
+import { useState } from "react";
+import { changePassword, getUserByUserId } from "../../services/UserService";
+import { handleValidationChangePassword } from "../../assests/js/handleValidation";
+
+import { UserContext } from "../../contexts/UserContext";
 
 export default function Profile() {
-    const user = JSON.parse(sessionStorage.getItem("user"));
+    const [api, contextHolder] = notification.useNotification();
+    const openNotificationSuccess = (placement) => {
+        api.success({
+            message: `Notification`,
+            description: "Update successfully!",
+            placement,
+        });
+    };
+
+    const openNotificationFail = (placement) => {
+        api.error({
+            message: `Notification`,
+            description: "Update failly!",
+            placement,
+        });
+    };
+
+    const { user } = useContext(UserContext);
+
+    const [show, setShow] = useState(false);
+
+    const [editData, seteditData] = useState({
+        editUserId: "",
+        editAccount: "",
+        editCurrentPassword: "",
+        editNewPassword: "",
+        editConfirmPassword: ""
+    });
+
+    const handleShowChangePass = async () => {
+        const getUser = await getUserByUserId(user.userId);
+        console.log(getUser);
+        seteditData({
+            editUserId: getUser.userId,
+            editAccount: getUser.accountName,
+            editCurrentPassword: getUser.password,
+            editNewPassword: "",
+            editConfirmPassword: "",
+        })
+        setShow(true);
+    }
+
+    const [errors, setErrors] = useState({
+        editNewPassword: "",
+        editConfirmPassword: "",
+    });
+
+    const handleEditInputChange = (event) => {
+        const field = event.target.name;
+        const value = event.target.value;
+
+        seteditData((preData) => ({ ...preData, [field]: value }));
+    };
+
+    const handleChangePassword = async () => {
+        let errors = {};
+        const userId = editData.editUserId;
+        const editNewpassword = editData.editNewPassword;
+        handleValidationChangePassword(editData, errors);
+        if (Object.keys(errors).length === 0) {
+            const result = await changePassword(userId, editNewpassword)
+            if (result.status === 200) {
+                setErrors("");
+                setShow(false);
+                openNotificationSuccess("topRight");
+            } else {
+                openNotificationFail("topRight");
+            }
+        } else {
+            setErrors(errors);
+        }
+    }
 
     return (
         <>
             <Header />
-
+            {contextHolder}
             <div className="aui-page-header">
                 <div
                     className="aui-page-header-inner"
@@ -29,7 +106,7 @@ export default function Profile() {
                     </div>
                 </div>
                 <div
-                    class="aui-page-header-main"
+                    className="aui-page-header-main"
                     style={{
                         marginLeft: "3%",
                         display: "flex",
@@ -61,7 +138,17 @@ export default function Profile() {
                                                 <ul className="aui-nav">
                                                     <li className="aui-nav-selected first">
                                                         <a className="aui-nav-item">
-                                                            Sumary
+                                                            Profile
+                                                        </a>
+                                                    </li>
+                                                    <li className="aui-nav-selected first"
+                                                        style={{
+                                                            backgroundColor:
+                                                                "#fff",
+                                                        }}
+                                                    >
+                                                        <a className="aui-nav-item" onClick={() => handleShowChangePass()}>
+                                                            Change Password
                                                         </a>
                                                     </li>
                                                     <li
@@ -88,6 +175,7 @@ export default function Profile() {
                                                             Applications
                                                         </a>
                                                     </li>
+
                                                 </ul>
                                             </div>
                                         </div>
@@ -99,7 +187,7 @@ export default function Profile() {
                     <main className="aui-page-panel-content">
                         <header className="aui-page-header">
                             <div className="aui-page-header-inner">
-                                <div class="aui-page-header-main">
+                                <div className="aui-page-header-main">
                                     <h2>Summary</h2>
                                 </div>
                             </div>
@@ -127,7 +215,7 @@ export default function Profile() {
                                                         <button className="jira-icon-button aui-avatar aui-avatar-large">
                                                             <span className="aui-avatar-inner">
                                                                 <img
-                                                                    class="avatar-image"
+                                                                    className="avatar-image"
                                                                     src="https://insight.fsoft.com.vn/jira3/images/icons/ico_add_avatar.png"
                                                                     alt="Edit avatar"
                                                                 />
@@ -248,6 +336,75 @@ export default function Profile() {
                     </main>
                 </div>
             </div>
+
+            <Modal
+                title="Change Password"
+                visible={show}
+                okText="Add new"
+                onCancel={() => { setShow(false); setErrors("") }}
+                onOk={() => handleChangePassword()}
+            >
+                <Form style={{ marginTop: 20 }}>
+                    <Form.Item>
+                        <label>Account Name: </label>
+                        <Input
+                            type="text"
+                            className="form-control"
+                            value={editData.editAccount}
+                            name="editAccount"
+                            disabled
+                        />
+                    </Form.Item>
+                    <Form.Item>
+                        <label>Current Password</label>
+                        <Input.Password
+                            autoComplete="off"
+                            name="password"
+                            className="form-control"
+                            placeholder="Password"
+                            value={editData.editCurrentPassword}
+                        />
+                    </Form.Item>
+                    <Form.Item>
+                        <label>New Password</label>
+                        <Input.Password
+                            autoComplete="off"
+                            name="editNewPassword"
+                            className="form-control"
+                            placeholder="Enter new password"
+                            value={editData.editNewPassword}
+                            onChange={handleEditInputChange}
+                        />
+                        {errors.editNewPassword && (
+                            <div
+                                className="invalid-feedback"
+                                style={{ display: "block", color: "red" }}
+                            >
+                                {errors.editNewPassword}
+                            </div>
+                        )}
+                    </Form.Item>
+                    <Form.Item>
+                        <label>Confirm Password</label>
+                        <Input.Password
+                            autoComplete="off"
+                            name="editConfirmPassword"
+                            className="form-control"
+                            placeholder="Enter confirm password"
+                            value={editData.editConfirmPassword}
+                            onChange={handleEditInputChange}
+                        />
+                        {errors.editConfirmPassword && (
+                            <div
+                                className="invalid-feedback"
+                                style={{ display: "block", color: "red" }}
+                            >
+                                {errors.editConfirmPassword}
+                            </div>
+                        )}
+                    </Form.Item>
+                </Form>
+            </Modal>
         </>
     );
 }

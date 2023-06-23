@@ -280,6 +280,7 @@ export default function ManageUser() {
     const handleClose = () => setShow(false);
     const [showAddNew, setShowAddNew] = useState(false);
 
+
     //useState input cho form Modal
     const [editData, setEditData] = useState({
         editID: "",
@@ -338,6 +339,7 @@ export default function ManageUser() {
 
     useEffect(() => {
         getData();
+        getEmailList();
     }, []);
 
     //call api lấy danh sách email
@@ -355,7 +357,10 @@ export default function ManageUser() {
             });
     };
 
-    getEmailList();
+    useEffect(() => {
+        getEmailList();
+    }, []);
+
 
     //call api lấy danh sách guest
     const getData = () => {
@@ -366,6 +371,7 @@ export default function ManageUser() {
             .get(cleanedUrl)
             .then((result) => {
                 setDataSource(result.data);
+                console.log(dataSource);
             })
             .catch((error) => {
                 console.log(error);
@@ -382,39 +388,19 @@ export default function ManageUser() {
             password: record.password,
             status: record.status,
         };
-        const deleteId = data.userID;
-        const cleanedUrl = `https://localhost:7112/api/user/ChangeUserStatus?userId=${deleteId}&status=0`;
+        // const deleteId = data.userID;
+        // const cleanedUrl = `https://localhost:7112/api/user/ChangeUserStatus?userId=${deleteId}&status=0`;
         Modal.confirm({
             title: "Are you sure to Deactivate account: " + data.account + " ?",
             okText: "DeaActivate",
             okType: "danger",
-            onOk: () => {
-                data.status = "0";
-                axios
-                    .post(cleanedUrl, data.status)
-                    .then((result) => {
-                        getData();
-                        openNotificationDisable("topRight");
-                    })
-                    .catch((error) => {
-                        openNotificationEnable("topRight");
-                    });
-            },
-            cancelText: "Cancel",
-            onCancel: () => { },
-        });
-    };
-
-    //call api Activate status guest
-    const handleChangeStatusActivate = (record) => {
-        const data = {
             userID: record.userId,
             fullName: record.fullName,
             email: record.email,
             account: record.accountName,
             password: record.password,
             status: record.status,
-        };
+        });
         const deleteId = data.userID;
         const cleanedUrl = `https://localhost:7112/api/user/ChangeUserStatus?userId=${deleteId}&status=1`;
         Modal.confirm({
@@ -480,9 +466,6 @@ export default function ManageUser() {
         }
     };
 
-
-
-
     return (
         <Layout
             style={{
@@ -531,7 +514,7 @@ export default function ManageUser() {
                         <Button type="primary" onClick={() => setShowAddNew(true)} style={{ marginBottom: '20px', marginRight: '10px' }}>
                             Create a new user
                         </Button>
-                        <CreateUserExcel/>
+                        <CreateUserExcel />
                         <Table
                             columns={columns}
                             dataSource={dataSource}
@@ -593,7 +576,7 @@ export default function ManageUser() {
                                     <Col>
                                         <Row>
                                             <label>BirthDay:</label>
- 
+
                                             <DatePicker
                                                 className="form-control"
                                                 style={{ width: "100%" }}

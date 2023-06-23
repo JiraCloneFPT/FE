@@ -34,7 +34,7 @@ export default function CreateUserExcel() {
     try {
       if (file) {
         const rows = await readXlsxFile(file);
-
+        console.log(rows);
         await axios.post("https://localhost:7112/api/user/upload2", rows, {
           headers: {
             "Content-Type": "application/json",

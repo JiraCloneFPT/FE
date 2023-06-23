@@ -6,7 +6,7 @@ import Detail from "../components/Detail";
 import SiderDetail from "../components/SiderDetail";
 const { Content } = Layout;
 
-const AllIssue = () => {
+const DetailIssue = () => {
     const {
         token: { colorBgContainer },
     } = theme.useToken();
@@ -52,4 +52,4 @@ const AllIssue = () => {
         </>
     );
 };
-export default AllIssue;
+export default DetailIssue;
