@@ -10,11 +10,9 @@ const { Content } = Layout;
 const AllIssue = () => {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
-    const { component, onSetData } = useContext(UserContext);
-    const user = JSON.parse(sessionStorage.getItem("user"));
-
+    const { component, onSetData, user } = useContext(UserContext);
     const handleGetData = async () => {
-        const result = await AllIssueByUser(user?.userId);
+        const result = await AllIssueByUser();
         if (result.status === 200) {
             setData(result.data);
             onSetData(result.data);
@@ -23,7 +21,7 @@ const AllIssue = () => {
     };
     useEffect(() => {
         handleGetData();
-    }, []);
+    }, [user]);
     const {
         token: { colorBgContainer },
     } = theme.useToken();

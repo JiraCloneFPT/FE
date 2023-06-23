@@ -509,7 +509,7 @@ export default function ManageUser() {
                         <Button type="primary" onClick={() => setShowAddNew(true)} style={{ marginBottom: '20px', marginRight: '10px' }}>
                             Create a new user
                         </Button>
-                        <CreateUserExcel/>
+                        <CreateUserExcel />
                         <Table
                             columns={columns}
                             dataSource={dataSource}

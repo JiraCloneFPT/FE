@@ -6,181 +6,14 @@ import {
     UnorderedListOutlined,
 } from "@ant-design/icons";
 import { Button, Dropdown, Input, Space } from "antd";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CreateIssue from "../issues/CreateIssue/CreateIssue";
-const link = window.location.origin;
-const items1 = [
-    {
-        key: "1",
-        label: (
-            <a rel="noopener noreferrer" href="#">
-                View System Dashboard
-            </a>
-        ),
-    },
-    {
-        key: "2",
-        label: (
-            <a rel="noopener noreferrer" href="#">
-                Manage Dashboard
-            </a>
-        ),
-    },
-];
-const items2 = [
-    {
-        key: "1",
-        label: (
-            <a rel="noopener noreferrer" href="#">
-                Software
-            </a>
-        ),
-    },
-    {
-        key: "2",
-        label: (
-            <a rel="noopener noreferrer" href="#">
-                Business
-            </a>
-        ),
-    },
-    {
-        key: "3",
-        label: (
-            <a rel="noopener noreferrer" href="#">
-                View all project
-            </a>
-        ),
-    },
-];
-const items3 = [
-    {
-        key: "1",
-        label: (
-            <a rel="noopener noreferrer" href={`${link}/issues?filter=2`}>
-                My open issue
-            </a>
-        ),
-    },
-    {
-        key: "2",
-        label: (
-            <a rel="noopener noreferrer" href={`${link}/issues?filter=3`}>
-                Report by me
-            </a>
-        ),
-    },
-    {
-        key: "3",
-        label: (
-            <a rel="noopener noreferrer" href={`${link}/issues?filter=1"`}>
-                More ...
-            </a>
-        ),
-    },
-];
-const items4 = [
-    {
-        key: "1",
-        label: (
-            <a rel="noopener noreferrer" href="#">
-                View all boards
-            </a>
-        ),
-    },
-];
-const items = [
-    {
-        key: "1",
-        label: (
-            <a rel="noopener noreferrer" href="/reported-by-me">
-                Reported by me
-            </a>
-        ),
-    },
-];
-const items5 = [
-    {
-        key: "1",
-        label: (
-            <a rel="noopener noreferrer" href="#">
-                Home
-            </a>
-        ),
-    },
-    {
-        key: "2",
-        label: (
-            <a rel="noopener noreferrer" href="#">
-                My Information
-            </a>
-        ),
-    },
-    {
-        key: "3",
-        label: (
-            <a rel="noopener noreferrer" href="#">
-                QA Eco System
-            </a>
-        ),
-    },
-    {
-        key: "4",
-        label: (
-            <a rel="noopener noreferrer" href="#">
-                Help
-            </a>
-        ),
-    },
-];
-
-const itemsOfAvater = [
-
-    {
-        key: '1',
-        label: (
-            <a target="_blank" rel="noopener noreferrer" onClick={() => onClickProfile()}>
-                Profile
-            </a>
-        ),
-    },
-    {
-        key: '2',
-        label: (
-            <a target="_blank" rel="noopener noreferrer" onClick={() => onClickDashBoard()}>
-                DashBoard
-            </a>
-        ),
-    },
-    {
-        key: '3',
-        label: (
-            <a target="_blank" rel="noopener noreferrer" onClick={() => onLogOut()}>
-                LogOut
-            </a>
-        ),
-    }
-
-]
-
-const onClickProfile = () => {
-    window.location.href = '/profile';
-}
-
-const onClickDashBoard = () => {
-    window.location.href = '/home';
-}
-
-const onLogOut = () => {
-    sessionStorage.clear();
-    localStorage.clear();
-    window.location.href = '/login';
-}
+import { UserContext } from "../../contexts/UserContext";
 
 
 export default function Header() {
-    const user = sessionStorage.getItem("user");
+    const { user, onSetUser } = useContext(UserContext);
     const navigate = useNavigate();
     const onClick = () => {
         navigate("/");
@@ -189,6 +22,180 @@ export default function Header() {
     const handleShowCreateIssueModal = () => {
         setOpencreateIssueModal(true);
     };
+    const redicter = (value) => {
+        navigate(value);
+    }
+    const items1 = [
+        {
+            key: "1",
+            label: (
+                <button className="button-href">
+                    View System Dashboard
+                </button>
+            ),
+        },
+        {
+            key: "2",
+            label: (
+                <button className="button-href">
+                    Manage Dashboard
+                </button>
+            ),
+        },
+    ];
+    const items2 = [
+        {
+            key: "1",
+            label: (
+                <button className="button-href">
+                    Software
+                </button>
+            ),
+        },
+        {
+            key: "2",
+            label: (
+                <button className="button-href">
+                    Business
+                </button>
+            ),
+        },
+        {
+            key: "3",
+            label: (
+                <button className="button-href">
+                    View All Project
+                </button>
+            ),
+        },
+    ];
+    const items3 = [
+        {
+            key: "1",
+            label: (
+                <button className="button-href" onClick={() => redicter(`/issues?filter=2`)}>
+                    My Open Issue
+                </button>
+            ),
+        },
+        {
+            key: "2",
+            label: (
+                <button className="button-href" onClick={() => redicter(`/issues?filter=3`)}>
+                    Report By Me
+                </button>
+            ),
+        },
+        {
+            key: "3",
+            label: (
+                <button className="button-href" onClick={() => redicter(`/issues?filter=1`)}>
+                    More ...
+                </button>
+            ),
+        },
+    ];
+    const items4 = [
+        {
+            key: "1",
+            label: (
+                <button className="button-href">
+                    View All Boards
+                </button>
+            ),
+        },
+    ];
+    const items = [
+        {
+            key: "1",
+            label: (
+                <button className="button-href" onClick={() => redicter(`/issues?filter=3`)}>
+                    Report By Me
+                </button>
+            ),
+        },
+    ];
+    const items5 = [
+        {
+            key: "1",
+            label: (
+                <button className="button-href">
+                    Home
+                </button>
+            ),
+        },
+        {
+            key: "2",
+            label: (
+                <button className="button-href">
+                    My Information
+                </button>
+            ),
+        },
+        {
+            key: "3",
+            label: (
+                <button className="button-href">
+                    QA Eco System
+                </button>
+            ),
+        },
+        {
+            key: "4",
+            label: (
+                <button className="button-href">
+                    Help
+                </button>
+            ),
+        },
+    ];
+
+    const itemsOfAvater = [
+
+        {
+            key: '1',
+            label: (
+                <button className="button-href" onClick={() => onClickProfile()}>
+                    Profile
+                </button>
+            ),
+        },
+        {
+            key: '2',
+            label: (
+                <button className="button-href" onClick={() => onClickDashBoard()}>
+                    DashBoard
+                </button>
+            ),
+        },
+        {
+            key: '3',
+            label: (
+                <button className="button-href" onClick={() => onLogOut()}>
+                    LogOut
+                </button>
+            ),
+        }
+
+    ]
+
+    const onClickProfile = () => {
+        navigate('/profile');
+    }
+
+    const onClickDashBoard = () => {
+        navigate('/home');
+    }
+
+    const onLogOut = () => {
+        localStorage.clear();
+        onSetUser({
+            data: "",
+            token: "",
+        });
+        navigate("/");
+    }
+
     return (
         <>
             <header>
@@ -210,8 +217,7 @@ export default function Header() {
                             </a>
                         </Dropdown>
                         <div
-                            className="d-flex align-center ml-2"
-                            style={{ cursor: "pointer" }}
+                            className="d-flex align-center ml-2 button-main"
                             onClick={onClick}
                         >
                             <img src="../images/System Dashboard - FI2.0/jira-logo-scaled.png" />
@@ -222,7 +228,7 @@ export default function Header() {
                                 className="d-flex align-center itemIcon"
                                 style={{ marginLeft: 32 }}
                             >
-                                <li>
+                                <li className="button-main">
                                     <Dropdown
                                         menu={{
                                             items: items1,
@@ -239,7 +245,7 @@ export default function Header() {
                                 {user
                                     ?
                                     <>
-                                        <li>
+                                        <li className="button-main">
                                             <Dropdown
                                                 menu={{
                                                     items: items2,
@@ -253,7 +259,7 @@ export default function Header() {
                                                 </a>
                                             </Dropdown>
                                         </li>
-                                        <li>
+                                        <li className="button-main">
                                             <Dropdown
                                                 menu={{
                                                     items: items3,
@@ -267,7 +273,7 @@ export default function Header() {
                                                 </a>
                                             </Dropdown>
                                         </li>
-                                        <li>
+                                        <li className="button-main">
                                             <Dropdown
                                                 menu={{
                                                     items: items4,
@@ -281,7 +287,7 @@ export default function Header() {
                                                 </a>
                                             </Dropdown>
                                         </li>
-                                        <li>
+                                        <li className="button-main">
                                             <Dropdown
                                                 menu={{
                                                     items: items5,
@@ -295,7 +301,7 @@ export default function Header() {
                                                 </a>
                                             </Dropdown>
                                         </li>
-                                        <li>
+                                        <li className="button-main">
                                             <Button
                                                 onClick={handleShowCreateIssueModal}
                                                 type="primary"
@@ -335,7 +341,7 @@ export default function Header() {
                                     style={{ color: "#000" }}
                                 />
                             </li>
-                            <li>
+                            <li className="button-main">
                                 {user ? (
                                     <Dropdown menu={{ items: itemsOfAvater }}>
                                         <a onClick={(e) => e.preventDefault()}>

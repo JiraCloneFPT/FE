@@ -3,10 +3,11 @@ import { SearchOutlined } from "@ant-design/icons";
 import { Button, Input, Space, Table } from "antd";
 import { useRef, useState } from "react";
 import Highlighter from "react-highlight-words";
-const link = window.location.origin;
+import { useNavigate } from "react-router-dom";
 
 export default function ListIssues({ data }) {
     const [searchText, setSearchText] = useState("");
+    const navigate = useNavigate();
     const [searchedColumn, setSearchedColumn] = useState("");
     const searchInput = useRef(null);
     const handleSearch = (selectedKeys, confirm, dataIndex) => {
@@ -120,9 +121,9 @@ export default function ListIssues({ data }) {
                     }
                 />
             ) : dataIndex === "summary" ? (
-                <a href={`${link}/issues/detail/${record.issueId}`}>
+                <button className="button-href" style={{ color: "#1d70ed" }} onClick={() => navigate(`/issues/detail/${record.issueId}`)}>
                     {record[dataIndex]}
-                </a>
+                </button>
             ) : (
                 <>{record[dataIndex]}</>
             );

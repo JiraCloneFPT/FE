@@ -1,14 +1,12 @@
 import { Table } from 'antd';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import axios from "axios";
+import { UserContext } from '../../contexts/UserContext';
 
 
 
 const IssuesList = () => {
-
-
-    const user = JSON.parse(sessionStorage.getItem('user'));
-
+    const { user } = useContext(UserContext);
     const columns = [
         {
             key: '1',

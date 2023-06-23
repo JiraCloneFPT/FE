@@ -1,10 +1,10 @@
-import Header from "./Header";
-import Footer from "./Footer";
+import { useContext } from "react";
 import "../../assests/css/profile.css";
+import { UserContext } from "../../contexts/UserContext";
+import Header from "./Header";
 
 export default function Profile() {
-    const user = JSON.parse(sessionStorage.getItem("user"));
-
+    const { user } = useContext(UserContext);
     return (
         <>
             <Header />
@@ -29,7 +29,7 @@ export default function Profile() {
                     </div>
                 </div>
                 <div
-                    class="aui-page-header-main"
+                    className="aui-page-header-main"
                     style={{
                         marginLeft: "3%",
                         display: "flex",
@@ -99,7 +99,7 @@ export default function Profile() {
                     <main className="aui-page-panel-content">
                         <header className="aui-page-header">
                             <div className="aui-page-header-inner">
-                                <div class="aui-page-header-main">
+                                <div className="aui-page-header-main">
                                     <h2>Summary</h2>
                                 </div>
                             </div>
@@ -127,7 +127,7 @@ export default function Profile() {
                                                         <button className="jira-icon-button aui-avatar aui-avatar-large">
                                                             <span className="aui-avatar-inner">
                                                                 <img
-                                                                    class="avatar-image"
+                                                                    className="avatar-image"
                                                                     src="https://insight.fsoft.com.vn/jira3/images/icons/ico_add_avatar.png"
                                                                     alt="Edit avatar"
                                                                 />

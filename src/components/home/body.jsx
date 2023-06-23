@@ -2,12 +2,14 @@
 import { Col, Row } from 'antd';
 import Login from '../auth/Login';
 import IssuesList from './IssuesList';
+import { useContext } from 'react';
+import { UserContext } from '../../contexts/UserContext';
 
 
 
 
 export default function Body() {
-    const user = JSON.parse(sessionStorage.getItem('user'));
+    const { user } = useContext(UserContext);
 
     return (
         <div className='container-fluid'>
