@@ -23,7 +23,7 @@ export default function Login() {
         if (result.status === 200) {
             onSetUser(result);
             if (isSave) {
-                sessionStorage.setItem('token', JSON.stringify(result.token));
+                localStorage.setItem('token', JSON.stringify(result.token));
             }
             navigate('/');
         } else {

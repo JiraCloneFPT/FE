@@ -5,8 +5,8 @@ import { getInfoService } from "../services/UserService";
 export const UserContext = createContext();
 const UserContextProvider = (props) => {
     const [user, setUser] = useState("");
-    const [token, setToken] = useState(JSON.parse(sessionStorage.getItem("token"))
-        ? JSON.parse(sessionStorage.getItem("token"))
+    const [token, setToken] = useState(JSON.parse(localStorage.getItem("token"))
+        ? JSON.parse(localStorage.getItem("token"))
         : "");
     const [render, setRender] = useState("");
     const [data, setData] = useState([]);

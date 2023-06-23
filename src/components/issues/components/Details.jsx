@@ -1,7 +1,8 @@
 /* eslint-disable no-unused-vars */
 import { InboxOutlined, UserOutlined } from "@ant-design/icons";
 import { Col, Collapse, Row, Tabs, Upload, message } from "antd";
-
+import History from "./History";
+import Activity from "./Activity";
 const { Dragger } = Upload;
 
 const props = {
@@ -255,72 +256,6 @@ const actitity = () => {
     const onChange = (key) => {
         console.log(key);
     };
-
-    const history = () => {
-        return (
-            <>
-                <div
-                    style={{
-                        borderBottom: "1px solid rgb(107, 119, 140)",
-                        padding: "12px 0",
-                    }}
-                >
-                    <span>
-                        Le Huu Nhat Khoa (FA.G0.DN.C) made changes - 5 hours ago
-                    </span>
-                    <Row gutter={[16, 16]}>
-                        <Col span={8}>
-                            <span style={{ fontWeight: "bold" }}>Status</span>
-                        </Col>
-                        <Col span={8}>
-                            <span>
-                                <span style={{ fontWeight: "bold" }}>
-                                    Original
-                                </span>
-                                : Reopened[4]
-                            </span>
-                        </Col>
-                        <Col span={8}>
-                            <span>
-                                <span style={{ fontWeight: "bold" }}>New</span>:
-                                In Progress[3]
-                            </span>
-                        </Col>
-                    </Row>
-                </div>
-                <div
-                    style={{
-                        borderBottom: "1px solid rgb(107, 119, 140)",
-                        padding: "12px 0",
-                    }}
-                >
-                    <span>
-                        Le Huu Nhat Khoa (FA.G0.DN.C) made changes - 5 hours ago
-                    </span>
-                    <Row gutter={[16, 16]}>
-                        <Col span={8}>
-                            <span style={{ fontWeight: "bold" }}>Status</span>
-                        </Col>
-                        <Col span={8}>
-                            <span>
-                                <span style={{ fontWeight: "bold" }}>
-                                    Original
-                                </span>
-                                : Reopened[4]
-                            </span>
-                        </Col>
-                        <Col span={8}>
-                            <span>
-                                <span style={{ fontWeight: "bold" }}>New</span>:
-                                In Progress[3]
-                            </span>
-                        </Col>
-                    </Row>
-                </div>
-            </>
-        );
-    };
-
     const items = [
         {
             key: "1",
@@ -335,12 +270,12 @@ const actitity = () => {
         {
             key: "3",
             label: `History`,
-            children: history(),
+            children: <History />,
         },
         {
             key: "4",
             label: `Activity`,
-            children: `Content of Tab Pane 4`,
+            children: <Activity />,
         },
         {
             key: "5",

@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 const { Header } = Layout;
 
 export default function HeaderAdmin() {
-    const { user } = useContext(UserContext);
+    const { user, onSetUser } = useContext(UserContext);
     const navigate = useNavigate();
     const [avatar, setAvatar] = useState('../img/1x/Asset 1.png');
 
@@ -27,7 +27,11 @@ export default function HeaderAdmin() {
     }
 
     const onLogOut = () => {
-        sessionStorage.clear();
+        localStorage.clear();
+        onSetUser({
+            data: "",
+            token: "",
+        });
         navigate('/');
     }
     const items = [

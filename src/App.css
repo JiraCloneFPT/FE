@@ -21,7 +21,25 @@
   --reOpen--: #DFE1E5;
   --ds-border: #091E4224;
 }
-
+.title-history{
+  padding: 10px 0 0;
+  margin-bottom: 20px;
+  display: flex;
+}
+.img-user{
+  margin-bottom: -3px;
+  margin: 0 10px 0 0;
+  width: 16px;
+  height: 16px;
+}
+.button-href{
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+.button-main{
+  cursor: pointer;
+}
 h3 {
   font-weight: 500;
   color: var(--titleHomePage--);
