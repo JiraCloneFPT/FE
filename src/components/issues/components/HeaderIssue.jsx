@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { Layout, Select, theme } from 'antd';
+import { Col, Layout, Row, Select, theme } from 'antd';
 import { useContext, useEffect, useState } from 'react';
 import { GetComponentsService } from '../../../services/ComponentService';
 import ExportFile from "../components/ExportFile";
@@ -24,28 +24,30 @@ const HeaderIssue = ({ name }) => {
     return (
         <Header
             style={{
-                padding: '0 16px',
                 background: colorBgContainer,
+                padding: "0px",
                 // minHeight: '13%',
-                height: 140
+                height: 150
             }}
         >
-            <div className="d-flex align-center justify-content-between">
-                <h3 className='titleTextSlider'>{name}</h3>
-                <Select
-                    placeholder="Component: All"
-                    value={component}
-                    onChange={(value) => handleChangeCombobox(value)}
-                    style={{
-                        width: '20%',
-                    }}
-                    options={components.map((item) => ({
-                        value: item.componentId,
-                        label: item.componentName,
-                    }))}
-                />
-                <ExportFile />
-            </div>
+            <Row>
+                <Col span={18}><h3 className='titleTextSlider'>{name}</h3></Col>
+                <Col span={6}><ExportFile /></Col>
+                <Col span={24}>
+                    <Select
+                        placeholder="Component: All"
+                        value={component}
+                        onChange={(value) => handleChangeCombobox(value)}
+                        style={{
+                            width: '20%',
+                        }}
+                        options={components.map((item) => ({
+                            value: item.componentId,
+                            label: item.componentName,
+                        }))}
+                    />
+                </Col>
+            </Row>
         </Header>
     )
 }

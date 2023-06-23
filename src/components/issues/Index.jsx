@@ -24,7 +24,7 @@ export default function Index() {
                 }}
             >
                 <Slider id={id} />
-                <div style={{ width: "100%", padding: "50px" }}>
+                <div style={{ width: "100%", padding: "10px 50px" }}>
                     {pages[id - 1]}
                 </div>
             </Layout>

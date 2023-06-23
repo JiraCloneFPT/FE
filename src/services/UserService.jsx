@@ -1,13 +1,13 @@
 // import RequestApi from "../utils/Request"
-import RequestApi from "../utils/RequestUser"
+import Request from "../utils/Request"
 
 // Fuction Login by user includes: email and password
 export const loginService = async (user) => {
     console.log(user)
     try {
-        const respone = await RequestApi({
+        const respone = await Request({
             method: "post",
-            url: "login",
+            url: "user/login",
             headers: {
                 "Content-Type": "application/json",
             },
@@ -55,3 +55,18 @@ export const getUserByUserId = async (userId) =>
 }
 
 //End - bổ sung
+
+export const getInfoService = async (token) => {
+    try {
+        const respone = await Request({
+            method: "get",
+            url: `user/info?token=${token}`,
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+        return respone.data;
+    } catch (e) {
+        return e;
+    }
+};

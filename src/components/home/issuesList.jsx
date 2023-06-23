@@ -1,15 +1,13 @@
 import { Table } from 'antd';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import axios from "axios";
+import { UserContext } from '../../contexts/UserContext';
 import { ListIssueType } from '../../utils/CommonIcon';
 
 
 
 const IssuesList = () => {
-
-
-    const user = JSON.parse(sessionStorage.getItem('user'));
-
+    const { user } = useContext(UserContext);
     const columns = [
         {
             key: '1',
@@ -58,7 +56,6 @@ const IssuesList = () => {
 
     const getData = () => {
         const cleanedUrl = 'https://localhost:7112/api/issue/GetAllIsseByUserId?userId=' + user.userId
-        console.log("123" + cleanedUrl);
         axios
             .get(cleanedUrl)
             .then((result) => {

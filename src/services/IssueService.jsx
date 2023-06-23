@@ -114,11 +114,11 @@ export const ReportedByMe = async (idUser) => {
         return e;
     }
 }
-export const AllIssueByUser = async (idUser) => {
+export const AllIssueByUser = async () => {
     try {
         const respone = await Request({
             method: "get",
-            url: `issue/allissue?idUser=${idUser}`,
+            url: `issue/allissue`,
             headers: {
                 "Content-Type": "application/json",
             },

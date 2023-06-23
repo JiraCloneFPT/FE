@@ -10,8 +10,7 @@ const { Content } = Layout;
 const Report = () => {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
-    const { component, onSetData } = useContext(UserContext);
-    const user = JSON.parse(sessionStorage.getItem("user"));
+    const { component, onSetData, user } = useContext(UserContext);
 
     const handleGetData = async () => {
         const result = await ReportedByMe(user?.userId);
@@ -23,7 +22,7 @@ const Report = () => {
     };
     useEffect(() => {
         handleGetData();
-    }, [component]);
+    }, [user]);
     const {
         token: { colorBgContainer },
     } = theme.useToken();

@@ -339,6 +339,7 @@ export default function ManageUser() {
 
     useEffect(() => {
         getData();
+        getEmailList();
     }, []);
 
     //call api lấy danh sách email
@@ -387,39 +388,19 @@ export default function ManageUser() {
             password: record.password,
             status: record.status,
         };
-        const deleteId = data.userID;
-        const cleanedUrl = `https://localhost:7112/api/user/ChangeUserStatus?userId=${deleteId}&status=0`;
+        // const deleteId = data.userID;
+        // const cleanedUrl = `https://localhost:7112/api/user/ChangeUserStatus?userId=${deleteId}&status=0`;
         Modal.confirm({
             title: "Are you sure to Deactivate account: " + data.account + " ?",
             okText: "DeaActivate",
             okType: "danger",
-            onOk: () => {
-                data.status = "0";
-                axios
-                    .post(cleanedUrl, data.status)
-                    .then((result) => {
-                        getData();
-                        openNotificationDisable("topRight");
-                    })
-                    .catch((error) => {
-                        openNotificationEnable("topRight");
-                    });
-            },
-            cancelText: "Cancel",
-            onCancel: () => { },
-        });
-    };
-
-    //call api Activate status guest
-    const handleChangeStatusActivate = (record) => {
-        const data = {
             userID: record.userId,
             fullName: record.fullName,
             email: record.email,
             account: record.accountName,
             password: record.password,
             status: record.status,
-        };
+        });
         const deleteId = data.userID;
         const cleanedUrl = `https://localhost:7112/api/user/ChangeUserStatus?userId=${deleteId}&status=1`;
         Modal.confirm({
@@ -484,9 +465,6 @@ export default function ManageUser() {
             setErrors(errors);
         }
     };
-
-
-
 
     return (
         <Layout

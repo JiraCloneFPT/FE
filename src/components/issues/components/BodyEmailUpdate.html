@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+       .main-table {
+        border: solid 1px gray;
+        border-collapse: collapse;
+        width: 70%;
+
+      }
+      th,
+      td {
+        padding: 10px;
+        color: rgb(70, 68, 68);
+        /* border: solid 1px gray; */
+      }
+      .status{
+        background-color: #DFE1E6;
+        color: black;
+      }
+      s{
+        background-color: #FFE7E7;
+      }
+    </style>
+  </head>
+  <body>
+    <table class="small-table">
+        <tr>
+            <td>There are <b style="color: #1960D0 ;">5 updates</b></td>
+        </tr>
+    </table>
+    <table class="main-table">
+      <tbody>
+        <tr>
+          <td colspan="2" style="color: #1960D0">
+            "+nameProject +" / "+ issue.IssueId +" <b class="status">"+nameStatusIssue+"</b> 
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2" style="font-size: 30px"><b>Test Jira 3</b></td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <a href="http://127.0.0.1:3000/issues/detail/"+issue.IssueId+"">View Issue</a>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2" style="font-size: large">5 updates</td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <b>Changes by User FullName </b>  on 19/Jun/23
+            9:01 PM
+          </td>
+        </tr>
+        <tr>
+          <td style="width: 22%;">Summary:</td>
+          <td><s>Old Sumary</s> New Summary</td>
+        </tr>
+        <tr>
+          <td>Issue Type:</td>
+          <td><s>Old </s> New </td>
+        </tr>
+        <tr>
+          <td>Assignee:</td>
+          <td><s>Old </s> New </td>
+        </tr>
+        <tr>
+          <td>Components:</td>
+          <td><s>Old </s> New </td>
+
+        </tr>
+        <tr>
+          <td>Created:</td>
+          <td><s>Old </s> New </td>
+
+        </tr>
+        <tr>
+          <td>Priority:</td>
+          <td><s>Old </s> New </td>
+
+        </tr>
+        <tr>
+          <td>Reporter:</td>
+          <td><s>Old </s> New </td>
+
+        </tr>
+        <tr>
+          <td>Security Level:</td>
+          <td><s>Old </s> New </td>
+        </tr>
+        <tr>
+          <td>QC Activity:</td>
+          <td><s>Old </s> New </td>
+        </tr>
+        <tr>
+          <td>Description:</td>
+          <td><s>Old </s> New </td>
+        </tr>
+      </tbody>
+    </table>
+  </body>
+</html>
