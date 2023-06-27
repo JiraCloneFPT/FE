@@ -14,21 +14,25 @@ import {
 import {
     UploadOutlined,
 } from "@ant-design/icons";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import '../../../assests/css/createIssue.css';
 import EditorTextArea from '../CreateIssue/EditorTextArea';
 import CommonUploadFiles from '../../../utils/CommonUploadFiles';
-import axios from 'axios';
 import moment from 'moment';
-import { GetIssueByIdService, GetItemsIssue } from "../../../services/IssueService";
-import { messageIssue01, messageIssue02 } from '../../../utils/CommonMessages';
+import { successNotification } from "../../../utils/CommonNotification";
+import { ResolveIssueService, GetIssueByIdService, GetItemsIssue } from "../../../services/IssueService";
+import { messageIssue03, messageIssue04 } from '../../../utils/CommonMessages';
+import { UserContext } from '../../../contexts/UserContext';
 
 const Option = Select.Option;
 
 const ResolveIssue = (props) => {
 
-    const idIssue = props.id;
+    const {user} = useContext(UserContext);
+    const userId = user?.userId;
+    const idIssue = props?.idIssue;
     const [form] = Form.useForm();
+    const {onSetRender} = useContext(UserContext);
 
     const [errors, setErrors] = useState({});
     const [resolution, setResolution] = useState([]);
@@ -44,6 +48,8 @@ const ResolveIssue = (props) => {
     const [complexities, setComplexities] = useState([]);
 
     const [formData, setFormData] = useState({
+        userId: userId,
+        issueId: "",
         resolutionId: '',
         severity: '',
         qcActivityId: '',
@@ -72,7 +78,6 @@ const ResolveIssue = (props) => {
     const handleGetItemsIssue = async () => {
         const res = await GetItemsIssue();
         const result = res.data;
-        console.log('GetItemsIssue ', result);
         setResolution(result.resolutionResolve)
         setAssignees(result.assignees)
         setCauseCategories(result.causeCategories)
@@ -87,10 +92,12 @@ const ResolveIssue = (props) => {
     }
 
     const handleGetIssueById = async () => {
-        const res = await GetIssueByIdService(idIssue);  
+        const res = await GetIssueByIdService(idIssue);
         const issue = res.data;
-        console.log('GetIssueByIdService ', issue);
+        // console.log('issue ', issue);
         setFormData(({
+            userId: userId,
+            issueId: issue?.issueId ?? "",
             severity: issue.severity ?? '',
             qcActivityId: issue.qcactivityId ?? '',
             leakCauseId: issue.leakCauseId ?? '',
@@ -155,29 +162,27 @@ const ResolveIssue = (props) => {
             ...formData,
             [name]: value
         });
-        console.log('name ', name, ' value ', value);
     }
 
     const handleDateChange = (name, value) => {
         setFormData({
-          ...formData,
-          [name]: (value !== null || value !== undefined ) ? moment(value) : ''
+            ...formData,
+            [name]: (value !== null || value !== undefined) ? moment(value) : ''
         })
-        console.log("name ", name, " value ", value);
     }
 
     const handleFileChange = (info) => {
-        console.log(info.file);
         setFormData({
             ...formData,
             attachments: info.file.originFileObj,
         });
     };
 
-    const handleResolveIssue = () => {
-        console.log('form ', formData);
+    const handleResolveIssue = async () => {
 
         const formDataRequest = new FormData();
+        formDataRequest.append("userId", userId);
+        formDataRequest.append("issueId", formData?.issueId ?? "");
         formDataRequest.append("resolutionId", formData?.resolutionId ?? "");
         formDataRequest.append("severity", formData?.severity ?? "");
         formDataRequest.append("qcActivityId", formData?.qcActivityId);
@@ -203,7 +208,17 @@ const ResolveIssue = (props) => {
             ? (formData.closedDate).format('YYYY-MM-DDTHH:mm:ss') : "");
         // comment
 
-        console.log('dataRequest ', formDataRequest);
+        console.log('form ', formData);
+        if (formValidate()) {
+            const result = await ResolveIssueService(formDataRequest);
+            props.setOpen(false);
+            form.resetFields();
+            if (result.code === 200) {
+                successNotification(messageIssue03, messageIssue04(""));
+                onSetRender();
+            }
+        }
+
     }
 
     const Header = () => {
@@ -261,7 +276,7 @@ const ResolveIssue = (props) => {
                         defaultValue={formData?.resolutionId}
                     >
                         {resolution?.map(item => (
-                            <Option value={item.id} key={item.id} name='projectId' >
+                            <Option value={item.id} key={item.id}  >
                                 {item.value}
                             </Option>
                         ))}
@@ -336,7 +351,7 @@ const ResolveIssue = (props) => {
                         name="defectTypeId"
                         allowClear
                         onChange={(e) => handleOnChange('defectTypeId', e)}
-                        defaultValue={formData?.defectOriginId}
+                        defaultValue={formData?.defectTypeId}
                     >
                         {defectTypes?.map(item => (
                             <Option value={item.defectTypeId} key={item.defectTypeId} name='defectTypeId'>
@@ -559,8 +574,9 @@ const ResolveIssue = (props) => {
                 >
                     <Input
                         style={{ maxWidth: 250 }}
+                        name='estimateEffort'
                         defaultValue={formData?.estimateEffort}
-                        onChange={(e) => handleOnChange(e.target.id, e.target.value)}
+                        onChange={(e) => handleOnChange(e.target.name, e.target.value)}
                     />
                 </Form.Item>
 
@@ -609,7 +625,7 @@ const ResolveIssue = (props) => {
                 >
                     <DatePicker
                         name='closedDate'
-                        onChange={(date, dateString) => handleOnChange('closedDate', date)}
+                        onChange={(date, dateString) => handleDateChange('closedDate', date)}
                         defaultValue={formData?.closedDate}
                     />
                 </Form.Item>
