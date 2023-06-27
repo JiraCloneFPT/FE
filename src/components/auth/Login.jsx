@@ -1,10 +1,13 @@
+/* eslint-disable no-unused-vars */
 import { Button, Checkbox, Form, Input, notification } from "antd";
 import { loginService } from "../../services/UserService";
 import { useContext, useState } from "react";
 import { UserContext } from "../../contexts/UserContext";
 import { useNavigate } from "react-router-dom";
+import { useCookies } from "react-cookie";
 
 export default function Login() {
+    const [cookies, setCookie] = useCookies([]);
     const { onSetUser } = useContext(UserContext);
     const [isSave, setIsSave] = useState(false);
     const navigate = useNavigate();
@@ -15,16 +18,18 @@ export default function Login() {
             placement,
         });
     };
-
+    const handleSetCookie = (type, value) => {
+        const expires = new Date();
+        type ? expires.setDate(expires.getDate() + 14) : expires.setMinutes(expires.getMinutes() + 5);
+        setCookie('token', value, { path: '/', expires: expires });
+    }
     const [api, contextHolder] = notification.useNotification();
 
     const onFinish = async (values) => {
         const result = await loginService(values);
         if (result.status === 200) {
             onSetUser(result);
-            if (isSave) {
-                localStorage.setItem('token', JSON.stringify(result.token));
-            }
+            handleSetCookie(isSave, result.token);
             navigate('/');
         } else {
             openNotificationDisable("topRight");

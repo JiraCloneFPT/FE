@@ -1,12 +1,13 @@
 /* eslint-disable react/prop-types */
 import { createContext, useEffect, useState } from "react";
 import { getInfoService } from "../services/UserService";
-
+import { useCookies } from 'react-cookie';
 export const UserContext = createContext();
 const UserContextProvider = (props) => {
+    const [cookies] = useCookies(['token']);
     const [user, setUser] = useState("");
-    const [token, setToken] = useState(JSON.parse(localStorage.getItem("token"))
-        ? JSON.parse(localStorage.getItem("token"))
+    const [token, setToken] = useState(cookies?.token
+        ? cookies.token
         : "");
     const [render, setRender] = useState("");
     const [data, setData] = useState([]);

@@ -5,11 +5,12 @@ import { Layout, theme, Dropdown, Space } from 'antd';
 import "../../assests/css/admin.css"
 import { UserContext } from "../../contexts/UserContext";
 import { useNavigate } from "react-router-dom";
-
+import { useCookies } from 'react-cookie';
 const { Header } = Layout;
 
 export default function HeaderAdmin() {
     const { user, onSetUser } = useContext(UserContext);
+    const [cookies, setCookie, removeCookie] = useCookies([]);
     const navigate = useNavigate();
     const [avatar, setAvatar] = useState('../img/1x/Asset 1.png');
 
@@ -27,12 +28,12 @@ export default function HeaderAdmin() {
     }
 
     const onLogOut = () => {
-        localStorage.clear();
+        removeCookie('token', { path: '/' });
         onSetUser({
             data: "",
             token: "",
         });
-        navigate('/');
+        navigate("/");
     }
     const items = [
         getItem(<a onClick={() => onLogOut()}>Log out</a>, '3', <LogoutOutlined />),

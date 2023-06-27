@@ -26,8 +26,16 @@
   margin-bottom: 20px;
   display: flex;
 }
+.title-activity{
+  margin-bottom: 10px;
+  display: flex;
+}
+.img-activity{
+  width: 48px;
+  height: 48px;
+}
 .img-user{
-  margin-bottom: -3px;
+  margin-top: 3px !important;
   margin: 0 10px 0 0;
   width: 16px;
   height: 16px;

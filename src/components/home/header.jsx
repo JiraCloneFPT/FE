@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import {
     BellFilled,
     DownOutlined,
@@ -10,10 +11,11 @@ import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CreateIssue from "../issues/CreateIssue/CreateIssue";
 import { UserContext } from "../../contexts/UserContext";
-
+import { useCookies } from 'react-cookie';
 
 export default function Header() {
     const { user, onSetUser } = useContext(UserContext);
+    const [cookies, setCookie, removeCookie] = useCookies([]);
     const navigate = useNavigate();
     const onClick = () => {
         navigate("/");
@@ -164,7 +166,7 @@ export default function Header() {
             key: '2',
             label: (
                 <button className="button-href" onClick={() => onClickDashBoard()}>
-                    DashBoard
+                    Dashboard
                 </button>
             ),
         },
@@ -172,7 +174,7 @@ export default function Header() {
             key: '3',
             label: (
                 <button className="button-href" onClick={() => onLogOut()}>
-                    LogOut
+                    Logout
                 </button>
             ),
         }
@@ -188,7 +190,7 @@ export default function Header() {
     }
 
     const onLogOut = () => {
-        localStorage.clear();
+        removeCookie('token', { path: '/' });
         onSetUser({
             data: "",
             token: "",

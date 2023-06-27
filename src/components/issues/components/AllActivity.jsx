@@ -1,21 +1,28 @@
 import { useParams } from "react-router-dom";
-import { GetHistoryByIssueId } from "../../../services/HistoryService";
+import { GetHistoryByIssueId,GetFirstHistoryByIssueId } from "../../../services/HistoryService";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../../contexts/UserContext";
 import { Col, Row } from "antd";
 import {HanldeDate} from "../../../helpers/HandleDate";
 
-const History = () => {
+const AllActivity = () => {
     const { id } = useParams();
     const { render } = useContext(UserContext);
     const [data, setData] = useState([]);
+    const [firstIssue, setFirstIssue] = useState({});
     const HandleGetHistory = async () => {
         const result = await GetHistoryByIssueId(id);
         result.status === 200 ? setData(result.data) : setData([]);
     }
+    const HandleGetFirstHistory = async () =>{
+        const result = await GetFirstHistoryByIssueId(id);
+        result.status === 200 ? setFirstIssue(result.data) : setFirstIssue({});
+    }
     useEffect(() => {
         HandleGetHistory();
+        HandleGetFirstHistory();
     }, [render]);
+    console.log(firstIssue);
     return (
         <>
             {
@@ -71,7 +78,18 @@ const History = () => {
                         )
                     })
             }
+            <div
+                                        style={{
+                                            borderBottom: "1px solid rgb(107, 119, 140)",
+                                            padding: "12px 0",
+                                        }}
+                                    >
+                                        <span className="title-history">
+                                            <img className="img-user" src="https://insight.fsoft.com.vn/jira3/secure/useravatar?size=small&avatarId=10122" />
+                                            <div style={{ color: "#0052cc" }}>{firstIssue.editorName}&nbsp;</div> created issue - {new Date(firstIssue.createTime).toDateString()}
+                                        </span>
+                                    </div>
         </>
     )
 };
-export default History;
+export default AllActivity;

@@ -3,6 +3,7 @@ import { InboxOutlined, UserOutlined } from "@ant-design/icons";
 import { Col, Collapse, Row, Tabs, Upload, message } from "antd";
 import History from "./History";
 import Activity from "./Activity";
+import AllActivity from "./AllActivity";
 const { Dragger } = Upload;
 
 const props = {
@@ -252,7 +253,7 @@ const dates = (issue) => {
         </>
     );
 };
-const actitity = () => {
+const actitity = (issue) => {
     const onChange = (key) => {
         console.log(key);
     };
@@ -260,7 +261,7 @@ const actitity = () => {
         {
             key: "1",
             label: `All`,
-            children: `Content of Tab Pane 1`,
+            children: <AllActivity />,
         },
         {
             key: "2",
@@ -275,7 +276,7 @@ const actitity = () => {
         {
             key: "4",
             label: `Activity`,
-            children: <Activity />,
+            children: <Activity issue={issue} />,
         },
         {
             key: "5",
