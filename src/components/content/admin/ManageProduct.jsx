@@ -165,7 +165,7 @@ export default function ManageProduct() {
 
     useEffect(() => {
         getData();
-    }, []);
+    }, [dataSource]);
 
     //call api lấy danh sách product
     const getData = () => {
@@ -198,7 +198,7 @@ export default function ManageProduct() {
     };
     useEffect(() => {
         getProductName();
-    }, []);
+    }, [productNames]);
 
     // useState create form
     const [inputData, setInputData] = useState({

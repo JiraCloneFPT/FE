@@ -175,11 +175,11 @@ export const CountWatcher = async (issueId) => {
     }
 }
 
-export const CheckWatcher = async (userId, issueId) => {
+export const CheckWatcher = async (issueId, userId) => {
     try {
         const respone = await Request({
             method: "get",
-            url: `issue/checkWatcher?userId=${userId}&issueId=${issueId}`,
+            url: `issue/checkWatcher?issueId=${issueId}&userId=${userId}`,
             headers: {
                 "Content-Type": "application/json",
             },
@@ -189,11 +189,27 @@ export const CheckWatcher = async (userId, issueId) => {
         return e;
     }
 }
+
 export const StartWatcher = async (userId,issueId) => {
     try {
         const respone = await Request({
             method: "post",
             url: `issue/startWatcher?userId=${userId}&issueId=${issueId}`,
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+        return respone.data;
+    } catch (e) {
+        return e;
+    }
+}
+
+export const StopWatcher = async (userId,issueId) => {
+    try {
+        const respone = await Request({
+            method: "post",
+            url: `issue/stopWatcher?userId=${userId}&issueId=${issueId}`,
             headers: {
                 "Content-Type": "application/json",
             },

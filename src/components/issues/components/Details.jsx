@@ -5,8 +5,11 @@ import History from "./History";
 import Activity from "./Activity";
 import { CountWatcher } from "../../../services/IssueService";
 import { CheckWatcher } from "../../../services/IssueService";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router-dom";
+import { UserContext } from "../../../contexts/UserContext";
+import { StartWatcher } from "../../../services/IssueService";
+import { StopWatcher } from "../../../services/IssueService";
 
 const { Dragger } = Upload;
 
@@ -37,8 +40,6 @@ const props = {
 
 
 const details = (issue) => {
-
-
 
     return (
         <>
@@ -191,7 +192,9 @@ const attachments = () => {
 const people = (issue) => {
     const { id } = useParams();
 
-    const userId = 2;
+    const { user, onSetUser } = useContext(UserContext);
+
+    const userId = user.userId;
 
     // lấy số lượng watcher
     const [count, setCount] = useState();
@@ -202,17 +205,34 @@ const people = (issue) => {
     }
     useEffect(() => {
         loadCountWatcher();
-    }, []);
+    }, [count]);
 
     //check đã watcher hay chưa
     const [check, setCheck] = useState();
     const loadCheck = async () => {
-        const getCheck = await CheckWatcher(userId, id);
+        const getCheck = await CheckWatcher(id, userId);
         setCheck(getCheck);
     }
     useEffect(() => {
         loadCheck();
-    }, []);
+    }, [check]);
+
+
+    const startWatcher = async (userID, id) => {
+        const result = await StartWatcher(userID, id);
+        if(result.status === 200){
+            loadCountWatcher();
+            loadCheck();
+        }
+    }
+
+    const stopWatcher = async (userID, id) => {
+        const result = await StopWatcher(userID, id);
+        if(result.status === 200){
+            loadCountWatcher();
+            loadCheck();
+        }
+    }
 
     return (
         <>
@@ -225,7 +245,7 @@ const people = (issue) => {
                         <div className="d-flex align-center">
                             <UserOutlined />
                             <p className="text ml-1">
-                                Le Huu Nhat Khoa (FA.G0.DN.C)
+                                {issue?.assigneeName}
                             </p>
                         </div>
                     </div>
@@ -260,10 +280,10 @@ const people = (issue) => {
                                 </span>
                                 {check == true ?
                                     <>
-                                        <a>start watching this issue</a>
+                                        <a onClick={() => startWatcher(userId,id)}>start watching this issue</a>
                                     </> :
                                     <>
-                                        <a>Stop watching this issue</a>
+                                        <a onClick={() => stopWatcher(userId, id)}>Stop watching this issue</a>
                                     </>
                                 }
                             </p>

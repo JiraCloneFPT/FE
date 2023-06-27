@@ -177,7 +177,7 @@ export default function ManageComponent() {
 
     useEffect(() => {
         getData();
-    }, []);
+    }, [dataSource]);
 
     //lấy danh sách component Name
     const getComponentName = () => {
@@ -196,9 +196,8 @@ export default function ManageComponent() {
 
     useEffect(() => {
         getComponentName();
-    }, []);
+    }, [componentNames]);
 
-    getComponentName();
 
     //useState form input  error cho form Modal
     const [errors, setErrors] = useState({

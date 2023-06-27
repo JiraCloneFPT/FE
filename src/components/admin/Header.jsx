@@ -1,20 +1,25 @@
 /* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
 import { Fragment, useState, useEffect } from "react";
+import { useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import { UserOutlined, DesktopOutlined, LogoutOutlined } from '@ant-design/icons';
 import { Layout, theme, Dropdown, Space } from 'antd';
 import "../../assests/css/admin.css"
+import { UserContext } from "../../contexts/UserContext";
 
 const { Header } = Layout;
 
 export default function HeaderAdmin() {
     const { user, onSetUser } = useContext(UserContext);
+    console.log(user);
     const navigate = useNavigate();
     const [avatar, setAvatar] = useState('../img/Logo.png');
 
     // useEffect(() => {
     //     setAvatar(JSON.parse(user).avatar);
     // }, [user]);
+
 
     function getItem(label, key, icon, children) {
         return {
