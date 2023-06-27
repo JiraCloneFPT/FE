@@ -6,27 +6,31 @@ import {
     CommentOutlined,
 } from "@ant-design/icons";
 import React, { useContext } from 'react';
-import { Button, Dropdown, Space, message, Menu } from "antd";
+import { Button, Dropdown, Space, message, Menu, Form, Input, } from "antd";
 import { Col, Row } from "antd";
-import { useEffect, useState } from "react";
+import { useEffect, useState, } from "react";
 import { useParams } from "react-router-dom";
 import Details from "./Details";
 import ResolveIssue from "./ResolveIssue";
 import EditIssue from "./EditIssue";
 import CancelIssue from "./CancelIssue";
 import CloseIssue from "./CloseIssue";
-import { GetIssueService } from "../../../services/IssueService";
+import { GetIssueService, InProgressIssueService, ReopenedIssueService } from "../../../services/IssueService";
 import ExportFileDetail from "../components/ExportFileDetail";
 import { UserContext } from "../../../contexts/UserContext";
+import { successNotification } from "../../../utils/CommonNotification";
+import { messageIssue03, messageIssue04 } from '../../../utils/CommonMessages';
 
 export default function Detail() {
     const [issue, setIssue] = useState();
-    const { render } = useContext(UserContext);
+    const { user } = useContext(UserContext);
+    const { render, onSetRender } = useContext(UserContext);
     let items = [];
     let statusIssue;
     const { id } = useParams();
     const handleGetIssue = async () => {
         const result = await GetIssueService(id);
+        console.log('issue', issue);
         result.status === 200 ? setIssue(result.data) : setIssue();
     };
     useEffect(() => {
@@ -53,6 +57,24 @@ export default function Detail() {
         setOpenCloseIssueModal(true);
     };
 
+    // handleReopenedIssue used TuNT
+    const handleReopenedIssue = async () => {
+        const result = await ReopenedIssueService(user?.userId, id);
+        if (result.code === 200) {
+            successNotification(messageIssue03, messageIssue04(""));
+            onSetRender();
+        }
+    }
+
+    // handleInProgressIssue used TuNT
+    const handleInProgressIssue = async () => {
+        const result = await InProgressIssueService(user?.userId, id);
+        if (result.code === 200) {
+            successNotification(messageIssue03, messageIssue04(""));
+            onSetRender();
+        }
+    }
+
     const open =
     {
         label: (
@@ -66,7 +88,7 @@ export default function Detail() {
     const inProgress =
     {
         label: (
-            <div className="d-flex align-center">
+            <div className="d-flex align-center" onClick={() => { handleInProgressIssue() }}>
                 <span className="menuProgress-1">Start Progress</span>
                 <ArrowRightOutlined className="menuProgress-2" />
                 <div className="menuProgress-3 progress">
@@ -110,7 +132,7 @@ export default function Detail() {
     const reopened =
     {
         label: (
-            <div className="d-flex align-center">
+            <div className="d-flex align-center" onClick={() => { handleReopenedIssue() }}>
                 <span className="menuProgress-1">Re-Open</span>
                 <ArrowRightOutlined className="menuProgress-2" />
                 <div className="menuProgress-3 cancel">
@@ -145,7 +167,7 @@ export default function Detail() {
         statusIssue = 'In Progress';
     }
     if (issue?.statusIssueId === 3) {
-        items = [resolve, reopened, canceled]; // resolve 
+        items = [reopened, closed]; // resolve 
         statusIssue = 'Resolve';
     }
     if (issue?.statusIssueId === 4) {
@@ -295,13 +317,6 @@ export default function Detail() {
 
             <div style={{ marginTop: 20 }}></div>
             <Details issue={issue} />
-            <Button
-                type="default"
-                style={{ backgroundColor: "#ECEDF0", marginTop: "30px" }}
-                icon={<CommentOutlined />}
-            >
-                Add Comment
-            </Button>
         </>
     );
 }

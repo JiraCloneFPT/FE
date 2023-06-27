@@ -57,6 +57,67 @@ export const CreateIssueService = async (data) => {
     }
 };
 // Used by TuNT37
+export const AddComments = async (data) => {
+    try {
+        const respone = await Request({
+            method: "post",
+            url: `issue/addComment`,
+            headers: {
+                "Content-Type": "application/json",
+            },
+            data: data
+        });
+        return respone.data;
+    } catch (e) {
+        return e;
+    }
+};
+// Used by TuNT37
+export const GetAllComments = async (issueId) => {
+    try {
+        const respone = await Request({
+            method: "get",
+            url: `issue/getComments?issueId=${issueId}`,
+            headers: {
+                "Content-Type": "application/json",
+            }
+        });
+        return respone.data;
+    } catch (e) {
+        return e;
+    }
+};
+// Used by TuNT37
+export const ReopenedIssueService = async (userId, issueId) => {
+    try {
+        const respone = await Request({
+            method: "put",
+            url: `issue/reopened?userId=${userId}&issueId=${issueId}`,
+            headers: {
+                "Content-Type": "application/json",
+            }
+        });
+        return respone.data;
+    } catch (e) {
+        return e;
+    }
+};
+// Used by TuNT37
+export const InProgressIssueService = async (userId, issueId) => {
+    try {
+        const respone = await Request({
+            method: "put",
+            url: `issue/inProgress?userId=${userId}&issueId=${issueId}`,
+            headers: {
+                "Content-Type": "application/json",
+            }
+        });
+        return respone.data;
+    } catch (e) {
+        return e;
+    }
+};
+// Used by TuNT37
 export const CancelIssueService = async (data) => {
     try {
         const respone = await Request({

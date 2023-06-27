@@ -339,7 +339,7 @@ const CloseIssue = (props) => {
                         style={{ maxWidth: 500 }}
                         name='impact'
                         defaultValue={formData?.impact}
-                        onChange={(e) => handleOnChange(e.target.id, e.target.value)}
+                        onChange={(e) => handleOnChange(e.target.name, e.target.value)}
                     />
                 </Form.Item>
 
