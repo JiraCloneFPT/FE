@@ -56,15 +56,79 @@ export const CreateIssueService = async (data) => {
         return e;
     }
 };
+// Used by TuNT37
+export const CancelIssueService = async (data) => {
+    try {
+        const respone = await Request({
+            method: "put",
+            url: "issue/cancel",
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+            data: data
+        });
+        return respone.data;
+    } catch (e) {
+        return e;
+    }
+};
+// Used by TuNT37
+export const CloseIssueService = async (data) => {
+    try {
+        const respone = await Request({
+            method: "put",
+            url: "issue/close",
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+            data: data
+        });
+        return respone.data;
+    } catch (e) {
+        return e;
+    }
+};
+// Used by TuNT37
+export const ResolveIssueService = async (data) => {
+    try {
+        const respone = await Request({
+            method: "put",
+            url: "issue/resolve",
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+            data: data
+        });
+        return respone.data;
+    } catch (e) {
+        return e;
+    }
+};
+// Used by TuNT37
 export const EditIssueService = async (data) => {
     try {
         const respone = await Request({
             method: "put",
-            url: "account/edit",
+            url: "issue/edit",
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+            data: data
+        });
+        return respone.data;
+    } catch (e) {
+        return e;
+    }
+};
+// Used by TuNT37
+export const GetIssueByIdService = async (id) => {
+    try {
+        const respone = await Request({
+            method: "get",
+            url: `issue/GetIssueById?id=${id}`, 
             headers: {
                 "Content-Type": "application/json",
             },
-            data: JSON.stringify(data),
         });
         return respone.data;
     } catch (e) {
@@ -80,6 +144,21 @@ export const DeleteIssueService = async (id) => {
                 "Content-Type": "application/json",
             },
             data: JSON.stringify(id),
+        });
+        return respone.data;
+    } catch (e) {
+        return e;
+    }
+};
+// Used by TuNT37
+export const GetItemsIssue = async () => {
+    try {
+        const respone = await Request({
+            method: "get",
+            url: "issue/GetItemsIssue",
+            headers: {
+                "Content-Type": "application/json",
+            },
         });
         return respone.data;
     } catch (e) {
@@ -119,6 +198,66 @@ export const AllIssueByUser = async () => {
         const respone = await Request({
             method: "get",
             url: `issue/allissue`,
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+        return respone.data;
+    } catch (e) {
+        return e;
+    }
+}
+
+export const CountWatcher = async (issueId) => {
+    try {
+        const respone = await Request({
+            method: "get",
+            url: `issue/countWatcher?issueId=${issueId}`,
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+        return respone.data;
+    } catch (e) {
+        return e;
+    }
+}
+
+export const CheckWatcher = async (issueId, userId) => {
+    try {
+        const respone = await Request({
+            method: "get",
+            url: `issue/checkWatcher?issueId=${issueId}&userId=${userId}`,
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+        return respone.data;
+    } catch (e) {
+        return e;
+    }
+}
+
+export const StartWatcher = async (userId,issueId) => {
+    try {
+        const respone = await Request({
+            method: "post",
+            url: `issue/startWatcher?userId=${userId}&issueId=${issueId}`,
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+        return respone.data;
+    } catch (e) {
+        return e;
+    }
+}
+
+export const StopWatcher = async (userId,issueId) => {
+    try {
+        const respone = await Request({
+            method: "post",
+            url: `issue/stopWatcher?userId=${userId}&issueId=${issueId}`,
             headers: {
                 "Content-Type": "application/json",
             },

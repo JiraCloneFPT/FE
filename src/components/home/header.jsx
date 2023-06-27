@@ -157,9 +157,9 @@ export default function Header() {
         {
             key: '1',
             label: (
-                <button className="button-href" onClick={() => onClickProfile()}>
+                <a target="_blank" rel="noopener noreferrer" onClick={() => onClickProfile()}>
                     Profile
-                </button>
+                </a>
             ),
         },
         {
@@ -194,9 +194,8 @@ export default function Header() {
         onSetUser({
             data: "",
             token: "",
-        });
-        navigate("/");
-    }
+        })
+    };
 
     return (
         <>

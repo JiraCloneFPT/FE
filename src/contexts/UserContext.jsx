@@ -34,8 +34,8 @@ const UserContextProvider = (props) => {
     const onSetComponent = (value) => {
         setComponent(value);
     };
-    const onSetRender = (value) => {
-        setRender(value);
+    const onSetRender = () => {
+        setRender(!render);
     };
     const onSetData = (value) => {
         setData(value);

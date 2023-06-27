@@ -2,6 +2,7 @@ import { Table } from 'antd';
 import { useState, useEffect, useContext } from 'react';
 import axios from "axios";
 import { UserContext } from '../../contexts/UserContext';
+import { ListIssueType } from '../../utils/CommonIcon';
 
 
 
@@ -14,6 +15,7 @@ const IssuesList = () => {
             dataIndex: 'T',
             width: 100,
             render: () => {
+
                 return (
                     <img src='../images/Create Issue - FI2.0/forbidden.png' />
                 )
@@ -67,7 +69,7 @@ const IssuesList = () => {
 
     useEffect(() => {
         getData();
-    }, []);
+    },[dataSource]);
 
 
     const [tableParams, setTableParams] = useState({

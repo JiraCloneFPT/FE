@@ -214,7 +214,7 @@ export default function ManageProject() {
     };
     useEffect(() => {
         getData();
-    }, []);
+    }, [dataSource]);
 
     //lấy danh sách projectNames
     const getProjectNames = () => {
@@ -233,9 +233,7 @@ export default function ManageProject() {
 
     useEffect(() => {
         getProjectNames();
-    }, []);
-
-    getProjectNames();
+    }, [projectNames]);
 
     //lấy danh sách shortNames
     const getShortNames = () => {
@@ -254,9 +252,7 @@ export default function ManageProject() {
 
     useEffect(() => {
         setShortNames();
-    }, []);
-
-    getShortNames();
+    }, [shortNames]);
 
     // useState create form
     const [inputData, setInputData] = useState({

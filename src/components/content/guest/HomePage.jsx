@@ -1,4 +1,4 @@
-import Header from "../../home/Header";
+import Header from "../../home/header"
 import Body from "../../home/Body";
 import Footer from "../../home/Footer";
 

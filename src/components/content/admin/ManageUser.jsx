@@ -67,9 +67,13 @@ export default function ManageUser() {
 
     //Nhận giá trị thay đổi trong ô input Datetime (Edit form)
     const handleEditInputChangeDate = (date, dateString) => {
+        // setEditData({
+        //     ...editData,
+        //     editBirthDay: dateString,
+        // });
         setEditData({
             ...editData,
-            editBirthDay: dateString,
+            [name]: formatDate(date, dayFormat),
         });
     };
 
@@ -89,10 +93,14 @@ export default function ManageUser() {
         setInputData((preData) => ({ ...preData, [field]: value }));
     };
     //Nhận giá trị thay đổi trong ô input Datetime (Create form)
-    const handleAddInputChangeDate = (date, dateString) => {
+    const handleAddInputChangeDate = (date, name) => {
+        // setInputData({
+        //     ...inputData,
+        //     inputBirthDay: dateString,
+        // });
         setInputData({
             ...inputData,
-            inputBirthDay: dateString,
+            [name]: formatDate(date, dayFormat),
         });
     };
 
@@ -280,6 +288,7 @@ export default function ManageUser() {
     const handleClose = () => setShow(false);
     const [showAddNew, setShowAddNew] = useState(false);
 
+
     //useState input cho form Modal
     const [editData, setEditData] = useState({
         editID: "",
@@ -338,7 +347,7 @@ export default function ManageUser() {
 
     useEffect(() => {
         getData();
-    }, []);
+    }, [dataSource]);
 
     //call api lấy danh sách email
     const getEmailList = () => {
@@ -355,7 +364,10 @@ export default function ManageUser() {
             });
     };
 
-    getEmailList();
+    useEffect(() => {
+        getEmailList();
+    }, [emailList]);
+
 
     //call api lấy danh sách guest
     const getData = () => {
@@ -366,6 +378,7 @@ export default function ManageUser() {
             .get(cleanedUrl)
             .then((result) => {
                 setDataSource(result.data);
+                console.log(dataSource);
             })
             .catch((error) => {
                 console.log(error);
@@ -382,39 +395,19 @@ export default function ManageUser() {
             password: record.password,
             status: record.status,
         };
-        const deleteId = data.userID;
-        const cleanedUrl = `https://localhost:7112/api/user/ChangeUserStatus?userId=${deleteId}&status=0`;
+        // const deleteId = data.userID;
+        // const cleanedUrl = `https://localhost:7112/api/user/ChangeUserStatus?userId=${deleteId}&status=0`;
         Modal.confirm({
             title: "Are you sure to Deactivate account: " + data.account + " ?",
             okText: "DeaActivate",
             okType: "danger",
-            onOk: () => {
-                data.status = "0";
-                axios
-                    .post(cleanedUrl, data.status)
-                    .then((result) => {
-                        getData();
-                        openNotificationDisable("topRight");
-                    })
-                    .catch((error) => {
-                        openNotificationEnable("topRight");
-                    });
-            },
-            cancelText: "Cancel",
-            onCancel: () => { },
-        });
-    };
-
-    //call api Activate status guest
-    const handleChangeStatusActivate = (record) => {
-        const data = {
             userID: record.userId,
             fullName: record.fullName,
             email: record.email,
             account: record.accountName,
             password: record.password,
             status: record.status,
-        };
+        });
         const deleteId = data.userID;
         const cleanedUrl = `https://localhost:7112/api/user/ChangeUserStatus?userId=${deleteId}&status=1`;
         Modal.confirm({
@@ -479,9 +472,6 @@ export default function ManageUser() {
             setErrors(errors);
         }
     };
-
-
-
 
     return (
         <Layout
@@ -593,14 +583,15 @@ export default function ManageUser() {
                                     <Col>
                                         <Row>
                                             <label>BirthDay:</label>
- 
+
                                             <DatePicker
                                                 className="form-control"
                                                 style={{ width: "100%" }}
                                                 // placeholder="yyyy-MM-dd"
                                                 format="YYYY-MM-DD"
-                                                value={editData.editBirthDay ? moment(editData.editBirthDay, 'YYYY-MM-DD') : null}
-                                                onChange={handleEditInputChangeDate}
+                                                name="editBirthDay"
+                                                value={editData.editBirthDay ? dayjs(editData.editBirthDay, dayFormat) : null}
+                                                onChange= {(date) =>handleEditInputChangeDate(date, "editBirthDay")}
                                             />
                                             {errors.editBirthDay && (
                                                 <div
@@ -681,7 +672,7 @@ export default function ManageUser() {
                                                 style={{ width: "100%" }}
                                                 placeholder="yyyy-MM-dd"
                                                 format="YYYY-MM-DD"
-                                                value={inputData.inputBirthDay ? moment(inputData.inputBirthDay, 'YYYY-MM-DD') : null}
+                                                value={inputData.inputBirthDay ? dayjs(inputData.inputBirthDay, dayFormat) : null}
                                                 onChange={handleAddInputChangeDate}
                                             />
                                             {errors.inputBirthDay && (

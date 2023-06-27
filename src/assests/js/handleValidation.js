@@ -39,7 +39,7 @@ export function handleValidationCreate(inputData, errors, emailList) {
     //lấy ngày hiện tại
     //Get DateTime Now
     console.log("Valid: " + inputData.inputEmail);
-    console.log("Check: "  + emailList);
+    console.log("Check: " + emailList);
     const currentDate = new Date();
 
     const year = currentDate.getFullYear();
@@ -152,4 +152,22 @@ export function handleValidationAddProduct(inputData, errors, productNames) {
     if (productNames.includes(inputData.inputProductName)) {
         errors.inputProductName = "Product Name has already existed";
     }
+}
+
+export function handleValidationChangePassword(editData, errors) {
+
+    if (editData.editNewPassword.length >= 6) {
+        if (!/[A-Z]/.test(editData.editNewPassword.charAt(0))) {
+            errors.editNewPassword = 'Password must start with a capital letter';
+        } else if (!/[a-zA-Z]/.test(editData.editNewPassword) || !/[0-9]/.test(editData.editNewPassword)) {
+            errors.editNewPassword = 'Password must contain both letters and numbers';
+        } else if (editData.editConfirmPassword == "" || editData.editConfirmPassword == null || editData.editConfirmPassword == " ") {
+            errors.editConfirmPassword = 'Confirm password does not be blank';
+        } else if (editData.editNewPassword != editData.editConfirmPassword) {
+            errors.editConfirmPassword = 'Comfirm password does not match with new password';
+        }
+    } else {
+        errors.editNewPassword = "Length of password must be equal or than 6"
+    }
+
 }

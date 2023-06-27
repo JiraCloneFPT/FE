@@ -18,7 +18,7 @@ import {
     PlusOutlined,
     UploadOutlined,
 } from "@ant-design/icons";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import "../../../assests/css/createIssue.css";
 import EditorTextArea from "./EditorTextArea";
 import CommonUploadFiles from "../../../utils/CommonUploadFiles";
@@ -26,12 +26,14 @@ import { successNotification } from "../../../utils/CommonNotification";
 import axios from "axios";
 import { messageIssue01, messageIssue02 } from "../../../utils/CommonMessages";
 import { ListIssueType } from "../../../utils/CommonIcon";
+import {UserContext} from "../../../contexts/UserContext";
 
 const Option = Select.Option;
 
 const CreateIssue = (props) => {
     const [form] = Form.useForm();
-    const userId = props.userId;
+    const {user} = useContext(UserContext);
+    const userId = user.userId;
 
     //#region States
     const [errors, setErrors] = useState({});
@@ -62,6 +64,7 @@ const CreateIssue = (props) => {
     //#endregion
 
     const [formData, setFormData] = useState({
+        userId: userId,
         projectId: "",
         issueTypeId: "",
         summary: "",
@@ -110,7 +113,6 @@ const CreateIssue = (props) => {
 
     const formValidate = () => {
         let errors = {};
-        console.log(formData.projectId);
         if (!formData.projectId) {
             errors.projectId = "projectId is required";
         }
@@ -192,6 +194,8 @@ const CreateIssue = (props) => {
             ...formData,
             assigneeId: userId,
         });
+        console.log(userId);
+        console.log('assign');
     };
 
     const handleFileChange = (info) => {
@@ -205,6 +209,7 @@ const CreateIssue = (props) => {
     const handleReset = () => {
         props.setOpen(false);
         setFormData({
+            userId: userId,
             projectId: "",
             issueTypeId: "",
             summary: "",
@@ -257,6 +262,7 @@ const CreateIssue = (props) => {
     const handleCreateIssue = () => {
         //#region FormData
         const formDataRequest = new FormData();
+        formDataRequest.append("userId", userId);
         formDataRequest.append("attachFile", formData.attachments);
         formDataRequest.append("projectId", formData.projectId);
         formDataRequest.append("issueTypeId", formData.issueTypeId);
