@@ -26,15 +26,14 @@ import { successNotification } from "../../../utils/CommonNotification";
 import axios from "axios";
 import { messageIssue01, messageIssue02 } from "../../../utils/CommonMessages";
 import { ListIssueType } from "../../../utils/CommonIcon";
-import UserContext from "../../../contexts/UserContext";
+import {UserContext} from "../../../contexts/UserContext";
 
 const Option = Select.Option;
 
 const CreateIssue = (props) => {
     const [form] = Form.useForm();
-    // const {user} = useContext(UserContext);
-    // const userId = user.userId;
-    const userId = 1; // hard code to test
+    const {user} = useContext(UserContext);
+    const userId = user.userId;
 
     //#region States
     const [errors, setErrors] = useState({});

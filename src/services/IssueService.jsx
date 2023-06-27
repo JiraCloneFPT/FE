@@ -57,6 +57,54 @@ export const CreateIssueService = async (data) => {
     }
 };
 // Used by TuNT37
+export const CancelIssueService = async (data) => {
+    try {
+        const respone = await Request({
+            method: "put",
+            url: "issue/cancel",
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+            data: data
+        });
+        return respone.data;
+    } catch (e) {
+        return e;
+    }
+};
+// Used by TuNT37
+export const CloseIssueService = async (data) => {
+    try {
+        const respone = await Request({
+            method: "put",
+            url: "issue/close",
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+            data: data
+        });
+        return respone.data;
+    } catch (e) {
+        return e;
+    }
+};
+// Used by TuNT37
+export const ResolveIssueService = async (data) => {
+    try {
+        const respone = await Request({
+            method: "put",
+            url: "issue/resolve",
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+            data: data
+        });
+        return respone.data;
+    } catch (e) {
+        return e;
+    }
+};
+// Used by TuNT37
 export const EditIssueService = async (data) => {
     try {
         const respone = await Request({
