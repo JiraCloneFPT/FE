@@ -1,12 +1,15 @@
 /* eslint-disable no-unused-vars */
-import { InboxOutlined, UserOutlined } from "@ant-design/icons";
-import { Col, Collapse, Row, Tabs, Upload, message } from "antd";
+import { UserOutlined, DeleteOutlined, UploadOutlined } from "@ant-design/icons";
+import { Col, Collapse, Row, Tabs, Upload, message, Modal } from "antd";
 import History from "./History";
 import Activity from "./Activity";
 import { CountWatcher } from "../../../services/IssueService";
 import { CheckWatcher } from "../../../services/IssueService";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import axios from "axios";
+import { successNotification } from "../../../utils/CommonNotification";
+import { messageIssue03, messageIssue04 } from "../../../utils/CommonMessages";
 
 const { Dragger } = Upload;
 
@@ -33,12 +36,7 @@ const props = {
 // const currentUrl = window.location.href;
 // const searchString = "http://localhost:3000/issues/detail/";
 
-
-
-
 const details = (issue) => {
-
-
 
     return (
         <>
@@ -174,16 +172,93 @@ const description = (issue) => {
 };
 
 const attachments = () => {
+
+    const {id} = useParams();
+    const [files, setFiles] = useState([]);
+    const [file, setFile] = useState();
+    const [isRefresh, setIsRefresh] = useState(false);
+    const [isShowSubmit, setIsShowSubmit] = useState(false);
+
+    useEffect(() => {
+        fetchFiles();
+    }, [isRefresh]);
+
+    const fetchFiles = async () => {
+        try {
+            const response = await axios.get(`https://localhost:7112/api/issue/getFilesIssue?issueId=${id}`);
+            setFiles(response.data.data);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const handleFileChange = (info) => {
+        setFile(info.file.originFileObj);
+        if(info.file.originFileObj){
+            setIsShowSubmit(true)
+        }
+    };
+
+    const handleAddFile = async () => {
+        const formDataRequest = new FormData();
+        try {
+            const response = await axios.post(`https://localhost:7112/api/issue/addFile`, formDataRequest , 
+            {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            });
+            setIsRefresh(!isRefresh)
+            setFile()
+            setIsShowSubmit(false)
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    const handleDeleteFile = (fileId) => {
+        Modal.confirm({
+            title: 'Are you sure you want to delete?',
+            okText: 'Yes',
+            okType: 'danger',
+            cancelText: 'No',
+            onOk: () => {
+                axios.delete(`https://localhost:7112/api/issue/removeFile?fileId=${fileId}`)
+                    .then((response) => {
+                        console.log('response ', response);
+                        if (response.data.code === 200) {
+                            successNotification(messageIssue03, messageIssue04(""));
+                            setIsRefresh(!isRefresh)
+                        }
+                    })
+            }
+        });
+    }
+
     return (
         <>
-            <Dragger {...props}>
+            <div>
+                <h2>List files of Issue</h2>
+                <ul>
+                    {files?.map((file) => (
+                        <li key={file?.id}>
+                            <a href={`data:application/octet-stream;base64,${file?.content}`} download={file?.name}>
+                                {file?.name}
+                            </a>
+                            <span> <DeleteOutlined onClick={() => { handleDeleteFile(file?.id) }} style={{ color: 'red', marginLeft: 10 }} /> </span>
+                        </li>
+                    ))}
+                </ul>
+            </div>
+            <Upload.Dragger className="attachments" onChange={handleFileChange} onRemove={() => {setIsShowSubmit(false), setFile()}} fileList={file ? [file] : []} style={{marginTop: 20}}>
                 <p className="ant-upload-drag-icon">
-                    <InboxOutlined className="imgUpload" />
+                    <UploadOutlined />
                 </p>
                 <p className="ant-upload-text">
                     Click or drag file to this area to upload
                 </p>
-            </Dragger>
+            </Upload.Dragger>
+            {isShowSubmit ? <><button onClick={handleAddFile}>Add File</button></> : <></>}
         </>
     );
 };
