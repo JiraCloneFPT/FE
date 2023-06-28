@@ -3,7 +3,6 @@ import Request from "../utils/Request"
 
 // Fuction Login by user includes: email and password
 export const loginService = async (user) => {
-    console.log(user)
     try {
         const respone = await Request({
             method: "post",
@@ -22,10 +21,9 @@ export const loginService = async (user) => {
 
 
 //Start - HuyNG5 - bổ sung
-export const changePassword = async (userId, editNewPassword) => 
-{
+export const changePassword = async (userId, editNewPassword) => {
     try {
-        const respone = await RequestApi({
+        const respone = await Request({
             method: "post",
             url: `changePassword?userId=${userId}&password=${editNewPassword}`,
             headers: {
@@ -33,15 +31,14 @@ export const changePassword = async (userId, editNewPassword) =>
             },
         });
         return respone.data;
-    } catch (e) {   
+    } catch (e) {
         return e;
     }
 }
 
-export const getUserByUserId = async (userId) =>
-{
+export const getUserByUserId = async (userId) => {
     try {
-        const respone = await RequestApi({
+        const respone = await Request({
             method: "get",
             url: `GetUserDetail?userId=${userId}`,
             headers: {
@@ -49,7 +46,7 @@ export const getUserByUserId = async (userId) =>
             },
         });
         return respone.data;
-    } catch (e) {   
+    } catch (e) {
         return e;
     }
 }

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable no-unused-vars */
 import { UserOutlined, DeleteOutlined, UploadOutlined } from "@ant-design/icons";
 import { Col, Collapse, Row, Tabs, Upload, message, Modal } from "antd";
