@@ -40,11 +40,11 @@ const AllActivity = () => {
                                     >
                                         <span className="title-history">
                                             <img className="img-user" src="https://insight.fsoft.com.vn/jira3/secure/useravatar?size=small&avatarId=10122" />
-                                            <div style={{ color: "#0052cc" }}>{item.editorName}&nbsp;</div> made changes - {time}
+                                            <a style={{ color: "#0052cc" }}>{item.editorName}&nbsp;</a> {item.properties ? 'made changes' : 'added a comment'} - {time}
                                         </span>
                                         <>
                                             {
-                                                item.properties.map(items => {
+                                                item.properties ? item.properties.map(items => {
                                                     return (
                                                         <>
                                                             <Row gutter={[16, 16]}>
@@ -67,7 +67,7 @@ const AllActivity = () => {
                                                             </Row>
                                                         </>
                                                     )
-                                                })
+                                                }) : <></>
                                             }
                                         </>
 

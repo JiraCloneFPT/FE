@@ -37,7 +37,7 @@ const EditIssue = (props) => {
   const userId = user?.userId;
   const idIssue = props?.idIssue;
   const [form] = Form.useForm();
-
+  const {onSetRender} = useContext(UserContext);
 
   const [files, setFiles] = useState([]);
 
@@ -111,7 +111,7 @@ const EditIssue = (props) => {
     dueTime: "",
     units: "",
     percentDone: "",
-    comment: "", //
+    comment: "", 
   });
 
   const handleGetItemsIssue = async () => {
@@ -190,7 +190,7 @@ const EditIssue = (props) => {
       dueTime: issue.dueTime ?? "",
       units: issue.units ?? "",
       percentDone: issue.percentDone ?? "",
-      //comment
+      comment: issue?.comment ?? "",
     });
   }
 
@@ -296,7 +296,7 @@ const EditIssue = (props) => {
     formDataRequest.append("dueTime", formData?.dueTime ?? "");
     formDataRequest.append("units", formData?.units ?? "");
     formDataRequest.append("percentDone", formData?.percentDone ?? "");
-    // comment
+    formDataRequest.append("comment", formData?.comment ?? ""); 
     //#endregion
     if (formValidate()) {
       const result = await EditIssueService(formDataRequest);
@@ -304,6 +304,7 @@ const EditIssue = (props) => {
       form.resetFields();
       if (result.code === 200) {
         successNotification(messageIssue03, messageIssue04(""));
+        onSetRender()
       }
     }
   };
@@ -1403,7 +1404,7 @@ const EditIssue = (props) => {
           }
         >
           <EditorTextArea
-            name="Comment"
+            name="comment"
             handleEditorContent={handleOnChange}
             defaultValue={formData?.comment}
           />

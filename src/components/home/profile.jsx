@@ -1,10 +1,9 @@
-import Header from "./Header";
-import Footer from "./Footer";
+import { Form, Input, Modal, notification } from "antd";
+import { useContext, useState } from "react";
 import "../../assests/css/profile.css";
-import { Modal, Form, Input, notification } from "antd";
-import { useState, useContext } from "react";
-import { changePassword, getUserByUserId } from "../../services/UserService";
 import { handleValidationChangePassword } from "../../assests/js/handleValidation";
+import { changePassword, getUserByUserId } from "../../services/UserService";
+import Header from "./Header";
 
 import { UserContext } from "../../contexts/UserContext";
 

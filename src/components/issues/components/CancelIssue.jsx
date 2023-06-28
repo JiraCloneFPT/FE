@@ -119,7 +119,7 @@ const CancelIssue = (props) => {
             complexity: issue.complexity ?? '',
             adjustedVP: issue.adjustedVP ?? '',
             closedDate: issue?.closedDate !== null ? moment(issue?.closedDate) : "",
-            //comment
+            comment: issue?.comment ?? '',
         }))
     }
 
@@ -161,7 +161,6 @@ const CancelIssue = (props) => {
     }
 
     const handleFileChange = (info) => {
-        console.log(info.file);
         setFormData({
             ...formData,
             attachments: info.file.originFileObj,
@@ -195,8 +194,9 @@ const CancelIssue = (props) => {
         formDataRequest.append("adjustedVP", formData?.adjustedVP ?? "");
         formDataRequest.append("closedDate", (moment.isMoment(formData.closedDate) && formData.closedDate.isValid())
             ? (formData.closedDate).format('YYYY-MM-DDTHH:mm:ss') : "");
-        // comment
+        formDataRequest.append("comment", formData?.comment ?? "");
 
+        console.log(formData);
         if (formValidate()) {
             const result = await CancelIssueService(formDataRequest);
             props.setOpen(false);
@@ -260,7 +260,7 @@ const CancelIssue = (props) => {
                         allowClear
                         onChange={(e) => handleOnChange('resolutionId', e)}
                         placeholder={'Please select...'}
-                        defaultValue={formData?.resolutionId}
+                        // defaultValue={formData?.resolutionId}
                     >
                         {resolution?.map(item => (
                             <Option value={item.id} key={item.id} name='resolutionId' >
@@ -742,8 +742,9 @@ const CancelIssue = (props) => {
                     extra={<p style={{ fontSize: 11, color: '#6b778c', margin: '5px 0 0' }}>...</p>}
                 >
                     <EditorTextArea
-                        name='Comment'
+                        name='comment'
                         handleEditorContent={handleOnChange}
+                        defaultValue={formData?.comment}
                     />
                 </Form.Item>
             </Form>

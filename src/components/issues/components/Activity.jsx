@@ -16,7 +16,6 @@ const Activity = ({ issue }) => {
         result.status === 200 ? setFirstIssue(result.data) : setFirstIssue({});
     }
     const HandleData = (data) => {
-
         let _data = [];
         for (var i = 0; i < data.length;) {
             let __data = [data[i]];
@@ -32,7 +31,6 @@ const Activity = ({ issue }) => {
             data.splice(i, 1);
             _data.push(__data);
         }
-        console.log(_data);
         setData(_data);
     }
     const HandleGetHistory = async () => {
@@ -46,18 +44,17 @@ const Activity = ({ issue }) => {
     useEffect(() => {
         HandleGetFirstHistory();
     }, [render]);
-    console.log(firstIssue);
     return (
         <>
             {
                 data.length === 0 ? 'There are no activities yet on this issue.'
                     :
-                    data.map((_item) => {
+                    data.map((_item, index) => {
                         const time = HanldeDate(_item[0].createAt);
                         return (
                             <>
                                 {
-                                    <>
+                                    <div key={index}>
                                         <div style={{
                                             borderBottom: "1px solid rgb(107, 119, 140)",
                                             paddingBottom: "10px",
@@ -71,11 +68,11 @@ const Activity = ({ issue }) => {
                                             </Col>
                                             <Col span={21}>
                                                 {
-                                                    _item.map(item => {
+                                                    _item.map((item, index) => {
                                                         return (
-                                                            <>
+                                                            <div key={index}>
                                                                 {
-                                                                    item.properties.map((items, index) => {
+                                                                    item.properties ? item.properties.map((items, index) => {
                                                                         const title = items.property === 'Reporter' || items.property === 'Assignee' ? ` changed the ${items.property} to ${items.new} on ` : ` updated the ${items.property} of `
                                                                         return (
                                                                             <div
@@ -88,12 +85,12 @@ const Activity = ({ issue }) => {
                                                                                 <Row>
                                                                                     <Col span={24}>
                                                                                         <span className="title-activity">
-                                                                                            <div style={{ color: "#0052cc" }}>{item.editorName}&nbsp;</div>
+                                                                                            <a style={{ color: "#0052cc" }}>{item.editorName}&nbsp;</a>
                                                                                             <div>
                                                                                                 {title}
                                                                                                 &nbsp;
                                                                                             </div>
-                                                                                            <div style={{ color: "#0052cc" }}>{issue?.shortNameProject}-{issue?.issueId} - {issue?.summary}</div>
+                                                                                            <a style={{ color: "#0052cc" }}>{issue?.shortNameProject}-{issue?.issueId} - {issue?.summary}</a>
                                                                                         </span>
                                                                                     </Col>
                                                                                     <Col span={24}>
@@ -103,10 +100,33 @@ const Activity = ({ issue }) => {
                                                                                 </Row>
                                                                             </div>
                                                                         )
-                                                                    })
+                                                                    }) : <div
+                                                                        key={index}
+                                                                        style={{
+                                                                            borderBottom: "1px solid rgb(107, 119, 140)",
+                                                                            padding: "10px"
+                                                                        }}
+                                                                    >
+                                                                        <Row>
+                                                                            <Col span={24}>
+                                                                                <span className="title-activity">
+                                                                                    <a style={{ color: "#0052cc" }}>{item.editorName}&nbsp;</a>
+                                                                                    <div>
+                                                                                        commented on
+                                                                                        &nbsp;
+                                                                                    </div>
+                                                                                    <a style={{ color: "#0052cc" }}>{issue?.shortNameProject}-{issue?.issueId} - {issue?.summary}</a>
+                                                                                </span>
+                                                                            </Col>
+                                                                            <Col span={24}>
+                                                                                <img className="img-user" src="https://insight.fsoft.com.vn/jira3/secure/viewavatar?size=xsmall&avatarId=17303&avatarType=issuetype" />
+                                                                                {time}
+                                                                            </Col>
+                                                                        </Row>
+                                                                    </div>
                                                                 }
 
-                                                            </>
+                                                            </div>
                                                         )
                                                     })
                                                 }
@@ -118,7 +138,7 @@ const Activity = ({ issue }) => {
                                             margin: "10px 0"
 
                                         }}></div>
-                                    </>
+                                    </div>
 
                                 }
                             </>

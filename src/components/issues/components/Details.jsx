@@ -14,6 +14,7 @@ import { messageIssue03, messageIssue04 } from "../../../utils/CommonMessages";
 import { UserContext } from "../../../contexts/UserContext";
 import { StartWatcher } from "../../../services/IssueService";
 import { StopWatcher } from "../../../services/IssueService";
+import Comment from "./Comment";
 
 import AllActivity from "./AllActivity";
 const { Dragger } = Upload;
@@ -206,6 +207,8 @@ const attachments = () => {
 
     const handleAddFile = async () => {
         const formDataRequest = new FormData();
+        formDataRequest.append("issueId", id);
+        formDataRequest.append("attachFile", file);
         try {
             const response = await axios.post(`https://localhost:7112/api/issue/addFile`, formDataRequest , 
             {
@@ -413,7 +416,7 @@ const actitity = (issue) => {
         {
             key: "2",
             label: `Comments`,
-            children: `Content of Tab Pane 2`,
+            children: <Comment/> ,
         },
         {
             key: "3",

@@ -7,8 +7,6 @@ import { UserOutlined, DesktopOutlined, LogoutOutlined } from '@ant-design/icons
 import { Layout, theme, Dropdown, Space } from 'antd';
 import "../../assests/css/admin.css"
 import { UserContext } from "../../contexts/UserContext";
-
-
 const { Header } = Layout;
 
 export default function HeaderAdmin() {
