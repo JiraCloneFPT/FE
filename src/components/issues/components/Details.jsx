@@ -184,10 +184,11 @@ const attachments = () => {
     const [file, setFile] = useState();
     const [isRefresh, setIsRefresh] = useState(false);
     const [isShowSubmit, setIsShowSubmit] = useState(false);
+    const { render } = useContext(UserContext);
 
     useEffect(() => {
         fetchFiles();
-    }, [isRefresh]);
+    }, [isRefresh, render]);
 
     const fetchFiles = async () => {
         try {

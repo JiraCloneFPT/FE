@@ -5,10 +5,10 @@ import { Modal, Form, Input, notification } from "antd";
 import { useState, useContext } from "react";
 import { changePassword, getUserByUserId } from "../../services/UserService";
 import { handleValidationChangePassword } from "../../assests/js/handleValidation";
-
 import { UserContext } from "../../contexts/UserContext";
 
 export default function Profile() {
+
     const [api, contextHolder] = notification.useNotification();
     const openNotificationSuccess = (placement) => {
         api.success({
@@ -26,7 +26,7 @@ export default function Profile() {
         });
     };
 
-    const { user } = useContext(UserContext);
+    const { user, onSetRender } = useContext(UserContext);
 
     const [show, setShow] = useState(false);
 
@@ -39,12 +39,13 @@ export default function Profile() {
     });
 
     const handleShowChangePass = async () => {
-        const getUser = await getUserByUserId(user.userId);
-        console.log(getUser);
+        console.log(user);
+        // const getUser = await getUserByUserId(user.userId);
+        // console.log(getUser);
         seteditData({
-            editUserId: getUser.userId,
-            editAccount: getUser.accountName,
-            editCurrentPassword: getUser.password,
+            editUserId: user.userId,
+            editAccount: user.accountName,
+            editCurrentPassword: user.password,
             editNewPassword: "",
             editConfirmPassword: "",
         })
@@ -65,15 +66,18 @@ export default function Profile() {
 
     const handleChangePassword = async () => {
         let errors = {};
-        const userId = editData.editUserId;
+        const userId = user.userId;
         const editNewpassword = editData.editNewPassword;
+
         handleValidationChangePassword(editData, errors);
+        console.log(errors);
         if (Object.keys(errors).length === 0) {
             const result = await changePassword(userId, editNewpassword)
             if (result.status === 200) {
                 setErrors("");
                 setShow(false);
                 openNotificationSuccess("topRight");
+                onSetRender();
             } else {
                 openNotificationFail("topRight");
             }
@@ -118,7 +122,7 @@ export default function Profile() {
                             id="up-user-title-name"
                             style={{ fontSize: "20px", fontWeight: "bold" }}
                         >
-                            Nguyen Gia Huy (FA.G0.DN.C)
+                            {user.fullName}
                         </span>
                     </h1>
                 </div>
@@ -342,7 +346,7 @@ export default function Profile() {
                 visible={show}
                 okText="Add new"
                 onCancel={() => { setShow(false); setErrors("") }}
-                onOk={() => handleChangePassword()}
+                onOk={() => {handleChangePassword()}}
             >
                 <Form style={{ marginTop: 20 }}>
                     <Form.Item>

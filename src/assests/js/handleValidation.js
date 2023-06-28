@@ -97,9 +97,9 @@ export function handleValidationAddProject(inputData, errors, projectNames, shor
     if (projectNames.includes(inputData.inputProjectName)) {
         errors.inputProjectName = "Project Name has already existed";
     }
-    if (shortNames.includes(inputData.inputShortName)) {
-        errors.inputShortName = "Short Name has already existed";
-    }
+    // if (shortNames.includes(inputData.inputShortName)) {
+    //     errors.inputShortName = "Short Name has already existed";
+    // }
 }
 
 export function handleValidationEditProject(editData, errors, projectNames, shortNames) {
@@ -112,9 +112,9 @@ export function handleValidationEditProject(editData, errors, projectNames, shor
     if (projectNames.includes(editData.editProjectName)) {
         errors.editProjectName = "Project Name has already existed";
     }
-    if (shortNames.includes(editData.editShortName)) {
-        errors.editShortName = "Short Name has already existed";
-    }
+    // if (shortNames.includes(editData.editShortName)) {
+    //     errors.editShortName = "Short Name has already existed";
+    // }
 }
 
 

@@ -29,7 +29,7 @@ export default function SiderAdmin() {
     ];
 
     const onClick = (value) => {
-        window.location.href = 'http://localhost:3000' + value.key;
+        navigate(value.key);
     };
 
     return (

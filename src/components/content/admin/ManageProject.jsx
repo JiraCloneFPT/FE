@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import axios from "axios";
 
 import SiderAdmin from "../../admin/Sider";
@@ -10,11 +10,12 @@ import { handleValidationEditProject } from "../../../assests/js/handleValidatio
 import { EditOutlined, DeleteOutlined, HomeTwoTone, RadiusUprightOutlined, PoweroffOutlined } from '@ant-design/icons';
 import { Breadcrumb, Layout, theme, Table, Input, Modal, Form, notification, Button, Row, Col, DatePicker } from 'antd';
 import { SearchOutlined } from '@ant-design/icons'
+import { UserContext } from "../../../contexts/UserContext";
 
 const { Content } = Layout;
 
 export default function ManageProject() {
-
+    const { render, onSetRender } = useContext(UserContext);
     //hiển thị thông báo
     const [api, contextHolder] = notification.useNotification();
     const openNotificationAdd = (placement) => {
@@ -214,7 +215,7 @@ export default function ManageProject() {
     };
     useEffect(() => {
         getData();
-    }, [dataSource]);
+    }, [render]);
 
     //lấy danh sách projectNames
     const getProjectNames = () => {
@@ -233,7 +234,7 @@ export default function ManageProject() {
 
     useEffect(() => {
         getProjectNames();
-    }, [projectNames]);
+    }, [render]);
 
     //lấy danh sách shortNames
     const getShortNames = () => {
@@ -251,8 +252,8 @@ export default function ManageProject() {
     };
 
     useEffect(() => {
-        setShortNames();
-    }, [shortNames]);
+        getShortNames();
+    }, [render]);
 
     // useState create form
     const [inputData, setInputData] = useState({
@@ -295,6 +296,7 @@ export default function ManageProject() {
                     openNotificationAdd("topRight");
                     setShowCreate(false);
                     setInputData("");
+                    onSetRender();
                 })
                 .catch((error) => { });
         } else {
@@ -333,6 +335,7 @@ export default function ManageProject() {
                     setErrors([]);
                     openNotificationUpdate("topRight");
                     setShowEdit(false);
+                    onSetRender();
                 })
                 .catch((error) => { });
         } else {
