@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 import CreateIssue from "../issues/CreateIssue/CreateIssue";
 import { UserContext } from "../../contexts/UserContext";
 import { useCookies } from 'react-cookie';
-
+import logo from '../../../public/images/System Dashboard - FI2.0/jira-logo-scaled.png';
 export default function Header() {
     const { user, onSetUser } = useContext(UserContext);
     const [cookies, setCookie, removeCookie] = useCookies([]);
@@ -221,7 +221,7 @@ export default function Header() {
                             className="d-flex align-center ml-2 button-main"
                             onClick={onClick}
                         >
-                            <img src="../images/System Dashboard - FI2.0/jira-logo-scaled.png" />
+                            <img src={logo} />
                             <span className="ml-1 text-white">FI2.0</span>
                         </div>
                         <div className="menuHeader">

@@ -11,7 +11,7 @@ import { successNotification } from "../../../utils/CommonNotification";
 export default function Comment() {
     const { TextArea } = Input;
     const { id } = useParams();
-    const { user } = useContext(UserContext);
+    const { user, onSetRender } = useContext(UserContext);
     const [comments, setComments] = useState([]);
     const [isShowComment, setIsShowcomment] = useState(false);
     const [isRefresh, setIsRefresh] = useState(false);
@@ -31,7 +31,7 @@ export default function Comment() {
     const handleOnChange = (value) => {
         setCommentContent(value);
     }
-    
+
     function convertDateTime(dateTimeStr) {
         const dateTime = new Date(dateTimeStr);
         const date = dateTime.toLocaleDateString('en-GB', { day: 'numeric', month: 'numeric', year: 'numeric' });
@@ -51,6 +51,7 @@ export default function Comment() {
             setIsRefresh(!isRefresh);
             setCommentContent('');
             setIsShowcomment(false);
+            onSetRender();
         }
     }
 
@@ -63,14 +64,14 @@ export default function Comment() {
                             <>
                                 <Row>
                                     <Col span={2} ><img style={{ maxHeight: 20 }} className="img-activity" src="https://insight.fsoft.com.vn/jira3/secure/useravatar?size=small&avatarId=10122" /></Col>
-                                    <Col ><span style={{color: "blue"}}>{comment?.fullName}</span> - {convertDateTime(comment?.createAt)} </Col>
+                                    <Col ><span style={{ color: "blue" }}>{comment?.fullName}</span> - {convertDateTime(comment?.createAt)} </Col>
                                     <Col > </Col>
                                 </Row>
                                 <Row>
                                     <Col span={2}> </Col>
                                     <Col > {comment?.commentContent} </Col>
                                 </Row>
-                                <hr style={{margin: 10}}></hr>
+                                <hr style={{ margin: 10 }}></hr>
                             </>
                         )
                     })}

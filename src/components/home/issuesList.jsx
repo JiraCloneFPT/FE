@@ -1,8 +1,8 @@
+/* eslint-disable no-unused-vars */
 import { Table } from 'antd';
-import { useState, useEffect, useContext } from 'react';
 import axios from "axios";
+import { useContext, useEffect, useState } from 'react';
 import { UserContext } from '../../contexts/UserContext';
-import { ListIssueType } from '../../utils/CommonIcon';
 
 
 
@@ -24,12 +24,21 @@ const IssuesList = () => {
         {
             key: '2',
             title: 'Key',
-            dataIndex: 'key',
+            render: (_, record) => {
+                return (
+                    <a href={`/issues/detail/${record?.issueId}`}>{record.key}</a>
+                )
+            }
+
         },
         {
             key: '3',
             title: 'Summary',
-            dataIndex: 'sumary',
+            render: (_, record) => {
+                return (
+                    <a href={`/issues/detail/${record?.issueId}`}>{record.sumary}</a>
+                )
+            }
         },
         {
             key: '4',
@@ -69,7 +78,7 @@ const IssuesList = () => {
 
     useEffect(() => {
         getData();
-    },[dataSource]);
+    }, [dataSource]);
 
 
     const [tableParams, setTableParams] = useState({
