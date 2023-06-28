@@ -72,7 +72,7 @@ const ResolveIssue = (props) => {
         complexity: '',
         adjustedVP: '',
         closedDate: '',
-        comment: '' // 
+        comment: '' 
     });
 
     const handleGetItemsIssue = async () => {
@@ -118,7 +118,7 @@ const ResolveIssue = (props) => {
             complexity: issue.complexity ?? '',
             adjustedVP: issue.adjustedVP ?? '',
             closedDate: issue?.closedDate !== null ? moment(issue?.closedDate) : "",
-            //comment
+            comment: issue?.comment ?? '',
         }))
 
     }
@@ -206,7 +206,7 @@ const ResolveIssue = (props) => {
         formDataRequest.append("adjustedVP", formData?.adjustedVP ?? "");
         formDataRequest.append("closedDate", (moment.isMoment(formData.closedDate) && formData.closedDate.isValid())
             ? (formData.closedDate).format('YYYY-MM-DDTHH:mm:ss') : "");
-        // comment
+        formDataRequest.append("comment", formData?.comment ?? "");
 
         console.log('form ', formData);
         if (formValidate()) {
@@ -273,7 +273,7 @@ const ResolveIssue = (props) => {
                         allowClear
                         onChange={(e) => handleOnChange('resolutionId', e)}
                         placeholder={'Please select...'}
-                        defaultValue={formData?.resolutionId}
+                        // defaultValue={formData?.resolutionId}
                     >
                         {resolution?.map(item => (
                             <Option value={item.id} key={item.id}  >
@@ -641,7 +641,7 @@ const ResolveIssue = (props) => {
                     extra={<p style={{ fontSize: 11, color: '#6b778c', margin: '5px 0 0' }}>...</p>}
                 >
                     <EditorTextArea
-                        name='Comment'
+                        name='comment'
                         handleEditorContent={handleOnChange}
                         defaultValue={formData?.comment}
                     />
