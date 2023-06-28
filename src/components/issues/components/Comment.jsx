@@ -15,11 +15,12 @@ export default function Comment() {
     const [comments, setComments] = useState([]);
     const [isShowComment, setIsShowcomment] = useState(false);
     const [isRefresh, setIsRefresh] = useState(false);
+    const { render } = useContext(UserContext);
     const [commentContent, setCommentContent] = useState('');
 
     useEffect(() => {
         handleGetComments();
-    }, [isRefresh])
+    }, [isRefresh, render])
 
     const handleGetComments = async () => {
         const result = await GetAllComments(id);

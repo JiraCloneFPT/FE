@@ -61,7 +61,7 @@ const CloseIssue = (props) => {
         adjustedVP: '',
         dueDate: '',
         closedDate: '',
-        comment: '', // 
+        comment: '', 
     });
 
     const handleGetItemsIssue = async () => {
@@ -99,7 +99,7 @@ const CloseIssue = (props) => {
             complexity: issue.complexity ?? '',
             adjustedVP: issue.adjustedVP ?? '',
             closedDate: issue?.closedDate !== null ? moment(issue?.closedDate) : "",
-            //comment
+            comment: issue?.comment ?? '',
         }))
     }
 
@@ -169,7 +169,8 @@ const CloseIssue = (props) => {
             ? (formData.dueDate).format('YYYY-MM-DDTHH:mm:ss') : "");
         formDataRequest.append("closedDate", (moment.isMoment(formData.closedDate) && formData.closedDate.isValid())
             ? (formData.closedDate).format('YYYY-MM-DDTHH:mm:ss') : "");
-        // comment
+        formDataRequest.append("comment", formData?.comment ?? "");
+        
         if (formValidate()) {
             const result = await CloseIssueService(formDataRequest);
             props.setOpen(false);
@@ -233,7 +234,7 @@ const CloseIssue = (props) => {
                         allowClear
                         onChange={(e) => handleOnChange('resolutionId', e)}
                         placeholder={'Please select...'}
-                        defaultValue={formData?.resolutionId}
+                        // defaultValue={formData?.resolutionId}
                     >
                         {resolution?.map(item => (
                             <Option value={item.id} key={item.id} name='resolutionId' >
@@ -496,8 +497,9 @@ const CloseIssue = (props) => {
                     extra={<p style={{ fontSize: 11, color: '#6b778c', margin: '5px 0 0' }}>...</p>}
                 >
                     <EditorTextArea
-                        name='Comment'
+                        name='comment'
                         handleEditorContent={handleOnChange}
+                        defaultValue={formData?.comment}
                     />
                 </Form.Item>
 

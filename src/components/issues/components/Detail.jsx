@@ -163,7 +163,7 @@ export default function Detail() {
         statusIssue = 'Open';
     }
     if (issue?.statusIssueId === 2) {
-        items = [reopened, closed]; // in progress
+        items = [resolve, reopened, closed]; // in progress
         statusIssue = 'In Progress';
     }
     if (issue?.statusIssueId === 3) {
