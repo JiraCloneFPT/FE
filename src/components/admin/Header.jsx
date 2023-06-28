@@ -1,25 +1,18 @@
 /* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
-import { Fragment, useState, useEffect } from "react";
-import { useContext } from "react";
+import { Fragment, useContext, useState,useEffect } from "react";
+import { useCookies } from 'react-cookie';
 import { useNavigate } from "react-router-dom";
 import { UserOutlined, DesktopOutlined, LogoutOutlined } from '@ant-design/icons';
 import { Layout, theme, Dropdown, Space } from 'antd';
 import "../../assests/css/admin.css"
 import { UserContext } from "../../contexts/UserContext";
-import { useCookies } from 'react-cookie';
 const { Header } = Layout;
 
 export default function HeaderAdmin() {
-    const { user, onSetUser } = useContext(UserContext);
+    const { onSetUser } = useContext(UserContext);
     const [cookies, setCookie, removeCookie] = useCookies([]);
     const navigate = useNavigate();
-    const [avatar, setAvatar] = useState('../img/Logo.png');
-
-    // useEffect(() => {
-    //     setAvatar(JSON.parse(user).avatar);
-    // }, [user]);
-
 
     function getItem(label, key, icon, children) {
         return {
@@ -39,12 +32,12 @@ export default function HeaderAdmin() {
         navigate("/");
     }
     const items = [
-        getItem(<a onClick={() =>onLogOut()}>Log out</a>, '3', <LogoutOutlined />),
+        getItem(<a onClick={() => onLogOut()}>Log out</a>, '3', <LogoutOutlined />),
     ];
 
-  const {
-    token: { colorBgContainer },
-  } = theme.useToken();
+    const {
+        token: { colorBgContainer },
+    } = theme.useToken();
 
     return (
         <Fragment>
