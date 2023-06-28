@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { handleValidation } from "../../../assests/js/handleValidation";
 import { handleValidationCreate } from "../../../assests/js/handleValidation";
@@ -12,12 +12,15 @@ import { EditOutlined, DeleteOutlined, HomeTwoTone, RadiusUprightOutlined, Power
 import { Breadcrumb, Layout, theme, Table, Input, Modal, Form, notification, Button, Row, Col, DatePicker } from 'antd';
 import { SearchOutlined } from '@ant-design/icons'
 import dayjs from "dayjs";
+import { AddUserService } from "../../../services/UserService";
+import { UserContext } from "../../../contexts/UserContext";
+import { UpdateUserService } from "../../../services/UserService";
 
 const { Content } = Layout;
 
 export default function ManageUser() {
     const dayFormat = "YYYY-MM-DD";
-
+    const { render, onSetRender } = useContext(UserContext);
     //Hien thi thong bao khi update/changestatus
     const [api, contextHolder] = notification.useNotification();
     const openNotificationUpdate = (placement) => {
@@ -60,13 +63,13 @@ export default function ManageUser() {
         const seconds = "00";
         const milliseconds = "000";
 
-        const formattedDate = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}.${milliseconds}`;
+        const formattedDate = `${year}-${month}-${day}${hours}:${minutes}:${seconds}.${milliseconds}`;
 
         return formattedDate;
     };
 
     //Nhận giá trị thay đổi trong ô input Datetime (Edit form)
-    const handleEditInputChangeDate = (date, dateString) => {
+    const handleEditInputChangeDate = (date, name) => {
         // setEditData({
         //     ...editData,
         //     editBirthDay: dateString,
@@ -100,7 +103,7 @@ export default function ManageUser() {
         // });
         setInputData({
             ...inputData,
-            [name]: formatDate(date, dayFormat),
+            [name]: date,
         });
     };
 
@@ -316,27 +319,26 @@ export default function ManageUser() {
     });
 
     //Thêm mới user
-    const handleSubmitCreate = () => {
+    const handleSubmitCreate = async () => {
         let errors = {};
+        const _date = new Date(inputData.inputBirthDay);
         const data = {
             fullname: inputData.inputFullName,
             email: inputData.inputEmail,
-            birthDay: inputData.inputBirthDay,
-        }
-        const url = `https://localhost:7112/api/user/AddUser`;
+            birthDay: _date.toDateString()
+        };
         handleValidationCreate(inputData, errors, emailList);
-        console.log(url)
         if (Object.keys(errors).length === 0) {
-            axios
-                .post(url, data)
-                .then((result) => {
-                    getData();
-                    setErrors([]);
-                    openNotificationAdd("topRight");
-                    setShowAddNew(false);
-                    setInputData("");
-                })
-                .catch((error) => { });
+            const result = await AddUserService(data);
+            console.log(result);
+            if (result) {
+                getData();
+                setErrors([]);
+                openNotificationAdd("topRight");
+                setShowAddNew(false);
+                setInputData("");
+                onSetRender();
+            }
         } else {
             setErrors(errors);
         }
@@ -347,7 +349,7 @@ export default function ManageUser() {
 
     useEffect(() => {
         getData();
-    }, [dataSource]);
+    }, [render]);
 
     //call api lấy danh sách email
     const getEmailList = () => {
@@ -366,7 +368,7 @@ export default function ManageUser() {
 
     useEffect(() => {
         getEmailList();
-    }, [emailList]);
+    }, [render]);
 
 
     //call api lấy danh sách guest
@@ -395,19 +397,38 @@ export default function ManageUser() {
             password: record.password,
             status: record.status,
         };
-        // const deleteId = data.userID;
-        // const cleanedUrl = `https://localhost:7112/api/user/ChangeUserStatus?userId=${deleteId}&status=0`;
+        const deleteId = data.userID;
+        const cleanedUrl = `https://localhost:7112/api/user/ChangeUserStatus?userId=${deleteId}&status=0`;
         Modal.confirm({
             title: "Are you sure to Deactivate account: " + data.account + " ?",
-            okText: "DeaActivate",
-            okType: "danger",
+            okText: "Deactivate",
+            okType: "default",
+            onOk: () => {
+                data.status = "1";
+                axios
+                    .post(cleanedUrl, data)
+                    .then((result) => {
+                        getData();
+                        openNotificationDisable("topRight");
+                    })
+                    .catch((error) => {
+                        openNotificationDisable("topRight");
+                    });
+            },
+            cancelText: "Cancel",
+            onCancel: () => { },
+        });
+    };
+
+    const handleChangeStatusActivate = (record) => {
+        const data = {
             userID: record.userId,
             fullName: record.fullName,
             email: record.email,
             account: record.accountName,
             password: record.password,
             status: record.status,
-        });
+        };
         const deleteId = data.userID;
         const cleanedUrl = `https://localhost:7112/api/user/ChangeUserStatus?userId=${deleteId}&status=1`;
         Modal.confirm({
@@ -415,7 +436,7 @@ export default function ManageUser() {
             okText: "Activate",
             okType: "default",
             onOk: () => {
-                data.status = "1";
+                data.status = "0";
                 axios
                     .post(cleanedUrl, data)
                     .then((result) => {
@@ -430,6 +451,7 @@ export default function ManageUser() {
             onCancel: () => { },
         });
     };
+
 
     //hiển thị thông tin chi tiết guest
     const handleEdit = (record) => {
@@ -446,28 +468,29 @@ export default function ManageUser() {
     };
 
     //chỉnh sửa thông tin guest
-    const handleUpdateGuest = () => {
+    const handleUpdateGuest = async () => {
         let errors = {};
-        const cleanedUrl = `https://localhost:7112/api/user/UpdateUser/${editData.editID}`;
+        // const cleanedUrl = `https://localhost:7112/api/user/UpdateUser/${editData.editID}`;
         const data = {
             userId: editData.editID,
             fullname: editData.editFullName,
             email: editData.editEmail,
             password: editData.editPassword,
-            birthDay: editData.editBirthDay,
+            birthDay: new Date(editData.editBirthDay),
             status: editData.editIsActive,
         };
+
         handleValidation(editData, errors);
         if (Object.keys(errors).length === 0) {
-            axios
-                .post(cleanedUrl, data)
-                .then((result) => {
-                    getData();
-                    setErrors([]);
-                    openNotificationUpdate("topRight");
-                    handleClose();
-                })
-                .catch((error) => { });
+            const result = await UpdateUserService(data);
+            if(result){
+                getData();
+                setErrors([]);
+                openNotificationUpdate("topRight");
+                handleClose();
+                onSetRender();
+            }
+         
         } else {
             setErrors(errors);
         }
@@ -588,10 +611,10 @@ export default function ManageUser() {
                                                 className="form-control"
                                                 style={{ width: "100%" }}
                                                 // placeholder="yyyy-MM-dd"
-                                                format="YYYY-MM-DD"
+                                                // format="YYYY-MM-DD"
                                                 name="editBirthDay"
                                                 value={editData.editBirthDay ? dayjs(editData.editBirthDay, dayFormat) : null}
-                                                onChange= {(date) =>handleEditInputChangeDate(date, "editBirthDay")}
+                                                onChange={(date) => handleEditInputChangeDate(date, "editBirthDay")}
                                             />
                                             {errors.editBirthDay && (
                                                 <div
@@ -671,9 +694,10 @@ export default function ManageUser() {
                                                 className="form-control"
                                                 style={{ width: "100%" }}
                                                 placeholder="yyyy-MM-dd"
-                                                format="YYYY-MM-DD"
-                                                value={inputData.inputBirthDay ? dayjs(inputData.inputBirthDay, dayFormat) : null}
-                                                onChange={handleAddInputChangeDate}
+                                                // format="YYYY-MM-DD"
+                                                // value={inputData.inputBirthDay ? dayjs(inputData.inputBirthDay, dayFormat) : null}
+                                                onChange={(date) => handleAddInputChangeDate(date, "inputBirthDay")}
+                                                name="inputBirthDay"
                                             />
                                             {errors.inputBirthDay && (
                                                 <div

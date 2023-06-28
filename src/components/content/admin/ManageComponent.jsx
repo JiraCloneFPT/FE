@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import axios from "axios";
 
 import SiderAdmin from "../../admin/Sider";
@@ -10,10 +10,13 @@ import { handleValidationAddComponent } from "../../../assests/js/handleValidati
 import { EditOutlined, DeleteOutlined, HomeTwoTone, RadiusUprightOutlined, PoweroffOutlined } from '@ant-design/icons';
 import { Breadcrumb, Layout, theme, Table, Input, Modal, Form, notification, Button, Row, Col, DatePicker } from 'antd';
 import { SearchOutlined } from '@ant-design/icons'
+import { UserContext } from "../../../contexts/UserContext";
 
 const { Content } = Layout;
 
 export default function ManageComponent() {
+
+    const { render, onSetRender } = useContext(UserContext);
 
     const {
         token: { colorBgContainer },
@@ -177,7 +180,7 @@ export default function ManageComponent() {
 
     useEffect(() => {
         getData();
-    }, [dataSource]);
+    }, [render]);
 
     //lấy danh sách component Name
     const getComponentName = () => {
@@ -196,7 +199,7 @@ export default function ManageComponent() {
 
     useEffect(() => {
         getComponentName();
-    }, [componentNames]);
+    }, [render]);
 
 
     //useState form input  error cho form Modal
@@ -248,6 +251,7 @@ export default function ManageComponent() {
                     setErrors([]);
                     openNotificationUpdate("topRight");
                     setShowEdit(false);
+                    onSetRender();
                 })
                 .catch((error) => { });
         } else {
@@ -325,6 +329,7 @@ export default function ManageComponent() {
                     openNotificationAdd("topRight");
                     setShowCreate(false);
                     setInputData("");
+                    onSetRender();
                 })
                 .catch((error) => { });
         } else {

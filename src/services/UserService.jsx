@@ -25,7 +25,7 @@ export const changePassword = async (userId, editNewPassword) => {
     try {
         const respone = await Request({
             method: "post",
-            url: `changePassword?userId=${userId}&password=${editNewPassword}`,
+            url: `user/changePassword?userId=${userId}&password=${editNewPassword}`,
             headers: {
                 "Content-Type": "application/json",
             },
@@ -61,6 +61,37 @@ export const getInfoService = async (token) => {
             headers: {
                 "Content-Type": "application/json",
             },
+        });
+        return respone.data;
+    } catch (e) {
+        return e;
+    }
+};
+export const AddUserService = async (data) => {
+    try {
+        const respone = await Request({
+            method: "post",
+            url: `user/AddUser`,
+            headers: {
+                "Content-Type": "application/json",
+            },
+            data: JSON.stringify(data)
+        });
+        return respone.data;
+    } catch (e) {
+        return e;
+    }
+};
+
+export const UpdateUserService = async (data) => {
+    try {
+        const respone = await Request({
+            method: "post",
+            url: `user/UpdateUser/${data?.userId}`,
+            headers: {
+                "Content-Type": "application/json",
+            },
+            data: JSON.stringify(data)
         });
         return respone.data;
     } catch (e) {

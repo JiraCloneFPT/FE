@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import axios from "axios";
 
 import SiderAdmin from "../../admin/Sider";
@@ -10,10 +10,12 @@ import { handleValidationEditProduct } from "../../../assests/js/handleValidatio
 import { EditOutlined, DeleteOutlined, HomeTwoTone, RadiusUprightOutlined, PoweroffOutlined } from '@ant-design/icons';
 import { Breadcrumb, Layout, theme, Table, Input, Modal, Form, notification, Button, Row, Col, DatePicker } from 'antd';
 import { SearchOutlined } from '@ant-design/icons'
+import { UserContext } from "../../../contexts/UserContext";
 
 const { Content } = Layout;
 
 export default function ManageProduct() {
+    const { render, onSetRender } = useContext(UserContext);
     //hiển thị thông báo
     const [api, contextHolder] = notification.useNotification();
     const openNotificationAdd = (placement) => {
@@ -165,7 +167,7 @@ export default function ManageProduct() {
 
     useEffect(() => {
         getData();
-    }, [dataSource]);
+    }, [render]);
 
     //call api lấy danh sách product
     const getData = () => {
@@ -198,7 +200,7 @@ export default function ManageProduct() {
     };
     useEffect(() => {
         getProductName();
-    }, [productNames]);
+    }, [render]);
 
     // useState create form
     const [inputData, setInputData] = useState({
@@ -236,6 +238,7 @@ export default function ManageProduct() {
                     openNotificationAdd("topRight");
                     setShowCreate(false);
                     setInputData("");
+                    onSetRender();
                 })
                 .catch((error) => { });
         } else {
@@ -272,6 +275,7 @@ export default function ManageProduct() {
                     setErrors([]);
                     openNotificationUpdate("topRight");
                     setShowEdit(false);
+                    onSetRender();
                 })
                 .catch((error) => { });
         } else {
