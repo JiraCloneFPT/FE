@@ -5,7 +5,8 @@ import {
     EditOutlined,
     CommentOutlined,
 } from "@ant-design/icons";
-import { Button, Dropdown, Space } from "antd";
+import React, { useContext } from 'react';
+import { Button, Dropdown, Space, message, Menu } from "antd";
 import { Col, Row } from "antd";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -16,9 +17,13 @@ import CancelIssue from "./CancelIssue";
 import CloseIssue from "./CloseIssue";
 import { GetIssueService } from "../../../services/IssueService";
 import ExportFileDetail from "../components/ExportFileDetail";
+import { UserContext } from "../../../contexts/UserContext";
 
 export default function Detail() {
     const [issue, setIssue] = useState();
+    const { render } = useContext(UserContext);
+    let items = [];
+    let statusIssue;
     const { id } = useParams();
     const handleGetIssue = async () => {
         const result = await GetIssueService(id);
@@ -26,7 +31,7 @@ export default function Detail() {
     };
     useEffect(() => {
         handleGetIssue();
-    }, []);
+    }, [render]);
 
     const [openResolveIssueModal, setOpenResolveIssueModal] = useState(false);
     const handleShowResolveIssueModal = () => {
@@ -47,92 +52,134 @@ export default function Detail() {
     const handleShowCloseIssueModal = () => {
         setOpenCloseIssueModal(true);
     };
-    
-    const items = [
-        {
-            label: (
-                <div className="d-flex align-center">
-                    <span className="menuProgress-1">Start Progress</span>
-                    <ArrowRightOutlined className="menuProgress-2" />
-                    <div className="menuProgress-3 progress">
-                        <span>IN PROGRESS</span>
-                    </div>
+
+    const open =
+    {
+        label: (
+            <div className="d-flex align-center">
+                <span className="menuProgress-1">Open</span>
+            </div>
+        ),
+        key: "1",
+    };
+
+    const inProgress =
+    {
+        label: (
+            <div className="d-flex align-center">
+                <span className="menuProgress-1">Start Progress</span>
+                <ArrowRightOutlined className="menuProgress-2" />
+                <div className="menuProgress-3 progress">
+                    <span>IN PROGRESS</span>
                 </div>
-            ),
-            key: "0",
-        },
-        {
-            label: (
-                <div className="d-flex align-center">
-                    <span className="menuProgress-1">Resolve</span>
-                    <ArrowRightOutlined className="menuProgress-2" />
-                    <div className="menuProgress-3 resolve">
-                        <span>RESOLVED</span>
-                    </div>
+            </div>
+        ),
+        key: "2",
+    };
+
+    const resolve =
+    {
+        label: (
+            <div className="d-flex align-center">
+                <span className="menuProgress-1">Resolve</span>
+                <ArrowRightOutlined className="menuProgress-2" />
+                <div className="menuProgress-3 resolve">
+                    <span>RESOLVED</span>
                 </div>
-            ),
-            key: "1",
-            onClick: handleShowResolveIssueModal,
-        },
-        {
-            label: (
-                <div className="d-flex align-center">
-                    <span className="menuProgress-1">Cancel</span>
-                    <ArrowRightOutlined className="menuProgress-2" />
-                    <div className="menuProgress-3 cancel">
-                        <span>CANCELLED</span>
-                    </div>
+            </div>
+        ),
+        key: "3",
+        onClick: handleShowResolveIssueModal,
+    };
+
+    const canceled =
+    {
+        label: (
+            <div className="d-flex align-center">
+                <span className="menuProgress-1">Cancel</span>
+                <ArrowRightOutlined className="menuProgress-2" />
+                <div className="menuProgress-3 cancel">
+                    <span>CANCELLED</span>
                 </div>
-            ),
-            key: "2",
-            onClick: handleShowCancelIssueModal,
-        },
-        {
-            label: (
-                <div className="d-flex align-center">
-                    <span className="menuProgress-1">Re-Open</span>
-                    <ArrowRightOutlined className="menuProgress-2" />
-                    <div className="menuProgress-3 cancel">
-                        <span>REOPENED</span>
-                    </div>
+            </div>
+        ),
+        key: "4",
+        onClick: handleShowCancelIssueModal,
+    };
+
+    const reopened =
+    {
+        label: (
+            <div className="d-flex align-center">
+                <span className="menuProgress-1">Re-Open</span>
+                <ArrowRightOutlined className="menuProgress-2" />
+                <div className="menuProgress-3 cancel">
+                    <span>REOPENED</span>
                 </div>
-            ),
-            key: "3",
-        },
-        {
-            label: (
-                <div className="d-flex align-center">
-                    <span className="menuProgress-1">Close</span>
-                    <ArrowRightOutlined className="menuProgress-2" />
-                    <div className="menuProgress-3 cancel">
-                        <span>CLOSED</span>
-                    </div>
+            </div>
+        ),
+        key: "5",
+    };
+
+    const closed =
+    {
+        label: (
+            <div className="d-flex align-center">
+                <span className="menuProgress-1">Close</span>
+                <ArrowRightOutlined className="menuProgress-2" />
+                <div className="menuProgress-3 cancel">
+                    <span>CLOSED</span>
                 </div>
-            ),
-            key: "4",
-            onClick: handleShowCloseIssueModal,
-        },
-    ];
+            </div>
+        ),
+        key: "6",
+        onClick: handleShowCloseIssueModal,
+    };
+
+    if (issue?.statusIssueId === 1) {
+        items = [inProgress, resolve, canceled] // open
+        statusIssue = 'Open';
+    }
+    if (issue?.statusIssueId === 2) {
+        items = [reopened, closed]; // in progress
+        statusIssue = 'In Progress';
+    }
+    if (issue?.statusIssueId === 3) {
+        items = [resolve, reopened, canceled]; // resolve 
+        statusIssue = 'Resolve';
+    }
+    if (issue?.statusIssueId === 4) {
+        items = [reopened];  // cancel 
+        statusIssue = 'Cancel';
+    }
+    if (issue?.statusIssueId === 5) {
+        items = [inProgress, resolve, canceled];  // Reopened
+        statusIssue = 'Reopened';
+    }
+    if (issue?.statusIssueId === 6) {
+        items = [reopened];  // close
+        statusIssue = 'Close';
+    }
 
     return (
         <>
             <ResolveIssue
-                id={id}
+                idIssue={id}
                 open={openResolveIssueModal}
                 setOpen={setOpenResolveIssueModal}
             />
             <EditIssue
-                id={id}
+                idIssue={id}
                 open={openEditIssueModal}
                 setOpen={setOpenEditIssueModal}
             />
             <CancelIssue
-                id={id}
+                idIssue={id}
                 open={openCancelIssueModal}
                 setOpen={setOpenCancelIssueModal}
             />
             <CloseIssue
-                id={id}
+                idIssue={id}
                 open={openCloseIssueModal}
                 setOpen={setOpenCloseIssueModal}
             />
@@ -219,9 +266,7 @@ export default function Detail() {
                             Assign
                         </Button>
                         <Dropdown
-                            menu={{
-                                items,
-                            }}
+                            menu={{ items }}
                             trigger={["click"]}
                         >
                             <a onClick={(e) => e.preventDefault()}>
@@ -230,7 +275,7 @@ export default function Detail() {
                                         type="primary"
                                         icon={<DownOutlined />}
                                     >
-                                        Open
+                                        {statusIssue}
                                     </Button>
                                 </Space>
                             </a>

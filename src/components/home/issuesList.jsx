@@ -69,7 +69,7 @@ const IssuesList = () => {
 
     useEffect(() => {
         getData();
-    }, []);
+    },[dataSource]);
 
 
     const [tableParams, setTableParams] = useState({

@@ -16,23 +16,30 @@ import {
   QuestionCircleOutlined,
   PlusOutlined,
   UploadOutlined,
+  DeleteOutlined
 } from "@ant-design/icons";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import "../../../assests/css/createIssue.css";
 import EditorTextArea from "../CreateIssue/EditorTextArea";
 import CommonUploadFiles from "../../../utils/CommonUploadFiles";
 import { successNotification } from "../../../utils/CommonNotification";
 import { ListIssueType } from "../../../utils/CommonIcon";
 import moment from "moment";
+import axios from "axios";
 import { EditIssueService, GetIssueByIdService, GetItemsIssue } from "../../../services/IssueService";
 import { messageIssue03, messageIssue04 } from "../../../utils/CommonMessages";
+import {UserContext} from "../../../contexts/UserContext";
 
 const Option = Select.Option;
 
 const EditIssue = (props) => {
-  const userId = 5
-  const idIssue = props.id;
+  const {user} = useContext(UserContext);
+  const userId = user?.userId;
+  const idIssue = props?.idIssue;
   const [form] = Form.useForm();
+
+
+  const [files, setFiles] = useState([]);
 
   const [errors, setErrors] = useState({});
   const [issueTypes, setIssureTypes] = useState([]);
@@ -135,53 +142,55 @@ const EditIssue = (props) => {
   }
 
   const handleGetIssueById = async () => {
-    const res = await GetIssueByIdService(idIssue);  
+    const res = await GetIssueByIdService(idIssue);
     const issue = res.data;
+    console.log('issue ', issue);
     setFormData({
-        issueId: issue?.issueId ?? "",
-        issueTypeId: issue.issueTypeId ?? "",
-        summary: issue.summary ?? "",
-        componentId: issue.componentId ?? "",
-        productId: issue.productId ?? "",
-        description: issue.description ?? "",
-        descriptionTranslate: issue.descriptionTranslate ?? "",
-        defectOriginId: issue.defectOriginId ?? "",
-        priorityId: issue.priorityId ?? "",
-        severity: issue.severity ?? "",
-        qcActivityId: issue.qcactivityId ?? "",
-        causeAnalysis: issue.causeAnalysis ?? "",
-        causeAnalysisTranslate: issue.causeAnalysisTranslate ?? "",
-        correctAction: issue.correctAction ?? "",
-        correctActionTranslate: issue.correctActionTranslate ?? "",
-        technicalCauseId: issue.technicalCauseId ?? "",
-        environment: issue.environment ?? "",
-        assigneeId: issue.assigneeId ?? "",
-        roleIssueId: issue.roleIssueId ?? "",
-        reporterId: issue.reporterId ?? "",
-        plannedStart: issue?.plannedStart !== null ? moment(issue?.plannedStart) : "",
-        originalEstimate: issue.originalEstimate ?? "",
-        remainingEstimate: issue.remainingEstimate ?? "",
-        estimateEffort: issue.estimateEffort ?? "",
-        complexity: issue.complexity ?? "",
-        adjustedVP: issue.adjustedVP ?? "",
-        dueDate: issue?.dueDate !== null ? moment(issue?.dueDate) : "",
-        labelsId: issue.labelsId ?? "",
-        sprint: issue.sprint ?? "",
-        functionId: issue.functionId ?? "",
-        testcaseId: issue.testcaseId ?? "",
-        functionCategory: issue.functionCategory ?? "",
-        linkedIssuesId: issue.linkedIssuesId ?? "",
-        //mockIssueId: issue ?? '',  // discus
-        epicLink: issue.epicLink ?? "",
-        closedDate: issue?.closedDate !== null ? moment(issue?.closedDate) : "",
-        securityLevel: issue.securityLevel ?? "",
-        defectTypeId: issue.defectTypeId ?? "",
-        causeCategoryId: issue.causeCategoryId ?? "",
-        leakCauseId: issue.leakCauseId ?? "",
-        dueTime: issue.dueTime ?? "",
-        units: issue.units ?? "",
-        percentDone: issue.percentDone ?? "",
-        //comment
+      userId: userId,
+      issueId: issue?.issueId ?? "",
+      issueTypeId: issue.issueTypeId ?? "",
+      summary: issue.summary ?? "",
+      componentId: issue.componentId ?? "",
+      productId: issue.productId ?? "",
+      description: issue.description ?? "",
+      descriptionTranslate: issue.descriptionTranslate ?? "",
+      defectOriginId: issue.defectOriginId ?? "",
+      priorityId: issue.priorityId ?? "",
+      severity: issue.severity ?? "",
+      qcActivityId: issue.qcactivityId ?? "",
+      causeAnalysis: issue.causeAnalysis ?? "",
+      causeAnalysisTranslate: issue.causeAnalysisTranslate ?? "",
+      correctAction: issue.correctAction ?? "",
+      correctActionTranslate: issue.correctActionTranslate ?? "",
+      technicalCauseId: issue.technicalCauseId ?? "",
+      environment: issue.environment ?? "",
+      assigneeId: issue.assigneeId ?? "",
+      roleIssueId: issue.roleIssueId ?? "",
+      reporterId: issue.reporterId ?? "",
+      plannedStart: issue?.plannedStart !== null ? moment(issue?.plannedStart) : "",
+      originalEstimate: issue.originalEstimate ?? "",
+      remainingEstimate: issue.remainingEstimate ?? "",
+      estimateEffort: issue.estimateEffort ?? "",
+      complexity: issue.complexity ?? "",
+      adjustedVP: issue.adjustedVP ?? "",
+      dueDate: issue?.dueDate !== null ? moment(issue?.dueDate) : "",
+      labelsId: issue.labelsId ?? "",
+      sprint: issue.sprint ?? "",
+      functionId: issue.functionId ?? "",
+      testcaseId: issue.testcaseId ?? "",
+      functionCategory: issue.functionCategory ?? "",
+      linkedIssuesId: issue.linkedIssuesId ?? "",
+      //mockIssueId: issue ?? '',  // discus
+      epicLink: issue.epicLink ?? "",
+      closedDate: issue?.closedDate !== null ? moment(issue?.closedDate) : "",
+      securityLevel: issue.securityLevel ?? "",
+      defectTypeId: issue.defectTypeId ?? "",
+      causeCategoryId: issue.causeCategoryId ?? "",
+      leakCauseId: issue.leakCauseId ?? "",
+      dueTime: issue.dueTime ?? "",
+      units: issue.units ?? "",
+      percentDone: issue.percentDone ?? "",
+      //comment
     });
   }
 
@@ -221,15 +230,13 @@ const EditIssue = (props) => {
       ...formData,
       [name]: value,
     });
-    console.log("name ", name, " value ", value);
   };
 
   const handleDateChange = (name, value) => {
     setFormData({
       ...formData,
-      [name]: (value !== null || value !== undefined ) ? moment(value) : ''
+      [name]: (value !== null || value !== undefined) ? moment(value) : ''
     })
-    console.log("name ", name, " value ", value);
   }
 
   const handleFileChange = (info) => {
@@ -242,10 +249,8 @@ const EditIssue = (props) => {
 
   const handleUpdateIssue = async () => {
     const formDataRequest = new FormData();
-    console.log('fofmdate ', formData);
     //#region Append Data
-    
-    formDataRequest.append("userId", userId );
+    formDataRequest.append("userId", userId);
     formDataRequest.append("issueId", formData?.issueId ?? "");
     formDataRequest.append("attachFile", formData?.attachments ?? "" ?? "");
     formDataRequest.append("summary", formData?.summary ?? "");
@@ -266,14 +271,14 @@ const EditIssue = (props) => {
     formDataRequest.append("assigneeId", formData?.assigneeId ?? "");
     formDataRequest.append("roleIssueId", formData?.roleIssueId ?? "");
     formDataRequest.append("reporterId", formData?.reporterId ?? "");
-    formDataRequest.append("plannedStart", (moment.isMoment(formData.plannedStart) && formData.plannedStart.isValid()) 
+    formDataRequest.append("plannedStart", (moment.isMoment(formData.plannedStart) && formData.plannedStart.isValid())
       ? (formData.plannedStart).format('YYYY-MM-DDTHH:mm:ss') : "");
     formDataRequest.append("originalEstimate	", formData?.originalEstimate);
     formDataRequest.append("remainingEstimate", formData?.remainingEstimate);
     formDataRequest.append("estimateEffort", formData?.estimateEffort);
     formDataRequest.append("complexity", formData?.complexity ?? "");
     formDataRequest.append("adjustedVP", formData?.adjustedVP ?? "");
-    formDataRequest.append("dueDate", (moment.isMoment(formData.dueDate) && formData.dueDate.isValid()) 
+    formDataRequest.append("dueDate", (moment.isMoment(formData.dueDate) && formData.dueDate.isValid())
       ? (formData.dueDate).format('YYYY-MM-DDTHH:mm:ss') : "");
     formDataRequest.append("labelsId", formData?.labelsId ?? "");
     formDataRequest.append("sprint", formData?.sprint ?? "");
@@ -282,7 +287,7 @@ const EditIssue = (props) => {
     formDataRequest.append("functionCategory", formData?.functionCategory ?? "");
     formDataRequest.append("linkedIssuesId", formData?.linkedIssuesId ?? "");
     formDataRequest.append("epicLink", formData?.epicLink ?? "");
-    formDataRequest.append("closedDate", (moment.isMoment(formData.closedDate) && formData.closedDate.isValid()) 
+    formDataRequest.append("closedDate", (moment.isMoment(formData.closedDate) && formData.closedDate.isValid())
       ? (formData.closedDate).format('YYYY-MM-DDTHH:mm:ss') : "");
     formDataRequest.append("securityLevel", formData?.securityLevel ?? "");
     formDataRequest.append("defectTypeId", formData?.defectTypeId ?? "");
@@ -1256,7 +1261,7 @@ const EditIssue = (props) => {
             name="defectTypeId"
             allowClear
             onChange={(e) => handleOnChange("defectTypeId", e)}
-            defaultValue={formData?.defectOriginId}
+            defaultValue={formData?.defectTypeId}
           >
             {defectTypes?.map((item) => (
               <Option

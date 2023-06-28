@@ -67,9 +67,13 @@ export default function ManageUser() {
 
     //Nhận giá trị thay đổi trong ô input Datetime (Edit form)
     const handleEditInputChangeDate = (date, dateString) => {
+        // setEditData({
+        //     ...editData,
+        //     editBirthDay: dateString,
+        // });
         setEditData({
             ...editData,
-            editBirthDay: dateString,
+            [name]: formatDate(date, dayFormat),
         });
     };
 
@@ -89,10 +93,14 @@ export default function ManageUser() {
         setInputData((preData) => ({ ...preData, [field]: value }));
     };
     //Nhận giá trị thay đổi trong ô input Datetime (Create form)
-    const handleAddInputChangeDate = (date, dateString) => {
+    const handleAddInputChangeDate = (date, name) => {
+        // setInputData({
+        //     ...inputData,
+        //     inputBirthDay: dateString,
+        // });
         setInputData({
             ...inputData,
-            inputBirthDay: dateString,
+            [name]: formatDate(date, dayFormat),
         });
     };
 
@@ -339,8 +347,7 @@ export default function ManageUser() {
 
     useEffect(() => {
         getData();
-        getEmailList();
-    }, []);
+    }, [dataSource]);
 
     //call api lấy danh sách email
     const getEmailList = () => {
@@ -359,7 +366,7 @@ export default function ManageUser() {
 
     useEffect(() => {
         getEmailList();
-    }, []);
+    }, [emailList]);
 
 
     //call api lấy danh sách guest
@@ -582,8 +589,9 @@ export default function ManageUser() {
                                                 style={{ width: "100%" }}
                                                 // placeholder="yyyy-MM-dd"
                                                 format="YYYY-MM-DD"
-                                                value={editData.editBirthDay ? moment(editData.editBirthDay, 'YYYY-MM-DD') : null}
-                                                onChange={handleEditInputChangeDate}
+                                                name="editBirthDay"
+                                                value={editData.editBirthDay ? dayjs(editData.editBirthDay, dayFormat) : null}
+                                                onChange= {(date) =>handleEditInputChangeDate(date, "editBirthDay")}
                                             />
                                             {errors.editBirthDay && (
                                                 <div
@@ -664,7 +672,7 @@ export default function ManageUser() {
                                                 style={{ width: "100%" }}
                                                 placeholder="yyyy-MM-dd"
                                                 format="YYYY-MM-DD"
-                                                value={inputData.inputBirthDay ? moment(inputData.inputBirthDay, 'YYYY-MM-DD') : null}
+                                                value={inputData.inputBirthDay ? dayjs(inputData.inputBirthDay, dayFormat) : null}
                                                 onChange={handleAddInputChangeDate}
                                             />
                                             {errors.inputBirthDay && (

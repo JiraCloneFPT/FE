@@ -57,6 +57,54 @@ export const CreateIssueService = async (data) => {
     }
 };
 // Used by TuNT37
+export const CancelIssueService = async (data) => {
+    try {
+        const respone = await Request({
+            method: "put",
+            url: "issue/cancel",
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+            data: data
+        });
+        return respone.data;
+    } catch (e) {
+        return e;
+    }
+};
+// Used by TuNT37
+export const CloseIssueService = async (data) => {
+    try {
+        const respone = await Request({
+            method: "put",
+            url: "issue/close",
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+            data: data
+        });
+        return respone.data;
+    } catch (e) {
+        return e;
+    }
+};
+// Used by TuNT37
+export const ResolveIssueService = async (data) => {
+    try {
+        const respone = await Request({
+            method: "put",
+            url: "issue/resolve",
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+            data: data
+        });
+        return respone.data;
+    } catch (e) {
+        return e;
+    }
+};
+// Used by TuNT37
 export const EditIssueService = async (data) => {
     try {
         const respone = await Request({
@@ -175,11 +223,11 @@ export const CountWatcher = async (issueId) => {
     }
 }
 
-export const CheckWatcher = async (userId, issueId) => {
+export const CheckWatcher = async (issueId, userId) => {
     try {
         const respone = await Request({
             method: "get",
-            url: `issue/checkWatcher?userId=${userId}&issueId=${issueId}`,
+            url: `issue/checkWatcher?issueId=${issueId}&userId=${userId}`,
             headers: {
                 "Content-Type": "application/json",
             },
@@ -189,11 +237,27 @@ export const CheckWatcher = async (userId, issueId) => {
         return e;
     }
 }
+
 export const StartWatcher = async (userId,issueId) => {
     try {
         const respone = await Request({
             method: "post",
             url: `issue/startWatcher?userId=${userId}&issueId=${issueId}`,
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+        return respone.data;
+    } catch (e) {
+        return e;
+    }
+}
+
+export const StopWatcher = async (userId,issueId) => {
+    try {
+        const respone = await Request({
+            method: "post",
+            url: `issue/stopWatcher?userId=${userId}&issueId=${issueId}`,
             headers: {
                 "Content-Type": "application/json",
             },

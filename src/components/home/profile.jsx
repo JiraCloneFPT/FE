@@ -2,7 +2,7 @@ import Header from "./Header";
 import Footer from "./Footer";
 import "../../assests/css/profile.css";
 import { Modal, Form, Input, notification } from "antd";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { changePassword, getUserByUserId } from "../../services/UserService";
 import { handleValidationChangePassword } from "../../assests/js/handleValidation";
 

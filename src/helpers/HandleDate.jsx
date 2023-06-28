@@ -1,4 +1,4 @@
-const HanldeDate = (date) => {
+export const HanldeDate = (date) => {
     const milliseconds = new Date() - new Date(date);
     const seconds = Math.floor(milliseconds / 1000);
     const minutes = Math.floor(seconds / 60);
@@ -8,4 +8,7 @@ const HanldeDate = (date) => {
         : hours > 0 ? `${hours} hours ago` : minutes > 0 ? `${minutes} minutes ago` : `Just Now`;
     return result;
 }
-export default HanldeDate;
+export const HanldeDateActivity = (date) =>{
+    const _date = new Date(date);
+    return _date.toDateString();
+}
