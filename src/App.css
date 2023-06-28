@@ -21,6 +21,10 @@
   --reOpen--: #DFE1E5;
   --ds-border: #091E4224;
 }
+.ant-layout-sider-dark, .ant-layout-sider-trigger{
+  background: #fff !important;
+  color: #000 !important;
+}
 .title-history{
   padding: 10px 0 0;
   margin-bottom: 20px;
