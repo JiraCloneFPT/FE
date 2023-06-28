@@ -30,6 +30,7 @@ import { messageIssue03, messageIssue04 } from "../../../utils/CommonMessages";
 const Option = Select.Option;
 
 const EditIssue = (props) => {
+  const userId = 5
   const idIssue = props.id;
   const [form] = Form.useForm();
 
@@ -58,6 +59,7 @@ const EditIssue = (props) => {
   const [leakCauses, setLeakCauses] = useState([]);
 
   const [formData, setFormData] = useState({
+    userId: userId,
     issueId: "",
     issueTypeId: "",
     summary: "",
@@ -242,6 +244,8 @@ const EditIssue = (props) => {
     const formDataRequest = new FormData();
     console.log('fofmdate ', formData);
     //#region Append Data
+    
+    formDataRequest.append("userId", userId );
     formDataRequest.append("issueId", formData?.issueId ?? "");
     formDataRequest.append("attachFile", formData?.attachments ?? "" ?? "");
     formDataRequest.append("summary", formData?.summary ?? "");
