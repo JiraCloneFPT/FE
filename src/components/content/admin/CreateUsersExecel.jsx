@@ -1,14 +1,14 @@
 import { UploadOutlined } from "@ant-design/icons";
 import { Button, Modal, Upload } from "antd";
 import axios from "axios";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import readXlsxFile from "read-excel-file";
 import { CommonNotification } from "../../../utils/CommonNotification";
-
+import { UserContext } from "../../../contexts/UserContext";
 export default function CreateUserExcel() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [file, setFile] = useState(null);
-
+  const { render, onSetRender } = useContext(UserContext);
   const props = {
     name: "file",
     maxCount: 1,
@@ -49,6 +49,7 @@ export default function CreateUserExcel() {
           "Upload users by Excel file Successfully !",
           "success"
         );
+        onSetRender();
       } else {
         // Handle file not selected error
         console.log("Please select a file to upload.");
