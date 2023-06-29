@@ -18,7 +18,6 @@ import { useState, useEffect, useContext } from 'react';
 import '../../../assests/css/createIssue.css';
 import EditorTextArea from '../CreateIssue/EditorTextArea';
 import CommonUploadFiles from '../../../utils/CommonUploadFiles';
-import axios from 'axios';
 import moment from 'moment';
 import { successNotification } from "../../../utils/CommonNotification";
 import { CancelIssueService, GetIssueByIdService, GetItemsIssue } from "../../../services/IssueService";

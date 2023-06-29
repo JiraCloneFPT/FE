@@ -8,6 +8,7 @@ import {
 import React, { useContext } from 'react';
 import { Button, Dropdown, Space, message, Menu, Form, Input, } from "antd";
 import { Col, Row } from "antd";
+import { Link } from 'react-scroll';
 import { useEffect, useState, } from "react";
 import { useParams } from "react-router-dom";
 import Details from "./Details";
@@ -278,7 +279,13 @@ export default function Detail() {
                             style={{ backgroundColor: "#ECEDF0" }}
                             icon={<CommentOutlined />}
                         >
-                            Add Comment
+                            <Link
+                                to="footerDiv"
+                                smooth={true}
+                                duration={500}
+                            >
+                                Add Comment
+                            </Link>
                         </Button>
                         <Button
                             type="default"

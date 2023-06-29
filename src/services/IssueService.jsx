@@ -182,6 +182,22 @@ export const EditIssueService = async (data) => {
     }
 };
 // Used by TuNT37
+export const AddIssueService = async (data) => {
+    try {
+        const respone = await Request({
+            method: "post",
+            url: "issue/addWithFile",
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+            data: data
+        });
+        return respone.data;
+    } catch (e) {
+        return e;
+    }
+};
+// Used by TuNT37
 export const GetIssueByIdService = async (id) => {
     try {
         const respone = await Request({
