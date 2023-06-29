@@ -30,7 +30,6 @@ export default function Detail() {
     const { id } = useParams();
     const handleGetIssue = async () => {
         const result = await GetIssueService(id);
-        console.log('issue', issue);
         result.status === 200 ? setIssue(result.data) : setIssue();
     };
     useEffect(() => {

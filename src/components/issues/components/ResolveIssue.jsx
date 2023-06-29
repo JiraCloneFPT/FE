@@ -28,11 +28,11 @@ const Option = Select.Option;
 
 const ResolveIssue = (props) => {
 
-    const {user} = useContext(UserContext);
+    const { user } = useContext(UserContext);
     const userId = user?.userId;
     const idIssue = props?.idIssue;
     const [form] = Form.useForm();
-    const {onSetRender} = useContext(UserContext);
+    const { onSetRender } = useContext(UserContext);
 
     const [errors, setErrors] = useState({});
     const [resolution, setResolution] = useState([]);
@@ -72,7 +72,7 @@ const ResolveIssue = (props) => {
         complexity: '',
         adjustedVP: '',
         closedDate: '',
-        comment: '' 
+        comment: ''
     });
 
     const handleGetItemsIssue = async () => {
@@ -94,7 +94,6 @@ const ResolveIssue = (props) => {
     const handleGetIssueById = async () => {
         const res = await GetIssueByIdService(idIssue);
         const issue = res.data;
-        // console.log('issue ', issue);
         setFormData(({
             userId: userId,
             issueId: issue?.issueId ?? "",
@@ -273,7 +272,7 @@ const ResolveIssue = (props) => {
                         allowClear
                         onChange={(e) => handleOnChange('resolutionId', e)}
                         placeholder={'Please select...'}
-                        // defaultValue={formData?.resolutionId}
+                    // defaultValue={formData?.resolutionId}
                     >
                         {resolution?.map(item => (
                             <Option value={item.id} key={item.id}  >

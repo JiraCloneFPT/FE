@@ -4,7 +4,7 @@ import Login from '../auth/Login';
 import IssuesList from './IssuesList';
 import { useContext } from 'react';
 import { UserContext } from '../../contexts/UserContext';
-
+import logo from "../../../public/images/System Dashboard - FI2.0/intro-illustration.png"
 
 export default function Body() {
     const { user } = useContext(UserContext);
@@ -18,7 +18,7 @@ export default function Body() {
                         <div className='backGroundBelowPage'>
                             <h3 className='textHomePage'>Introduction</h3>
                             <div className='d-flex' style={{ padding: 24 }}>
-                                <img style={{ marginRight: 24, width: 100 }} src='../images/System Dashboard - FI2.0/intro-illustration.png' />
+                                <img style={{ marginRight: 24, width: 100 }} src={logo} />
                                 <div className='textIntroduction'>
                                     <h3 className='f-16'>Welcome to FI2.0</h3>
                                     <span style={{ marginTop: 10, display: 'block' }}>New to Jira? Check out the <a href="#">Jira User's Guide</a></span>

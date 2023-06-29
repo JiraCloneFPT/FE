@@ -81,7 +81,6 @@ const CloseIssue = (props) => {
     const handleGetIssueById = async () => {
         const res = await GetIssueByIdService(idIssue);
         const issue = res.data;
-        console.log('issue ', issue);
         setFormData(({
             userId: userId,
             issueId: issue?.issueId ?? "",

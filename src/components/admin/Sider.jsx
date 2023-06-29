@@ -41,7 +41,7 @@ export default function SiderAdmin() {
             // style={{background:'var(--mainColor--)'}}
             style={{ background: '#1d70ed' }}
         >
-            <div style={{ padding: "20px 12px" }}>
+            <div style={{ padding: "7px" }}>
                 <a href="" className="d-flex align-items-center">
                     <img
                         className="borederRadius50"
@@ -51,16 +51,15 @@ export default function SiderAdmin() {
                         height="50"
                         alt=""
                     />
-                    <span className="ml-3 text-white titleRoomFont" style={{ fontSize: 20, margin: 'auto', fontWeight: 'bold' }}>Jira System</span>
+                    <span className="ml-3 titleRoomFont" style={{ fontSize: 20, margin: 'auto', fontWeight: 'bold' }}>Jira System</span>
                 </a>
             </div>
             <Menu
                 onClick={(key) => onClick(key)}
-                theme="dark"
                 defaultSelectedKeys={['1']}
                 mode="inline"
                 items={managerMenu}
-                style={{ background: '#1d70ed', color: 'white' }}
+                style={{ background: '#1d70ed', color: 'white', minHeight: "100vh" }}
             />
         </Sider>
     )

@@ -116,14 +116,14 @@ export default function ManageUser() {
     const columns = [
         {
             title: "ID",
-            width: 100,
+            // width: 20,
             dataIndex: "userId",
             key: 1,
             fixed: "left",
         },
         {
-            title: "FullName",
-            width: 100,
+            title: "Full Name",
+            // width: 60,
             dataIndex: "fullName",
             key: "fulName",
             fixed: "left",
@@ -155,8 +155,8 @@ export default function ManageUser() {
             },
         },
         {
-            title: "email",
-            width: 150,
+            title: "Email",
+            // width: 80,
             dataIndex: "email",
             key: 3,
             fixed: "left",
@@ -191,7 +191,7 @@ export default function ManageUser() {
             title: "Account",
             dataIndex: "accountName",
             key: 5,
-            width: 150,
+            // width: 50,
             filterDropdown: ({ setSelectedKeys, selectedKeys, confirm }) => {
                 return (
                     <Input
@@ -223,7 +223,7 @@ export default function ManageUser() {
             title: "BirthDay",
             dataIndex: "birthday",
             key: 4,
-            width: 150,
+            // width: 100,
             fixed: "left",
             render: (record) => {
                 if (record != null) {
@@ -238,7 +238,7 @@ export default function ManageUser() {
             title: "Status",
             dataIndex: "status",
             key: 7,
-            width: 150,
+            // width: 150,
             render: (record) => {
                 if (record == "1") {
                     return "Activated";
@@ -251,7 +251,7 @@ export default function ManageUser() {
             title: "Action",
             key: 8,
             fixed: "right",
-            width: 100,
+            // width: 50,
             render: (record) => {
                 return (
                     <>
@@ -380,7 +380,6 @@ export default function ManageUser() {
             .get(cleanedUrl)
             .then((result) => {
                 setDataSource(result.data);
-                console.log(dataSource);
             })
             .catch((error) => {
                 console.log(error);
@@ -483,14 +482,14 @@ export default function ManageUser() {
         handleValidation(editData, errors);
         if (Object.keys(errors).length === 0) {
             const result = await UpdateUserService(data);
-            if(result){
+            if (result) {
                 getData();
                 setErrors([]);
                 openNotificationUpdate("topRight");
                 handleClose();
                 onSetRender();
             }
-         
+
         } else {
             setErrors(errors);
         }
@@ -564,7 +563,7 @@ export default function ManageUser() {
                         >
                             <Form style={{ marginTop: 20 }}>
                                 <Form.Item>
-                                    <label>FullName</label>
+                                    <label>Full Name</label>
                                     <Input
                                         type="text"
                                         placeholder="Enter FullName"
@@ -640,7 +639,7 @@ export default function ManageUser() {
                         >
                             <Form style={{ marginTop: 20 }}>
                                 <Form.Item>
-                                    <label>FullName</label>
+                                    <label>Full Name</label>
                                     <Input
                                         type="text"
                                         placeholder="Enter FullName"
@@ -681,7 +680,7 @@ export default function ManageUser() {
                                 <Form.Item>
                                     <Col>
                                         <Row>
-                                            <label>BirthDay:</label>
+                                            <label>Birthday:</label>
                                             {/* <DatePicker
                                                 className="form-control"
                                                 style={{ width: "100%" }}

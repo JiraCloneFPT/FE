@@ -50,7 +50,7 @@ const Activity = ({ issue }) => {
                 data.length === 0 ? 'There are no activities yet on this issue.'
                     :
                     data.map((_item, index) => {
-                        const time = HanldeDate(_item[0].createAt);
+
                         return (
                             <>
                                 {
@@ -69,6 +69,7 @@ const Activity = ({ issue }) => {
                                             <Col span={21}>
                                                 {
                                                     _item.map((item, index) => {
+                                                        const time = HanldeDate(item.createAt);
                                                         return (
                                                             <div key={index}>
                                                                 {
@@ -90,7 +91,7 @@ const Activity = ({ issue }) => {
                                                                                                 {title}
                                                                                                 &nbsp;
                                                                                             </div>
-                                                                                            <a style={{ color: "#0052cc" }}>{issue?.shortNameProject}-{issue?.issueId} - {issue?.summary}</a>
+                                                                                            <a href={`/issues/detail/${issue?.issueId}`} style={{ color: "#0052cc" }}>{issue?.shortNameProject}-{issue?.issueId} - {issue?.summary}</a>
                                                                                         </span>
                                                                                     </Col>
                                                                                     <Col span={24}>

@@ -17,6 +17,8 @@ import { StopWatcher } from "../../../services/IssueService";
 import Comment from "./Comment";
 
 import AllActivity from "./AllActivity";
+import { GetHistoryByIssueId } from "../../../services/HistoryService";
+import { HanldeDate } from "../../../helpers/HandleDate";
 const { Dragger } = Upload;
 
 const props = {
@@ -179,7 +181,7 @@ const description = (issue) => {
 
 const attachments = () => {
 
-    const {id} = useParams();
+    const { id } = useParams();
     const [files, setFiles] = useState([]);
     const [file, setFile] = useState();
     const [isRefresh, setIsRefresh] = useState(false);
@@ -201,7 +203,7 @@ const attachments = () => {
 
     const handleFileChange = (info) => {
         setFile(info.file.originFileObj);
-        if(info.file.originFileObj){
+        if (info.file.originFileObj) {
             setIsShowSubmit(true)
         }
     };
@@ -211,12 +213,12 @@ const attachments = () => {
         formDataRequest.append("issueId", id);
         formDataRequest.append("attachFile", file);
         try {
-            const response = await axios.post(`https://localhost:7112/api/issue/addFile`, formDataRequest , 
-            {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                },
-            });
+            const response = await axios.post(`https://localhost:7112/api/issue/addFile`, formDataRequest,
+                {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                });
             setIsRefresh(!isRefresh)
             setFile()
             setIsShowSubmit(false)
@@ -259,7 +261,7 @@ const attachments = () => {
                     ))}
                 </ul>
             </div>
-            <Upload.Dragger className="attachments" onChange={handleFileChange} onRemove={() => {setIsShowSubmit(false), setFile()}} fileList={file ? [file] : []} style={{marginTop: 20}}>
+            <Upload.Dragger className="attachments" onChange={handleFileChange} onRemove={() => { setIsShowSubmit(false), setFile() }} fileList={file ? [file] : []} style={{ marginTop: 20 }}>
                 <p className="ant-upload-drag-icon">
                     <UploadOutlined />
                 </p>
@@ -283,7 +285,6 @@ const people = (issue) => {
     const [count, setCount] = useState();
     const loadCountWatcher = async () => {
         const getCount = await CountWatcher(id);
-        console.log(getCount);
         setCount(getCount);
     }
     useEffect(() => {
@@ -303,7 +304,7 @@ const people = (issue) => {
 
     const startWatcher = async (userID, id) => {
         const result = await StartWatcher(userID, id);
-        if(result.status === 200){
+        if (result.status === 200) {
             loadCountWatcher();
             loadCheck();
         }
@@ -311,7 +312,7 @@ const people = (issue) => {
 
     const stopWatcher = async (userID, id) => {
         const result = await StopWatcher(userID, id);
-        if(result.status === 200){
+        if (result.status === 200) {
             loadCountWatcher();
             loadCheck();
         }
@@ -363,7 +364,7 @@ const people = (issue) => {
                                 </span>
                                 {check == true ?
                                     <>
-                                        <a onClick={() => startWatcher(userId,id)}>start watching this issue</a>
+                                        <a onClick={() => startWatcher(userId, id)}>start watching this issue</a>
                                     </> :
                                     <>
                                         <a onClick={() => stopWatcher(userId, id)}>Stop watching this issue</a>
@@ -379,6 +380,18 @@ const people = (issue) => {
 };
 
 const dates = (issue) => {
+    const { render, onSetRender } = useContext(UserContext);
+    const [issues, setIssues] = useState();
+    const handleGetIssues = async () => {
+        const result = await GetHistoryByIssueId(issue?.issueId);
+        console.log(result);
+        result.status === 200 ? setIssues(result.data) : setIssues([]);
+    }
+    useEffect(() => {
+        if (issue) {
+            handleGetIssues();
+        }
+    }, [render, issue])
     return (
         <>
             <Row>
@@ -396,7 +409,7 @@ const dates = (issue) => {
                             <p className="text">Updated:</p>
                         </div>
                         <div className="d-flex align-center">
-                            <p className="text ml-1">2 days ago 3:32 PM</p>
+                            <p className="text ml-1">{issues?.length > 0 ? HanldeDate(issues[0]?.createAt) : "Just created"}</p>
                         </div>
                     </div>
                 </Col>
@@ -417,7 +430,7 @@ const actitity = (issue) => {
         {
             key: "2",
             label: `Comments`,
-            children: <Comment/> ,
+            children: <Comment />,
         },
         {
             key: "3",
@@ -432,7 +445,7 @@ const actitity = (issue) => {
         {
             key: "5",
             label: `Transactions`,
-            children: `Content of Tab Pane 5`,
+            children: `No workflow transitions have been executed yet.`,
         },
     ];
 

@@ -38,8 +38,8 @@ export function handleValidation(editData, errors) {
 export function handleValidationCreate(inputData, errors, emailList) {
     //lấy ngày hiện tại
     //Get DateTime Now
-    console.log("Valid: " + inputData.inputEmail);
-    console.log("Check: " + emailList);
+    // console.log("Valid: " + inputData.inputEmail);
+    // console.log("Check: " + emailList);
     const currentDate = new Date();
 
     const year = currentDate.getFullYear();

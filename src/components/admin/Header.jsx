@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
-import { Fragment, useContext, useState,useEffect } from "react";
+import { Fragment, useContext, useState, useEffect } from "react";
 import { useCookies } from 'react-cookie';
 import { useNavigate } from "react-router-dom";
 import { UserOutlined, DesktopOutlined, LogoutOutlined } from '@ant-design/icons';
@@ -59,7 +59,7 @@ export default function HeaderAdmin() {
                 >
                     <Space>
                         <a className="d-flex align-items-center" href="#">
-                            <img src="https://insight.fsoft.com.vn/jira3/images/icons/ico_add_avatar.png" alt="" style={{ cursor: "pointer", borderRadius: "50%" }} width="50" height="50"
+                            <img src="https://insight.fsoft.com.vn/jira3/images/icons/ico_add_avatar.png" alt="" style={{ cursor: "pointer", borderRadius: "50%" }} width="40" height="40"
                                 className="" />
                         </a>
                     </Space>

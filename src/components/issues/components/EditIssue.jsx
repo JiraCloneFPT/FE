@@ -28,16 +28,16 @@ import moment from "moment";
 import axios from "axios";
 import { EditIssueService, GetIssueByIdService, GetItemsIssue } from "../../../services/IssueService";
 import { messageIssue03, messageIssue04 } from "../../../utils/CommonMessages";
-import {UserContext} from "../../../contexts/UserContext";
+import { UserContext } from "../../../contexts/UserContext";
 
 const Option = Select.Option;
 
 const EditIssue = (props) => {
-  const {user} = useContext(UserContext);
+  const { user } = useContext(UserContext);
   const userId = user?.userId;
   const idIssue = props?.idIssue;
   const [form] = Form.useForm();
-  const {onSetRender} = useContext(UserContext);
+  const { onSetRender } = useContext(UserContext);
 
   const [files, setFiles] = useState([]);
 
@@ -111,7 +111,7 @@ const EditIssue = (props) => {
     dueTime: "",
     units: "",
     percentDone: "",
-    comment: "", 
+    comment: "",
   });
 
   const handleGetItemsIssue = async () => {
@@ -144,7 +144,6 @@ const EditIssue = (props) => {
   const handleGetIssueById = async () => {
     const res = await GetIssueByIdService(idIssue);
     const issue = res.data;
-    console.log('issue ', issue);
     setFormData({
       userId: userId,
       issueId: issue?.issueId ?? "",
@@ -296,7 +295,7 @@ const EditIssue = (props) => {
     formDataRequest.append("dueTime", formData?.dueTime ?? "");
     formDataRequest.append("units", formData?.units ?? "");
     formDataRequest.append("percentDone", formData?.percentDone ?? "");
-    formDataRequest.append("comment", formData?.comment ?? ""); 
+    formDataRequest.append("comment", formData?.comment ?? "");
     //#endregion
     if (formValidate()) {
       const result = await EditIssueService(formDataRequest);
