@@ -27,12 +27,13 @@ import axios from "axios";
 import { messageIssue01, messageIssue02 } from "../../../utils/CommonMessages";
 import { ListIssueType } from "../../../utils/CommonIcon";
 import { UserContext } from "../../../contexts/UserContext";
+import { AddIssueService, GetItemsIssue } from "../../../services/IssueService";
 
 const Option = Select.Option;
 
 const CreateIssue = (props) => {
     const [form] = Form.useForm();
-    const { user } = useContext(UserContext);
+    const { user, onsetRender} = useContext(UserContext);
     const userId = user.userId;
 
     //#region States
@@ -63,6 +64,7 @@ const CreateIssue = (props) => {
     const [leakCauses, setLeakCauses] = useState([]);
     //#endregion
 
+    //#region  formData
     const [formData, setFormData] = useState({
         userId: userId,
         projectId: "",
@@ -110,6 +112,7 @@ const CreateIssue = (props) => {
         units: "",
         percentDone: "",
     });
+    //#endregion
 
     const formValidate = () => {
         let errors = {};
@@ -144,38 +147,37 @@ const CreateIssue = (props) => {
         return Object.keys(errors).length === 0;
     };
 
+    const handleGetItemsIssue = async () => {
+        const res = await GetItemsIssue();
+        const result = res.data;
+        setAssignees(result.assignees);
+        setCauseCategories(result.causeCategories);
+        setComplexities(result.complexities);
+        setComponents(result.components);
+        setDefectOrigins(result.defectOrigins);
+        setDefectTypes(result.defectTypes);
+        setEpicLinks(result.epicLinks);
+        setFunctionCategories(result.functionCategories);
+        setIssureTypes(result.issueTypes);
+        setIssues(result.issues);
+        setLabels(result.labels);
+        setLeakCauses(result.leakCauses);
+        setLinkedIssues(result.linkedIssues);
+        setPriorities(result.priorities);
+        setProducts(result.products);
+        setProjects(result.projects);
+        setQCActivities(result.qcActivities);
+        setReporters(result.reporters);
+        setRoles(result.roles);
+        setSecurityLevels(result.securityLevels);
+        setSeverities(result.severities);
+        setSprints(result.sprints);
+        setTechnicalCauses(result.technicalCauses);
+    }
+
     useEffect(() => {
-        axios
-            .get("https://localhost:7112/api/issue/GetItemsIssue")
-            .then((res) => {
-                setAssignees(res.data.data.assignees);
-                setCauseCategories(res.data.data.causeCategories);
-                setComplexities(res.data.data.complexities);
-                setComponents(res.data.data.components);
-                setDefectOrigins(res.data.data.defectOrigins);
-                setDefectTypes(res.data.data.defectTypes);
-                setEpicLinks(res.data.data.epicLinks);
-                setFunctionCategories(res.data.data.functionCategories);
-                setIssureTypes(res.data.data.issueTypes);
-                setIssues(res.data.data.issues);
-                setLabels(res.data.data.labels);
-                setLeakCauses(res.data.data.leakCauses);
-                setLinkedIssues(res.data.data.linkedIssues);
-                setPriorities(res.data.data.priorities);
-                setProducts(res.data.data.products);
-                setProjects(res.data.data.projects);
-                setQCActivities(res.data.data.qcActivities);
-                setReporters(res.data.data.reporters);
-                setRoles(res.data.data.roles);
-                setSecurityLevels(res.data.data.securityLevels);
-                setSeverities(res.data.data.severities);
-                setSprints(res.data.data.sprints);
-                setTechnicalCauses(res.data.data.technicalCauses);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    }, []);
+        handleGetItemsIssue();
+    }, [props?.open]);
 
     const onChangeCheckboxCreateAnotherIssue = (e) => {
         console.log(`checked = ${e.target.checked}`);
@@ -186,7 +188,6 @@ const CreateIssue = (props) => {
             ...formData,
             [name]: value,
         });
-        console.log("name ", name, " value ", value);
     };
 
     const handleAssignToMe = () => {
@@ -194,8 +195,6 @@ const CreateIssue = (props) => {
             ...formData,
             assigneeId: userId,
         });
-        console.log(userId);
-        console.log('assign');
     };
 
     const handleFileChange = (info) => {
@@ -206,6 +205,7 @@ const CreateIssue = (props) => {
         });
     };
 
+    //#region handleResetForm
     const handleReset = () => {
         props.setOpen(false);
         setFormData({
@@ -258,8 +258,9 @@ const CreateIssue = (props) => {
         form.resetFields();
         setErrors({});
     };
+    //#endregion
 
-    const handleCreateIssue = () => {
+    const handleCreateIssue = async () => {
         //#region FormData
         const formDataRequest = new FormData();
         formDataRequest.append("userId", userId);
@@ -392,26 +393,12 @@ const CreateIssue = (props) => {
         //#endregion
         console.log("formDataRequest ", formDataRequest);
         if (formValidate()) {
-            axios
-                .post(
-                    "https://localhost:7112/api/issue/addWithFile",
-                    formDataRequest,
-                    {
-                        headers: {
-                            "Content-Type": "multipart/form-data",
-                            // 'Authorization': `Bearer ${token}`
-                        },
-                    }
-                )
-                .then((res) => {
-                    handleReset();
-                    if (res.data.code === 200) {
-                        successNotification(messageIssue01, messageIssue02(""));
-                    }
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
+            const result = await AddIssueService(formDataRequest);
+            handleReset();
+            if (result?.code === 200) {
+                successNotification(messageIssue01, messageIssue02(""));
+                onSetRender()
+            }
         }
     };
 

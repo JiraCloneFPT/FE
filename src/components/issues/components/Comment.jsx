@@ -77,6 +77,8 @@ export default function Comment() {
                     })}
                 </> : <><p>There are no comments yet on this issue.</p></>}
             {isShowComment === false ?
+            
+            <div id="footerDiv">
                 <Button
                     type="default"
                     style={{ backgroundColor: "#ECEDF0", marginTop: 30 }}
@@ -85,6 +87,8 @@ export default function Comment() {
                 >
                     Add Comment
                 </Button>
+            </div>
+                
                 : <></>
             }
             {isShowComment === true ?

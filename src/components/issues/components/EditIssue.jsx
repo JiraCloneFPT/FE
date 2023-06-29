@@ -25,7 +25,6 @@ import CommonUploadFiles from "../../../utils/CommonUploadFiles";
 import { successNotification } from "../../../utils/CommonNotification";
 import { ListIssueType } from "../../../utils/CommonIcon";
 import moment from "moment";
-import axios from "axios";
 import { EditIssueService, GetIssueByIdService, GetItemsIssue } from "../../../services/IssueService";
 import { messageIssue03, messageIssue04 } from "../../../utils/CommonMessages";
 import { UserContext } from "../../../contexts/UserContext";
