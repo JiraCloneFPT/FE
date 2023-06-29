@@ -1,39 +1,36 @@
-import { useContext, useEffect, useState } from "react";
+/* eslint-disable no-unused-vars */
 import axios from "axios";
-import { handleValidation } from "../../../assests/js/handleValidation";
-import { handleValidationCreate } from "../../../assests/js/handleValidation";
 import moment from "moment";
+import { useContext, useEffect, useState } from "react";
+import { handleValidation, handleValidationCreate } from "../../../assests/js/handleValidation";
 
-import SiderAdmin from "../../admin/Sider";
 import HeaderAdmin from "../../admin/Header";
+import SiderAdmin from "../../admin/Sider";
 import CreateUserExcel from "./CreateUsersExecel";
 
 import {
   EditOutlined,
-  DeleteOutlined,
   HomeTwoTone,
-  RadiusUprightOutlined,
   PoweroffOutlined,
+  SearchOutlined
 } from "@ant-design/icons";
 import {
   Breadcrumb,
-  Layout,
-  theme,
-  Table,
-  Input,
-  Modal,
-  Form,
-  notification,
   Button,
-  Row,
   Col,
   DatePicker,
+  Form,
+  Input,
+  Layout,
+  Modal,
+  Row,
+  Table,
+  notification,
+  theme,
 } from "antd";
-import { SearchOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
-import { AddUserService } from "../../../services/UserService";
 import { UserContext } from "../../../contexts/UserContext";
-import { UpdateUserService } from "../../../services/UserService";
+import { AddUserService, UpdateUserService } from "../../../services/UserService";
 
 const { Content } = Layout;
 
@@ -130,178 +127,178 @@ export default function ManageUser() {
     token: { colorBgContainer },
   } = theme.useToken();
 
-    //Khai bao cot trong table
-    const columns = [
-        {
-            title: "ID",
-            // width: 20,
-            dataIndex: "userId",
-            key: 1,
-            fixed: "left",
-        },
-        {
-            title: "Full Name",
-            // width: 60,
-            dataIndex: "fullName",
-            key: "fulName",
-            fixed: "left",
-            filterDropdown: ({ setSelectedKeys, selectedKeys, confirm }) => {
-                return (
-                    <Input
-                        autoFocus
-                        placeholder="Type fullname"
-                        value={selectedKeys[0]}
-                        onChange={(e) => {
-                            setSelectedKeys(e.target.value ? [e.target.value] : []);
-                        }}
-                        onPressEnter={() => {
-                            confirm();
-                        }}
-                        onBlur={() => {
-                            confirm();
-                        }}
-                    ></Input>
-                );
-            },
-            filterIcon: () => {
-                return <SearchOutlined />;
-            },
-            onFilter: (value, record) => {
-                if (record.fullName != null) {
-                    return record.fullName.toLowerCase().includes(value.toLowerCase());
-                }
-            },
-        },
-        {
-            title: "Email",
-            // width: 80,
-            dataIndex: "email",
-            key: 3,
-            fixed: "left",
-            filterDropdown: ({ setSelectedKeys, selectedKeys, confirm }) => {
-                return (
-                    <Input
-                        autoFocus
-                        placeholder="Type email"
-                        value={selectedKeys[0]}
-                        onChange={(e) => {
-                            setSelectedKeys(e.target.value ? [e.target.value] : []);
-                        }}
-                        onPressEnter={() => {
-                            confirm();
-                        }}
-                        onBlur={() => {
-                            confirm();
-                        }}
-                    ></Input>
-                );
-            },
-            filterIcon: () => {
-                return <SearchOutlined />;
-            },
-            onFilter: (value, record) => {
-                if (record.email != null) {
-                    return record.email.toLowerCase().includes(value.toLowerCase());
-                }
-            },
-        },
-        {
-            title: "Account",
-            dataIndex: "accountName",
-            key: 5,
-            // width: 50,
-            filterDropdown: ({ setSelectedKeys, selectedKeys, confirm }) => {
-                return (
-                    <Input
-                        autoFocus
-                        placeholder="Type account"
-                        value={selectedKeys[0]}
-                        onChange={(e) => {
-                            setSelectedKeys(e.target.value ? [e.target.value] : []);
-                        }}
-                        onPressEnter={() => {
-                            confirm();
-                        }}
-                        onBlur={() => {
-                            confirm();
-                        }}
-                    ></Input>
-                );
-            },
-            filterIcon: () => {
-                return <SearchOutlined />;
-            },
-            onFilter: (value, record) => {
-                if (record.accountName != null) {
-                    return record.accountName.toLowerCase().includes(value.toLowerCase());
-                }
-            },
-        },
-        {
-            title: "BirthDay",
-            dataIndex: "birthday",
-            key: 4,
-            // width: 100,
-            fixed: "left",
-            render: (record) => {
-                if (record != null) {
-                    const formattedDate = moment(record).format("YYYY-MM-DD");
-                    return formattedDate;
-                } else {
-                    return " "
-                }
-            }
-        },
-        {
-            title: "Status",
-            dataIndex: "status",
-            key: 7,
-            // width: 150,
-            render: (record) => {
-                if (record == "1") {
-                    return "Activated";
-                } else if (record == "0") {
-                    return "Deactivated";
-                }
-            },
-        },
-        {
-            title: "Action",
-            key: 8,
-            fixed: "right",
-            // width: 50,
-            render: (record) => {
-                return (
-                    <>
-                        <Button
-                            onClick={() => handleEdit(record)}
-                            type="primary"
-                            icon={<EditOutlined />}
-                        ></Button>{" "}
-                        &nbsp;
-                        {record.status == "1" ? (
-                            <Button
-                                onClick={() => handleChangeStatusDeActivate(record)}
-                                style={{ color: "white", backgroundColor: "red" }}
-                                icon={<PoweroffOutlined />}
-                            ></Button>
-                        ) : (
-                            <></>
-                        )}
-                        {record.status == "0" ? (
-                            <Button
-                                onClick={() => handleChangeStatusActivate(record)}
-                                style={{ color: "white", backgroundColor: "green" }}
-                                icon={<PoweroffOutlined />}
-                            ></Button>
-                        ) : (
-                            <></>
-                        )}
-                    </>
-                );
-            },
-        },
-    ];
+  //Khai bao cot trong table
+  const columns = [
+    {
+      title: "ID",
+      // width: 20,
+      dataIndex: "userId",
+      key: 1,
+      fixed: "left",
+    },
+    {
+      title: "Full Name",
+      // width: 60,
+      dataIndex: "fullName",
+      key: "fulName",
+      fixed: "left",
+      filterDropdown: ({ setSelectedKeys, selectedKeys, confirm }) => {
+        return (
+          <Input
+            autoFocus
+            placeholder="Type fullname"
+            value={selectedKeys[0]}
+            onChange={(e) => {
+              setSelectedKeys(e.target.value ? [e.target.value] : []);
+            }}
+            onPressEnter={() => {
+              confirm();
+            }}
+            onBlur={() => {
+              confirm();
+            }}
+          ></Input>
+        );
+      },
+      filterIcon: () => {
+        return <SearchOutlined />;
+      },
+      onFilter: (value, record) => {
+        if (record.fullName != null) {
+          return record.fullName.toLowerCase().includes(value.toLowerCase());
+        }
+      },
+    },
+    {
+      title: "Email",
+      // width: 80,
+      dataIndex: "email",
+      key: 3,
+      fixed: "left",
+      filterDropdown: ({ setSelectedKeys, selectedKeys, confirm }) => {
+        return (
+          <Input
+            autoFocus
+            placeholder="Type email"
+            value={selectedKeys[0]}
+            onChange={(e) => {
+              setSelectedKeys(e.target.value ? [e.target.value] : []);
+            }}
+            onPressEnter={() => {
+              confirm();
+            }}
+            onBlur={() => {
+              confirm();
+            }}
+          ></Input>
+        );
+      },
+      filterIcon: () => {
+        return <SearchOutlined />;
+      },
+      onFilter: (value, record) => {
+        if (record.email != null) {
+          return record.email.toLowerCase().includes(value.toLowerCase());
+        }
+      },
+    },
+    {
+      title: "Account",
+      dataIndex: "accountName",
+      key: 5,
+      // width: 50,
+      filterDropdown: ({ setSelectedKeys, selectedKeys, confirm }) => {
+        return (
+          <Input
+            autoFocus
+            placeholder="Type account"
+            value={selectedKeys[0]}
+            onChange={(e) => {
+              setSelectedKeys(e.target.value ? [e.target.value] : []);
+            }}
+            onPressEnter={() => {
+              confirm();
+            }}
+            onBlur={() => {
+              confirm();
+            }}
+          ></Input>
+        );
+      },
+      filterIcon: () => {
+        return <SearchOutlined />;
+      },
+      onFilter: (value, record) => {
+        if (record.accountName != null) {
+          return record.accountName.toLowerCase().includes(value.toLowerCase());
+        }
+      },
+    },
+    {
+      title: "Birthday",
+      dataIndex: "birthday",
+      key: 4,
+      // width: 100,
+      fixed: "left",
+      render: (record) => {
+        if (record != null) {
+          const formattedDate = moment(record).format("YYYY-MM-DD");
+          return formattedDate;
+        } else {
+          return " "
+        }
+      }
+    },
+    {
+      title: "Status",
+      dataIndex: "status",
+      key: 7,
+      // width: 150,
+      render: (record) => {
+        if (record == "1") {
+          return "Activated";
+        } else if (record == "0") {
+          return "Deactivated";
+        }
+      },
+    },
+    {
+      title: "Action",
+      key: 8,
+      fixed: "right",
+      // width: 50,
+      render: (record) => {
+        return (
+          <>
+            <Button
+              onClick={() => handleEdit(record)}
+              type="primary"
+              icon={<EditOutlined />}
+            ></Button>{" "}
+            &nbsp;
+            {record.status == "1" ? (
+              <Button
+                onClick={() => handleChangeStatusDeActivate(record)}
+                style={{ color: "white", backgroundColor: "red" }}
+                icon={<PoweroffOutlined />}
+              ></Button>
+            ) : (
+              <></>
+            )}
+            {record.status == "0" ? (
+              <Button
+                onClick={() => handleChangeStatusActivate(record)}
+                style={{ color: "white", backgroundColor: "green" }}
+                icon={<PoweroffOutlined />}
+              ></Button>
+            ) : (
+              <></>
+            )}
+          </>
+        );
+      },
+    },
+  ];
 
   //Pop up/ Pop off Modal
   const [show, setShow] = useState(false);
@@ -389,20 +386,20 @@ export default function ManageUser() {
   }, [render]);
 
 
-    //call api lấy danh sách guest
-    const getData = () => {
-        // const url = process.env.REACT_APP_SERVER_HOST + "user/GetAllUser";
-        // const cleanedUrl = url.replace(/`/g, "");
-        const cleanedUrl = 'https://localhost:7112/api/user/GetAllUser'
-        axios
-            .get(cleanedUrl)
-            .then((result) => {
-                setDataSource(result.data);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    };
+  //call api lấy danh sách guest
+  const getData = () => {
+    // const url = process.env.REACT_APP_SERVER_HOST + "user/GetAllUser";
+    // const cleanedUrl = url.replace(/`/g, "");
+    const cleanedUrl = 'https://localhost:7112/api/user/GetAllUser'
+    axios
+      .get(cleanedUrl)
+      .then((result) => {
+        setDataSource(result.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   //call api DeActivate status guest
   const handleChangeStatusDeActivate = (record) => {
@@ -433,7 +430,7 @@ export default function ManageUser() {
           });
       },
       cancelText: "Cancel",
-      onCancel: () => {},
+      onCancel: () => { },
     });
   };
 
@@ -465,7 +462,7 @@ export default function ManageUser() {
           });
       },
       cancelText: "Cancel",
-      onCancel: () => {},
+      onCancel: () => { },
     });
   };
 
@@ -496,21 +493,21 @@ export default function ManageUser() {
       status: editData.editIsActive,
     };
 
-        handleValidation(editData, errors);
-        if (Object.keys(errors).length === 0) {
-            const result = await UpdateUserService(data);
-            if (result) {
-                getData();
-                setErrors([]);
-                openNotificationUpdate("topRight");
-                handleClose();
-                onSetRender();
-            }
+    handleValidation(editData, errors);
+    if (Object.keys(errors).length === 0) {
+      const result = await UpdateUserService(data);
+      if (result) {
+        getData();
+        setErrors([]);
+        openNotificationUpdate("topRight");
+        handleClose();
+        onSetRender();
+      }
 
-        } else {
-            setErrors(errors);
-        }
-    };
+    } else {
+      setErrors(errors);
+    }
+  };
 
   return (
     <Layout
@@ -574,58 +571,58 @@ export default function ManageUser() {
               }}
             />
 
-                        {/* form update user information */}
-                        <Modal
-                            title="Update User's Information"
-                            visible={show}
-                            okText="Save Change"
-                            onCancel={() => { handleClose(); setErrors([]) }}
-                            onOk={() => handleUpdateGuest()}
-                        >
-                            <Form style={{ marginTop: 20 }}>
-                                <Form.Item>
-                                    <label>Full Name</label>
-                                    <Input
-                                        type="text"
-                                        placeholder="Enter FullName"
-                                        className="form-control"
-                                        value={editData.editFullName}
-                                        name="editFullName"
-                                        onChange={handleInputChange}
-                                    />
-                                    {errors.editFullName && (
-                                        <div
-                                            className="invalid-feedback"
-                                            style={{ display: "block", color: "red" }}
-                                        >
-                                            {errors.editFullName}
-                                        </div>
-                                    )}
-                                </Form.Item>
-                                <Form.Item>
-                                    <label>Email</label>
-                                    <Input
-                                        type="email"
-                                        placeholder="Enter Email"
-                                        className="form-control"
-                                        value={editData.editEmail}
-                                        disabled
-                                    />
-                                </Form.Item>
-                                <Form.Item>
-                                    <label>Account</label>
-                                    <Input
-                                        type="account"
-                                        className="form-control"
-                                        value={editData.editAccountName}
-                                        name="editAccountName"
-                                        disabled
-                                    />
-                                </Form.Item>
-                                <Form.Item>
-                                    <Col>
-                                        <Row>
-                                            <label>BirthDay:</label>
+            {/* form update user information */}
+            <Modal
+              title="Update User's Information"
+              visible={show}
+              okText="Save Change"
+              onCancel={() => { handleClose(); setErrors([]) }}
+              onOk={() => handleUpdateGuest()}
+            >
+              <Form style={{ marginTop: 20 }}>
+                <Form.Item>
+                  <label>Full Name</label>
+                  <Input
+                    type="text"
+                    placeholder="Enter FullName"
+                    className="form-control"
+                    value={editData.editFullName}
+                    name="editFullName"
+                    onChange={handleInputChange}
+                  />
+                  {errors.editFullName && (
+                    <div
+                      className="invalid-feedback"
+                      style={{ display: "block", color: "red" }}
+                    >
+                      {errors.editFullName}
+                    </div>
+                  )}
+                </Form.Item>
+                <Form.Item>
+                  <label>Email</label>
+                  <Input
+                    type="email"
+                    placeholder="Enter Email"
+                    className="form-control"
+                    value={editData.editEmail}
+                    disabled
+                  />
+                </Form.Item>
+                <Form.Item>
+                  <label>Account</label>
+                  <Input
+                    type="account"
+                    className="form-control"
+                    value={editData.editAccountName}
+                    name="editAccountName"
+                    disabled
+                  />
+                </Form.Item>
+                <Form.Item>
+                  <Col>
+                    <Row>
+                      <label>BirthDay:</label>
 
                       <DatePicker
                         className="form-control"
@@ -656,59 +653,59 @@ export default function ManageUser() {
               </Form>
             </Modal>
 
-                        {/* form add new user */}
-                        <Modal
-                            title="Add new user"
-                            visible={showAddNew}
-                            okText="Add new"
-                            onCancel={() => { setShowAddNew(false); setErrors([]); setInputData("") }}
-                            onOk={() => { handleSubmitCreate(); }}
-                        >
-                            <Form style={{ marginTop: 20 }}>
-                                <Form.Item>
-                                    <label>Full Name</label>
-                                    <Input
-                                        type="text"
-                                        placeholder="Enter FullName"
-                                        className="form-control"
-                                        value={inputData.inputFullName}
-                                        name="inputFullName"
-                                        onChange={handleAddInputChange}
-                                        required
-                                    />
-                                    {errors.inputFullName && (
-                                        <div
-                                            className="invalid-feedback"
-                                            style={{ display: "block", color: "red" }}
-                                        >
-                                            {errors.inputFullName}
-                                        </div>
-                                    )}
-                                </Form.Item>
-                                <Form.Item>
-                                    <label>Email</label>
-                                    <Input
-                                        type="email"
-                                        placeholder="Enter Email"
-                                        className="form-control"
-                                        value={inputData.inputEmail}
-                                        name="inputEmail"
-                                        onChange={handleAddInputChange}
-                                    />
-                                    {errors.inputEmail && (
-                                        <div
-                                            className="invalid-feedback"
-                                            style={{ display: "block", color: "red" }}
-                                        >
-                                            {errors.inputEmail}
-                                        </div>
-                                    )}
-                                </Form.Item>
-                                <Form.Item>
-                                    <Col>
-                                        <Row>
-                                            <label>Birthday:</label>
-                                            {/* <DatePicker
+            {/* form add new user */}
+            <Modal
+              title="Add new user"
+              visible={showAddNew}
+              okText="Add new"
+              onCancel={() => { setShowAddNew(false); setErrors([]); setInputData("") }}
+              onOk={() => { handleSubmitCreate(); }}
+            >
+              <Form style={{ marginTop: 20 }}>
+                <Form.Item>
+                  <label>Full Name</label>
+                  <Input
+                    type="text"
+                    placeholder="Enter FullName"
+                    className="form-control"
+                    value={inputData.inputFullName}
+                    name="inputFullName"
+                    onChange={handleAddInputChange}
+                    required
+                  />
+                  {errors.inputFullName && (
+                    <div
+                      className="invalid-feedback"
+                      style={{ display: "block", color: "red" }}
+                    >
+                      {errors.inputFullName}
+                    </div>
+                  )}
+                </Form.Item>
+                <Form.Item>
+                  <label>Email</label>
+                  <Input
+                    type="email"
+                    placeholder="Enter Email"
+                    className="form-control"
+                    value={inputData.inputEmail}
+                    name="inputEmail"
+                    onChange={handleAddInputChange}
+                  />
+                  {errors.inputEmail && (
+                    <div
+                      className="invalid-feedback"
+                      style={{ display: "block", color: "red" }}
+                    >
+                      {errors.inputEmail}
+                    </div>
+                  )}
+                </Form.Item>
+                <Form.Item>
+                  <Col>
+                    <Row>
+                      <label>Birthday:</label>
+                      {/* <DatePicker
                                                 className="form-control"
                                                 style={{ width: "100%" }}
                                                 placeholder="yyyy-MM-dd"

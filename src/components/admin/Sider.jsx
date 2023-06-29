@@ -59,35 +59,35 @@ export default function SiderAdmin() {
     navigate(value.key);
   };
 
-    return (
-        <Sider
-            collapsible
-            collapsed={collapsed}
-            onCollapse={(value) => setCollapsed(value)}
-            trigger={null}
-            // style={{background:'var(--mainColor--)'}}
-            style={{ background: '#1d70ed' }}
-        >
-            <div style={{ padding: "7px" }}>
-                <a href="" className="d-flex align-items-center">
-                    <img
-                        className="borederRadius50"
-                        src="../images/Logo.jpg"
-                        style={{ background: "#fff" }}
-                        width="50"
-                        height="50"
-                        alt=""
-                    />
-                    <span className="ml-3 titleRoomFont" style={{ fontSize: 20, margin: 'auto', fontWeight: 'bold' }}>Jira System</span>
-                </a>
-            </div>
-            <Menu
-                onClick={(key) => onClick(key)}
-                defaultSelectedKeys={['1']}
-                mode="inline"
-                items={managerMenu}
-                style={{ background: '#1d70ed', color: 'white', minHeight: "100vh" }}
-            />
-        </Sider>
-    )
+  return (
+    <Sider
+      collapsible
+      collapsed={collapsed}
+      onCollapse={(value) => setCollapsed(value)}
+      trigger={null}
+      // style={{background:'var(--mainColor--)'}}
+      style={{ background: '#1d70ed' }}
+    >
+      <div style={{ padding: "7px" }}>
+        <a href="" className="d-flex align-items-center">
+          <img
+            className="borederRadius50"
+            src="../images/Logo.jpg"
+            style={{ background: "#fff" }}
+            width="50"
+            height="50"
+            alt=""
+          />
+          <span className="ml-3 titleRoomFont" style={{ fontSize: 20, margin: 'auto', fontWeight: 'bold' }}>Jira System</span>
+        </a>
+      </div>
+      <Menu
+        onClick={(key) => onClick(key)}
+        defaultSelectedKeys={['1']}
+        mode="inline"
+        items={managerMenu}
+        style={{ background: '#1d70ed', color: 'white', minHeight: "100vh", padding: "10px 0" }}
+      />
+    </Sider>
+  )
 }

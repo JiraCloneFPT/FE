@@ -267,7 +267,7 @@ export default function ManageComponent() {
 
         Modal.confirm({
             title: "Are you sure to close component: " + record.componentName + " ?",
-            okText: "close",
+            okText: "Ok",
             okType: "danger",
             onOk: () => {
                 axios
@@ -347,7 +347,7 @@ export default function ManageComponent() {
             <Layout
                 className="site-layout"
             >
-                <HeaderAdmin/>
+                <HeaderAdmin />
                 {contextHolder}
                 <Content
                     style={{

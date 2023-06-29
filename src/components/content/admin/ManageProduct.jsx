@@ -291,7 +291,7 @@ export default function ManageProduct() {
 
         Modal.confirm({
             title: "Are you sure to close product: " + record.productName + " ?",
-            okText: "close",
+            okText: "Ok",
             okType: "danger",
             onOk: () => {
                 axios

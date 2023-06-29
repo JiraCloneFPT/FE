@@ -351,7 +351,7 @@ export default function ManageProject() {
 
         Modal.confirm({
             title: "Are you sure to close project: " + record.projectName + " ?",
-            okText: "close",
+            okText: "Ok",
             okType: "danger",
             onOk: () => {
                 axios
@@ -404,7 +404,7 @@ export default function ManageProject() {
             <Layout
                 className="site-layout"
             >
-                <HeaderAdmin/>
+                <HeaderAdmin />
                 {contextHolder}
                 <Content
                     style={{
