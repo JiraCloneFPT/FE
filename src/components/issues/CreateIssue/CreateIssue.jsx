@@ -33,7 +33,7 @@ const Option = Select.Option;
 
 const CreateIssue = (props) => {
     const [form] = Form.useForm();
-    const { user, onsetRender} = useContext(UserContext);
+    const { user, onsetRender } = useContext(UserContext);
     const userId = user.userId;
 
     //#region States
@@ -62,6 +62,7 @@ const CreateIssue = (props) => {
     const [defectTypes, setDefectTypes] = useState([]);
     const [causeCategories, setCauseCategories] = useState([]);
     const [leakCauses, setLeakCauses] = useState([]);
+
     //#endregion
 
     //#region  formData
@@ -94,7 +95,7 @@ const CreateIssue = (props) => {
         complexity: "",
         adjustedVP: "",
         dueDate: "",
-        attachments: "", //
+        attachments: [], //
         labelsId: "",
         sprint: "",
         functionId: "",
@@ -197,13 +198,20 @@ const CreateIssue = (props) => {
         });
     };
 
+    const [fileList, setFileList] = useState([]);
     const handleFileChange = (info) => {
-        console.log(info.file);
-        setFormData({
-            ...formData,
-            attachments: info.file.originFileObj,
-        });
+        let fileList = [...info.fileList];
+        fileList = fileList.slice(-3); 
+
+        setFileList(fileList);
     };
+    // const handleFileChange = (info) => {
+    //     console.log(info.file);
+    //     setFormData({
+    //         ...formData,
+    //         attachments: info.file.originFileObj,
+    //     });
+    // };
 
     //#region handleResetForm
     const handleReset = () => {
@@ -264,7 +272,12 @@ const CreateIssue = (props) => {
         //#region FormData
         const formDataRequest = new FormData();
         formDataRequest.append("userId", userId);
-        formDataRequest.append("attachFile", formData.attachments);
+
+        // formDataRequest.append("attachFile", formData.attachments);
+        fileList.forEach((file) => {
+            formDataRequest.append('attachFiles', file.originFileObj);
+        });
+
         formDataRequest.append("projectId", formData.projectId);
         formDataRequest.append("issueTypeId", formData.issueTypeId);
         formDataRequest.append("summary", formData.summary);
@@ -1441,7 +1454,7 @@ const CreateIssue = (props) => {
                     }
                 >
                     {/* <CommonUploadFiles /> */}
-                    <Upload.Dragger onChange={handleFileChange}>
+                    <Upload.Dragger multiple fileList={fileList} onChange={handleFileChange} className="attachments" >
                         <p className="ant-upload-drag-icon">
                             <UploadOutlined />
                         </p>

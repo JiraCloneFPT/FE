@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable no-unused-vars */
-import { UserOutlined, DeleteOutlined, UploadOutlined } from "@ant-design/icons";
-import { Col, Collapse, Row, Tabs, Upload, message, Modal } from "antd";
+import { UserOutlined, DeleteOutlined, UploadOutlined, DownloadOutlined } from "@ant-design/icons";
+import { Col, Collapse, Row, Tabs, Upload, message, Modal, Card, Image, Button } from "antd";
 import History from "./History";
 import Activity from "./Activity";
 import { CountWatcher } from "../../../services/IssueService";
@@ -195,23 +195,30 @@ const attachments = () => {
     const fetchFiles = async () => {
         try {
             const response = await axios.get(`https://localhost:7112/api/issue/getFilesIssue?issueId=${id}`);
+            console.log('files ', response.data.data);
             setFiles(response.data.data);
         } catch (error) {
             console.error(error);
         }
     };
-
+    const [fileList, setFileList] = useState([]);
     const handleFileChange = (info) => {
-        setFile(info.file.originFileObj);
-        if (info.file.originFileObj) {
+        let fileList = [...info.fileList];
+        fileList = fileList.slice(-3); 
+        if(fileList.length > 0){
             setIsShowSubmit(true)
         }
+        setFileList(fileList);
     };
 
     const handleAddFile = async () => {
         const formDataRequest = new FormData();
         formDataRequest.append("issueId", id);
-        formDataRequest.append("attachFile", file);
+        // formDataRequest.append("attachFile", file);
+        fileList.forEach((file) => {
+            formDataRequest.append('attachFiles', file.originFileObj);
+        });
+
         try {
             const response = await axios.post(`https://localhost:7112/api/issue/addFile`, formDataRequest,
                 {
@@ -220,7 +227,7 @@ const attachments = () => {
                     },
                 });
             setIsRefresh(!isRefresh)
-            setFile()
+            setFileList()
             setIsShowSubmit(false)
         } catch (error) {
             console.error(error);
@@ -246,22 +253,40 @@ const attachments = () => {
         });
     }
 
+    const isImageFile = (fileName) => {
+        const imageExtensions = ['.png', '.jpg', '.jpeg', '.gif'];
+        const fileExtension = fileName.slice(fileName.lastIndexOf('.')).toLowerCase();
+        return imageExtensions.includes(fileExtension);
+    };
+
     return (
         <>
             <div>
                 <h2>List files of Issue</h2>
-                <ul>
+
+                <div style={{ display: "flex", flexWrap: "wrap" }} >
                     {files?.map((file) => (
-                        <li key={file?.id}>
-                            <a href={`data:application/octet-stream;base64,${file?.content}`} download={file?.name}>
-                                {file?.name}
-                            </a>
-                            <span> <DeleteOutlined onClick={() => { handleDeleteFile(file?.id) }} style={{ color: 'red', marginLeft: 10 }} /> </span>
-                        </li>
+                        <Card key={file?.id}>
+                            {isImageFile(file?.name) ? (
+                                <Image style={{ maxHeight: 70 }} src={file?.fileSrc} alt={file?.name} />
+                            ) : (
+                                <a href={`data:application/octet-stream;base64,${file?.content}`} download={file?.name}>
+                                    {file?.name}
+                                </a>
+                            )}
+                            <span style={{margin: 10}}> <a  href={`data:application/octet-stream;base64,${file?.content}`} download={file?.name}><DownloadOutlined/></a></span>
+                            <span> <DeleteOutlined onClick={() => { handleDeleteFile(file?.id) }} style={{ color: 'red'}} /> </span>
+                        </Card>
                     ))}
-                </ul>
+                </div>
             </div>
-            <Upload.Dragger className="attachments" onChange={handleFileChange} onRemove={() => { setIsShowSubmit(false), setFile() }} fileList={file ? [file] : []} style={{ marginTop: 20 }}>
+            <Upload.Dragger 
+                multiple 
+                fileList={fileList ? fileList : []} 
+                className="attachments" 
+                onChange={handleFileChange} 
+                onRemove={() => { setIsShowSubmit(false) }} 
+                style={{ marginTop: 20 }}>
                 <p className="ant-upload-drag-icon">
                     <UploadOutlined />
                 </p>
@@ -269,7 +294,7 @@ const attachments = () => {
                     Click or drag file to this area to upload
                 </p>
             </Upload.Dragger>
-            {isShowSubmit ? <><button onClick={handleAddFile}>Add File</button></> : <></>}
+            {isShowSubmit === true ? <><Button onClick={handleAddFile}>Add File </Button></> : <></>}
         </>
     );
 };
