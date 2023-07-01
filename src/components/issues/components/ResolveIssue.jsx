@@ -177,13 +177,7 @@ const ResolveIssue = (props) => {
 
         setFileList(fileList);
     };
-    // const handleFileChange = (info) => {
-    //     setFormData({
-    //         ...formData,
-    //         attachments: info.file.originFileObj,
-    //     });
-    // };
-
+    
     const handleResolveIssue = async () => {
 
         const formDataRequest = new FormData();

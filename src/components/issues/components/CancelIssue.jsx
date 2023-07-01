@@ -166,13 +166,7 @@ const CancelIssue = (props) => {
 
         setFileList(fileList);
     };
-    // const handleFileChange = (info) => {
-    //     setFormData({
-    //         ...formData,
-    //         attachments: info.file.originFileObj,
-    //     });
-    // };
-
+    
     const handleCancelIssue = async () => {
         const formDataRequest = new FormData();
         formDataRequest.append("userId", userId);

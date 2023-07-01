@@ -189,6 +189,7 @@ const CreateIssue = (props) => {
             ...formData,
             [name]: value,
         });
+        console.log(name, value);
     };
 
     const handleAssignToMe = () => {
@@ -205,13 +206,6 @@ const CreateIssue = (props) => {
 
         setFileList(fileList);
     };
-    // const handleFileChange = (info) => {
-    //     console.log(info.file);
-    //     setFormData({
-    //         ...formData,
-    //         attachments: info.file.originFileObj,
-    //     });
-    // };
 
     //#region handleResetForm
     const handleReset = () => {

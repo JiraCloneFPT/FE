@@ -229,7 +229,7 @@ const EditIssue = (props) => {
       [name]: value,
     });
   };
-
+  
   const handleDateChange = (name, value) => {
     setFormData({
       ...formData,
@@ -244,14 +244,6 @@ const EditIssue = (props) => {
 
     setFileList(fileList);
   };
-
-  // const handleFileChange = (info) => {
-  //   console.log(info.file);
-  //   setFormData({
-  //     ...formData,
-  //     attachments: info.file.originFileObj,
-  //   });
-  // };
 
   const handleUpdateIssue = async () => {
     //#region Append formData
@@ -309,15 +301,16 @@ const EditIssue = (props) => {
     formDataRequest.append("percentDone", formData?.percentDone ?? "");
     formDataRequest.append("comment", formData?.comment ?? "");
     //#endregion
-    if (formValidate()) {
-      const result = await EditIssueService(formDataRequest);
-      props.setOpen(false);
-      form.resetFields();
-      if (result.code === 200) {
-        successNotification(messageIssue03, messageIssue04(""));
-        onSetRender()
-      }
-    }
+    console.log('f', formData);
+    // if (formValidate()) {
+    //   const result = await EditIssueService(formDataRequest);
+    //   props.setOpen(false);
+    //   form.resetFields();
+    //   if (result.code === 200) {
+    //     successNotification(messageIssue03, messageIssue04(""));
+    //     onSetRender()
+    //   }
+    // }
   };
 
   const Header = () => {
@@ -511,7 +504,7 @@ const EditIssue = (props) => {
           }
         >
           <EditorTextArea
-            name="description"
+            name={"description"}
             handleEditorContent={handleOnChange}
             defaultValue={formData?.description}
           />

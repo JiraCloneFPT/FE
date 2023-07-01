@@ -19,6 +19,7 @@ import Comment from "./Comment";
 import AllActivity from "./AllActivity";
 import { GetHistoryByIssueId } from "../../../services/HistoryService";
 import { HanldeDate } from "../../../helpers/HandleDate";
+import { AddFilesService, DeleteFileService, GetFilesService } from "../../../services/FileService";
 const { Dragger } = Upload;
 
 const props = {
@@ -182,8 +183,8 @@ const description = (issue) => {
 const attachments = () => {
 
     const { id } = useParams();
-    const [files, setFiles] = useState([]);
-    const [file, setFile] = useState();
+    const [files, setFiles] = useState([]); // list file exists 
+    const [fileList, setFileList] = useState([]); // list file request create
     const [isRefresh, setIsRefresh] = useState(false);
     const [isShowSubmit, setIsShowSubmit] = useState(false);
     const { render } = useContext(UserContext);
@@ -193,17 +194,12 @@ const attachments = () => {
     }, [isRefresh, render]);
 
     const fetchFiles = async () => {
-        try {
-            const response = await axios.get(`https://localhost:7112/api/issue/getFilesIssue?issueId=${id}`);
-            console.log('files ', response.data.data);
-            setFiles(response.data.data);
-        } catch (error) {
-            console.error(error);
-        }
+        const result = await GetFilesService(id);
+        setFiles(result.data);
     };
-    const [fileList, setFileList] = useState([]);
-    const handleFileChange = (info) => {
-        let fileList = [...info.fileList];
+
+    const handleFileChange = async (info) => {
+        let fileList = await [...info.fileList];
         fileList = fileList.slice(-3); 
         if(fileList.length > 0){
             setIsShowSubmit(true)
@@ -219,36 +215,26 @@ const attachments = () => {
             formDataRequest.append('attachFiles', file.originFileObj);
         });
 
-        try {
-            const response = await axios.post(`https://localhost:7112/api/issue/addFile`, formDataRequest,
-                {
-                    headers: {
-                        "Content-Type": "multipart/form-data",
-                    },
-                });
+        const result = await AddFilesService(formDataRequest);
+        if(result?.code === 200){
             setIsRefresh(!isRefresh)
             setFileList()
             setIsShowSubmit(false)
-        } catch (error) {
-            console.error(error);
         }
     }
 
-    const handleDeleteFile = (fileId) => {
+    const handleDeleteFile = async (fileId) => {
         Modal.confirm({
             title: 'Are you sure you want to delete?',
             okText: 'Yes',
             okType: 'danger',
             cancelText: 'No',
-            onOk: () => {
-                axios.delete(`https://localhost:7112/api/issue/removeFile?fileId=${fileId}`)
-                    .then((response) => {
-                        console.log('response ', response);
-                        if (response.data.code === 200) {
-                            successNotification(messageIssue03, messageIssue04(""));
-                            setIsRefresh(!isRefresh)
-                        }
-                    })
+            onOk: async () => {
+                const result = await DeleteFileService(fileId);
+                if(result?.code === 200){
+                    successNotification(messageIssue03, messageIssue04(""));
+                    setIsRefresh(!isRefresh)
+                }
             }
         });
     }
@@ -268,7 +254,7 @@ const attachments = () => {
                     {files?.map((file) => (
                         <Card key={file?.id}>
                             {isImageFile(file?.name) ? (
-                                <Image style={{ maxHeight: 70 }} src={file?.fileSrc} alt={file?.name} />
+                                <Image style={{ maxHeight: 100 }} src={file?.fileSrc} alt={file?.name} />
                             ) : (
                                 <a href={`data:application/octet-stream;base64,${file?.content}`} download={file?.name}>
                                     {file?.name}
@@ -284,7 +270,7 @@ const attachments = () => {
                 multiple 
                 fileList={fileList ? fileList : []} 
                 className="attachments" 
-                onChange={handleFileChange} 
+                onChange={ async (info) =>  { await handleFileChange(info)}} 
                 onRemove={() => { setIsShowSubmit(false) }} 
                 style={{ marginTop: 20 }}>
                 <p className="ant-upload-drag-icon">
