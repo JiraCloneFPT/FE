@@ -159,13 +159,14 @@ const CancelIssue = (props) => {
         })
     }
 
+    const [fileList, setFileList] = useState([]);
     const handleFileChange = (info) => {
-        setFormData({
-            ...formData,
-            attachments: info.file.originFileObj,
-        });
-    };
+        let fileList = [...info.fileList];
+        fileList = fileList.slice(-3); 
 
+        setFileList(fileList);
+    };
+    
     const handleCancelIssue = async () => {
         const formDataRequest = new FormData();
         formDataRequest.append("userId", userId);
@@ -185,7 +186,12 @@ const CancelIssue = (props) => {
         formDataRequest.append("description", formData?.description ?? "");
         formDataRequest.append("descriptionTranslate", formData?.descriptionTranslate ?? "");
         formDataRequest.append("assigneeId", formData?.assigneeId ?? "");
-        formDataRequest.append("attachFile", formData?.attachments ?? "" ?? "");
+
+        // formDataRequest.append("attachFile", formData?.attachments ?? "" ?? "");
+        fileList.forEach((file) => {
+            formDataRequest.append('attachFiles', file.originFileObj);
+        });
+        
         formDataRequest.append("testcaseId", formData?.testcaseId ?? "");
         formDataRequest.append("functionCategory", formData?.functionCategory ?? "");
         formDataRequest.append("estimateEffort", formData?.estimateEffort);
@@ -603,7 +609,7 @@ const CancelIssue = (props) => {
                     label={<label className="create-issue-item-label">Attachment</label>}
                 >
                     {/* <CommonUploadFiles /> */}
-                    <Upload.Dragger className="attachments" onChange={handleFileChange}>
+                    <Upload.Dragger multiple fileList={fileList} className="attachments" onChange={handleFileChange}>
                         <p className="ant-upload-drag-icon">
                             <UploadOutlined />
                         </p>
