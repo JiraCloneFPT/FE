@@ -69,7 +69,12 @@ export default function Comment() {
                                 </Row>
                                 <Row>
                                     <Col span={2}> </Col>
-                                    <Col > {comment?.commentContent} </Col>
+                                    <Col>
+                                        {(comment?.commentContent?.includes("<p>")) ?
+                                            <div dangerouslySetInnerHTML={{ __html: comment?.commentContent }} ></div>
+                                            :
+                                            <> {comment?.commentContent} </>}
+                                    </Col>
                                 </Row>
                                 <hr style={{ margin: 10 }}></hr>
                             </>
@@ -77,18 +82,18 @@ export default function Comment() {
                     })}
                 </> : <><p>There are no comments yet on this issue.</p></>}
             {isShowComment === false ?
-            
-            <div id="footerDiv">
-                <Button
-                    type="default"
-                    style={{ backgroundColor: "#ECEDF0", marginTop: 30 }}
-                    icon={<CommentOutlined />}
-                    onClick={() => { setIsShowcomment(true) }}
-                >
-                    Add Comment
-                </Button>
-            </div>
-                
+
+                <div id="footerDiv">
+                    <Button
+                        type="default"
+                        style={{ backgroundColor: "#ECEDF0", marginTop: 30 }}
+                        icon={<CommentOutlined />}
+                        onClick={() => { setIsShowcomment(true) }}
+                    >
+                        Add Comment
+                    </Button>
+                </div>
+
                 : <></>
             }
             {isShowComment === true ?

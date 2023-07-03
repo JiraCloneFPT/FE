@@ -29,7 +29,7 @@ export default function EditorTextArea(props) {
                         'removeformat | help',
                     content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
                 }}
-                onEditorChange={() => props.handleEditorContent(props.name ,editorRef.current.getContent({format: 'text'}))}
+                onEditorChange={() => props.handleEditorContent(props.name ,editorRef.current.getContent())}
             />
         </>
     );

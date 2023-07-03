@@ -16,13 +16,13 @@ import {
 } from "@ant-design/icons";
 import { useState, useEffect, useContext } from 'react';
 import '../../../assests/css/createIssue.css';
-import EditorTextArea from '../CreateIssue/EditorTextArea';
-import CommonUploadFiles from '../../../utils/CommonUploadFiles';
 import moment from 'moment';
 import { successNotification } from "../../../utils/CommonNotification";
 import { CancelIssueService, GetIssueByIdService, GetItemsIssue } from "../../../services/IssueService";
 import { messageIssue03, messageIssue04 } from '../../../utils/CommonMessages';
 import {UserContext} from "../../../contexts/UserContext";
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 const Option = Select.Option;
 const { TextArea } = Input;
@@ -470,11 +470,7 @@ const CancelIssue = (props) => {
                         </p>
                     }
                 >
-                    <EditorTextArea
-                        name="causeAnalysis"
-                        handleEditorContent={handleOnChange}
-                        defaultValue={formData?.causeAnalysis}
-                    />
+                    <ReactQuill className="quill-editor" value={formData?.causeAnalysis} onChange={(e)=>handleOnChange('causeAnalysis', e)} />
                 </Form.Item>
 
                 <Form.Item
@@ -511,11 +507,7 @@ const CancelIssue = (props) => {
                         </p>
                     }
                 >
-                    <EditorTextArea
-                        name="correctAction"
-                        handleEditorContent={handleOnChange}
-                        defaultValue={formData?.correctAction}
-                    />
+                    <ReactQuill className="quill-editor" value={formData?.correctAction} onChange={(e)=>handleOnChange('correctAction', e)} />
                 </Form.Item>
 
                 <Form.Item
@@ -530,11 +522,7 @@ const CancelIssue = (props) => {
                         </p>
                     }
                 >
-                    <EditorTextArea
-                        name="causeAnalysisTranslate"
-                        handleEditorContent={handleOnChange}
-                        defaultValue={formData?.causeAnalysisTranslate}
-                    />
+                    <ReactQuill className="quill-editor" value={formData?.causeAnalysisTranslate} onChange={(e)=>handleOnChange('causeAnalysisTranslate', e)} />
                 </Form.Item>
 
                 <Form.Item
@@ -549,11 +537,7 @@ const CancelIssue = (props) => {
                         </p>
                     }
                 >
-                    <EditorTextArea
-                        name="correctActionTranslate"
-                        handleEditorContent={handleOnChange}
-                        defaultValue={formData?.correctActionTranslate}
-                    />
+                    <ReactQuill className="quill-editor" value={formData?.correctActionTranslate} onChange={(e)=>handleOnChange('correctActionTranslate', e)} />
                 </Form.Item>
 
                 <Form.Item
@@ -566,11 +550,7 @@ const CancelIssue = (props) => {
                 <Form.Item
                     label={<label className='create-issue-item-label'>Description<span style={colorRequired}>*</span></label>}
                 >
-                    <EditorTextArea
-                        name='description'
-                        handleEditorContent={handleOnChange}
-                        defaultValue={formData?.description}
-                    />
+                    <ReactQuill className="quill-editor" value={formData?.description} onChange={(e)=>handleOnChange('description', e)} />
                     {errors?.description && (<div className="invalid-feedback" style={{ display: "block", color: "red" }}> {errors?.description} </div>)}
                 </Form.Item>
 
@@ -578,11 +558,7 @@ const CancelIssue = (props) => {
                     label={<label className='create-issue-item-label'>Description (Translated)</label>}
                     extra={<p style={{ fontSize: 11, color: '#6b778c', margin: '5px 0 0' }}>Use for Comtor to translate bug</p>}
                 >
-                    <EditorTextArea
-                        name='descriptionTranslate'
-                        handleEditorContent={handleOnChange}
-                        defaultValue={formData?.descriptionTranslate}
-                    />
+                    <ReactQuill className="quill-editor" value={formData?.descriptionTranslate} onChange={(e)=>handleOnChange('descriptionTranslate', e)} />
                 </Form.Item>
 
                 <Form.Item
@@ -608,7 +584,6 @@ const CancelIssue = (props) => {
                 <Form.Item
                     label={<label className="create-issue-item-label">Attachment</label>}
                 >
-                    {/* <CommonUploadFiles /> */}
                     <Upload.Dragger multiple fileList={fileList} className="attachments" onChange={handleFileChange}>
                         <p className="ant-upload-drag-icon">
                             <UploadOutlined />
@@ -746,11 +721,7 @@ const CancelIssue = (props) => {
                     label={<label className='create-issue-item-label'>Comment</label>}
                     extra={<p style={{ fontSize: 11, color: '#6b778c', margin: '5px 0 0' }}>...</p>}
                 >
-                    <EditorTextArea
-                        name='comment'
-                        handleEditorContent={handleOnChange}
-                        defaultValue={formData?.comment}
-                    />
+                    <ReactQuill className="quill-editor" value={formData?.comment} onChange={(e)=>handleOnChange('comment', e)} />
                 </Form.Item>
             </Form>
         </Modal>
