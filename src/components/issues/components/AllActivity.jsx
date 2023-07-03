@@ -55,13 +55,20 @@ const AllActivity = () => {
                                                                     <span>
                                                                         <span style={{ fontWeight: "bold" }}>
                                                                             Original
-                                                                        </span>
-                                                                        : {items.orginal}
+                                                                        </span> : 
+                                                                        {(items?.orginal?.includes("<p>")) ? 
+                                                                            <div dangerouslySetInnerHTML={{ __html: items?.orginal}} ></div> 
+                                                                            :
+                                                                            <> {items.orginal} </> }
                                                                     </span>
                                                                 </Col>
                                                                 <Col span={8}>
                                                                     <span>
-                                                                        <span style={{ fontWeight: "bold" }}>New</span>: {items.new}
+                                                                        <span style={{ fontWeight: "bold" }}>New</span>: 
+                                                                        {(items?.new?.includes("<p>")) ? 
+                                                                            <div dangerouslySetInnerHTML={{ __html: items?.new}} ></div> 
+                                                                            :
+                                                                            <> {items.new} </> }
                                                                     </span>
                                                                 </Col>
                                                             </Row>

@@ -24,20 +24,22 @@ import { successNotification } from "../../../utils/CommonNotification";
 import { messageIssue01, messageIssue02 } from "../../../utils/CommonMessages";
 import { ListIssueType } from "../../../utils/CommonIcon";
 import { UserContext } from "../../../contexts/UserContext";
-import { AddIssueService, GetItemsIssue } from "../../../services/IssueService";
+import { AddIssueService, GetItemsIssue, GetIssueByIdService } from "../../../services/IssueService";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
 const Option = Select.Option;
 
-const CreateIssue = (props) => {
+const CloneIssue = (props) => {
     const [form] = Form.useForm();
     const { user, onsetRender } = useContext(UserContext);
-    const userId = user.userId;
+    const userId = user?.userId;
+    const idIssue = props?.idIssue;
 
     //#region States
     const [errors, setErrors] = useState({});
 
+    const [fileList, setFileList] = useState([]);
     const [projects, setProjects] = useState([]);
     const [issueTypes, setIssureTypes] = useState([]);
     const [components, setComponents] = useState([]);
@@ -175,7 +177,61 @@ const CreateIssue = (props) => {
         setTechnicalCauses(result.technicalCauses);
     }
 
+    const handleGetIssueById = async () => {
+        const res = await GetIssueByIdService(idIssue);
+        const issue = res.data;
+        setFormData({
+            userId: userId,
+            issueId: issue?.issueId ?? "", //
+            projectId: issue?.projectId ?? "",
+            issueTypeId: issue.issueTypeId ?? "",
+            summary: issue.summary ?? "",
+            componentId: issue.componentId ?? "",
+            productId: issue.productId ?? "",
+            description: issue.description ?? "",
+            descriptionTranslate: issue.descriptionTranslate ?? "",
+            defectOriginId: issue.defectOriginId ?? "",
+            priorityId: issue.priorityId ?? "",
+            severity: issue.severity ?? "",
+            qcActivityId: issue.qcactivityId ?? "",
+            causeAnalysis: issue.causeAnalysis ?? "",
+            causeAnalysisTranslate: issue.causeAnalysisTranslate ?? "",
+            correctAction: issue.correctAction ?? "",
+            correctActionTranslate: issue.correctActionTranslate ?? "",
+            technicalCauseId: issue.technicalCauseId ?? "",
+            environment: issue.environment ?? "",
+            assigneeId: issue.assigneeId ?? "",
+            roleIssueId: issue.roleIssueId ?? "",
+            reporterId: issue.reporterId ?? "",
+            plannedStart: issue?.plannedStart !== null ? moment(issue?.plannedStart) : "",
+            originalEstimate: issue.originalEstimate ?? "",
+            remainingEstimate: issue.remainingEstimate ?? "",
+            estimateEffort: issue.estimateEffort ?? "",
+            complexity: issue.complexity ?? "",
+            adjustedVP: issue.adjustedVP ?? "",
+            dueDate: issue?.dueDate !== null ? moment(issue?.dueDate) : "",
+            labelsId: issue.labelsId ?? "",
+            sprint: issue.sprint ?? "",
+            functionId: issue.functionId ?? "",
+            testcaseId: issue.testcaseId ?? "",
+            functionCategory: issue.functionCategory ?? "",
+            linkedIssuesId: issue.linkedIssuesId ?? "",
+            //mockIssueId: issue ?? '',  // discus
+            epicLink: issue.epicLink ?? "",
+            closedDate: issue?.closedDate !== null ? moment(issue?.closedDate) : "",
+            securityLevel: issue.securityLevel ?? "",
+            defectTypeId: issue.defectTypeId ?? "",
+            causeCategoryId: issue.causeCategoryId ?? "",
+            leakCauseId: issue.leakCauseId ?? "",
+            dueTime: issue.dueTime ?? "",
+            units: issue.units ?? "",
+            percentDone: issue.percentDone ?? "",
+            // comment: issue?.comment ?? "", // 
+        });
+    }
+
     useEffect(() => {
+        handleGetIssueById();
         handleGetItemsIssue();
     }, [props?.open]);
 
@@ -198,11 +254,9 @@ const CreateIssue = (props) => {
         });
     };
 
-    const [fileList, setFileList] = useState([]);
     const handleFileChange = (info) => {
         let fileList = [...info.fileList];
-        fileList = fileList.slice(-3); 
-
+        fileList = fileList.slice(-3);
         setFileList(fileList);
     };
 
@@ -266,7 +320,6 @@ const CreateIssue = (props) => {
         const formDataRequest = new FormData();
         formDataRequest.append("userId", userId);
 
-        // formDataRequest.append("attachFile", formData.attachments);
         fileList.forEach((file) => {
             formDataRequest.append('attachFiles', file.originFileObj);
         });
@@ -397,7 +450,7 @@ const CreateIssue = (props) => {
         formDataRequest.append("units", formData.units);
         formDataRequest.append("percentDone", formData.percentDone);
         //#endregion
-        console.log("formDataRequest ", formDataRequest);
+        console.log('formDAta ', formData);
         if (formValidate()) {
             const result = await AddIssueService(formDataRequest);
             handleReset();
@@ -411,7 +464,7 @@ const CreateIssue = (props) => {
     const Header = () => {
         return (
             <div className="modal-create-issue-header">
-                <h2 className="create-issue-text">Create Issue</h2>
+                <h2 className="create-issue-text">Clone Issue</h2>
                 <Button
                     style={{ background: "#ebedf0", border: "none" }}
                     icon={<SettingOutlined />}
@@ -435,7 +488,7 @@ const CreateIssue = (props) => {
                         handleCreateIssue();
                     }}
                 >
-                    Create
+                    Clone
                 </Button>
                 <Button
                     onClick={() => {
@@ -472,16 +525,7 @@ const CreateIssue = (props) => {
                 colon={false}
                 className="form-create-issue"
             >
-                <p
-                    style={{
-                        fontSize: 12,
-                        color: "#6b778c",
-                        margin: "-10px 0 10px",
-                    }}
-                >
-                    All fields marked with an asterisk (
-                    <span style={colorRequired}>*</span>) are required
-                </p>
+
                 <Form.Item
                     label={
                         <label className="create-issue-item-label">
@@ -720,7 +764,7 @@ const CreateIssue = (props) => {
                         </p>
                     }
                 >
-                <ReactQuill className="quill-editor"  value={formData?.descriptionTranslate} onChange={(e)=>handleOnChange('descriptionTranslate', e)}  />
+                    <ReactQuill className="quill-editor" value={formData?.descriptionTranslate} onChange={(e)=>handleOnChange('descriptionTranslate', e)}  />
                 </Form.Item>
 
                 <Form.Item
@@ -924,7 +968,7 @@ const CreateIssue = (props) => {
                         </p>
                     }
                 >
-                    <ReactQuill className="quill-editor"  value={formData?.causeAnalysis} onChange={(e)=>handleOnChange('causeAnalysis', e)}  />
+                    <ReactQuill className="quill-editor" value={formData?.causeAnalysis} onChange={(e)=>handleOnChange('causeAnalysis', e)}  />
                 </Form.Item>
 
                 <Form.Item
@@ -945,7 +989,7 @@ const CreateIssue = (props) => {
                         </p>
                     }
                 >
-                    <ReactQuill className="quill-editor"  value={formData?.causeAnalysisTranslate} onChange={(e)=>handleOnChange('causeAnalysisTranslate', e)}  />
+                    <ReactQuill className="quill-editor" value={formData?.causeAnalysisTranslate} onChange={(e)=>handleOnChange('causeAnalysisTranslate', e)}  />
                 </Form.Item>
 
                 <Form.Item
@@ -966,7 +1010,7 @@ const CreateIssue = (props) => {
                         </p>
                     }
                 >
-                    <ReactQuill className="quill-editor"  value={formData?.correctAction} onChange={(e)=>handleOnChange('correctAction', e)}  />
+                    <ReactQuill className="quill-editor" value={formData?.correctAction} onChange={(e)=>handleOnChange('correctAction', e)}  />
                 </Form.Item>
 
                 <Form.Item
@@ -988,7 +1032,7 @@ const CreateIssue = (props) => {
                         </p>
                     }
                 >
-                    <ReactQuill className="quill-editor"  value={formData?.correctActionTranslate} onChange={(e)=>handleOnChange('correctActionTranslate', e)}  />
+                    <ReactQuill className="quill-editor" value={formData?.correctActionTranslate} onChange={(e)=>handleOnChange('correctActionTranslate', e)}  />
                 </Form.Item>
 
                 <Form.Item
@@ -1037,7 +1081,7 @@ const CreateIssue = (props) => {
                         </p>
                     }
                 >
-                    <ReactQuill className="quill-editor" value={formData?.environment} onChange={(e)=>handleOnChange('environment', e)}/>
+                    <ReactQuill className="quill-editor" value={formData?.environment} onChange={(e)=>handleOnChange('environment', e)}  />
                 </Form.Item>
 
                 <Form.Item
@@ -1934,4 +1978,4 @@ const CreateIssue = (props) => {
     );
 };
 
-export default CreateIssue;
+export default CloneIssue;

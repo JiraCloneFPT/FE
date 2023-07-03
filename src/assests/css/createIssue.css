@@ -1,3 +1,10 @@
+
+.quill-editor{
+    height: 100px;
+    margin-bottom: 50px;
+    max-width: 500px;
+}
+
 .modal-create-issue .ant-modal-content{
     padding: 0 !important;
 }

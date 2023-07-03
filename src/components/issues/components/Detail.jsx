@@ -4,6 +4,7 @@ import {
     DownOutlined,
     EditOutlined,
     CommentOutlined,
+    CopyOutlined
 } from "@ant-design/icons";
 import React, { useContext } from 'react';
 import { Button, Dropdown, Space, message, Menu, Form, Input, } from "antd";
@@ -14,6 +15,7 @@ import { useParams } from "react-router-dom";
 import Details from "./Details";
 import ResolveIssue from "./ResolveIssue";
 import EditIssue from "./EditIssue";
+import CloneIssue from "./CloneIssue";
 import CancelIssue from "./CancelIssue";
 import CloseIssue from "./CloseIssue";
 import { GetIssueService, InProgressIssueService, ReopenedIssueService } from "../../../services/IssueService";
@@ -45,6 +47,11 @@ export default function Detail() {
     const [openEditIssueModal, setOpenEditIssueModal] = useState(false);
     const handleShowEditIssueModal = () => {
         setOpenEditIssueModal(true);
+    };
+
+    const [openCloneIssueModal, setOpenCloneIssueModal] = useState(false);
+    const handleShowCloneIssueModal = () => {
+        setOpenCloneIssueModal(true);
     };
 
     const [openCancelIssueModal, setOpenCancelIssueModal] = useState(false);
@@ -195,6 +202,11 @@ export default function Detail() {
                 open={openEditIssueModal}
                 setOpen={setOpenEditIssueModal}
             />
+            <CloneIssue
+                idIssue={id}
+                open={openCloneIssueModal}
+                setOpen={setOpenCloneIssueModal}
+            />
             <CancelIssue
                 idIssue={id}
                 open={openCancelIssueModal}
@@ -308,6 +320,14 @@ export default function Detail() {
                                 </Space>
                             </a>
                         </Dropdown>
+                        <Button
+                            type="default"
+                            style={{ backgroundColor: "#ECEDF0" }}
+                            icon={<CopyOutlined />}
+                            onClick={handleShowCloneIssueModal}
+                        >
+                            Clone Issue
+                        </Button>
                     </Space>
                 </Col>
                 <Col span={2}>

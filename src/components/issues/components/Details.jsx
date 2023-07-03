@@ -175,7 +175,10 @@ const details = (issue) => {
 const description = (issue) => {
     return (
         <>
-            <p>{issue?.description}</p>
+            {(issue?.description?.includes("<p>")) ?
+                <div dangerouslySetInnerHTML={{ __html: issue?.description }} ></div>
+                :
+                <> {issue?.description} </>}
         </>
     );
 };
@@ -200,8 +203,8 @@ const attachments = () => {
 
     const handleFileChange = async (info) => {
         let fileList = await [...info.fileList];
-        fileList = fileList.slice(-3); 
-        if(fileList.length > 0){
+        fileList = fileList.slice(-3);
+        if (fileList.length > 0) {
             setIsShowSubmit(true)
         }
         setFileList(fileList);
@@ -216,7 +219,7 @@ const attachments = () => {
         });
 
         const result = await AddFilesService(formDataRequest);
-        if(result?.code === 200){
+        if (result?.code === 200) {
             setIsRefresh(!isRefresh)
             setFileList()
             setIsShowSubmit(false)
@@ -231,7 +234,7 @@ const attachments = () => {
             cancelText: 'No',
             onOk: async () => {
                 const result = await DeleteFileService(fileId);
-                if(result?.code === 200){
+                if (result?.code === 200) {
                     successNotification(messageIssue03, messageIssue04(""));
                     setIsRefresh(!isRefresh)
                 }
@@ -260,18 +263,18 @@ const attachments = () => {
                                     {file?.name}
                                 </a>
                             )}
-                            <span style={{margin: 10}}> <a  href={`data:application/octet-stream;base64,${file?.content}`} download={file?.name}><DownloadOutlined/></a></span>
-                            <span> <DeleteOutlined onClick={() => { handleDeleteFile(file?.id) }} style={{ color: 'red'}} /> </span>
+                            <span style={{ margin: 10 }}> <a href={`data:application/octet-stream;base64,${file?.content}`} download={file?.name}><DownloadOutlined /></a></span>
+                            <span> <DeleteOutlined onClick={() => { handleDeleteFile(file?.id) }} style={{ color: 'red' }} /> </span>
                         </Card>
                     ))}
                 </div>
             </div>
-            <Upload.Dragger 
-                multiple 
-                fileList={fileList ? fileList : []} 
-                className="attachments" 
-                onChange={ async (info) =>  { await handleFileChange(info)}} 
-                onRemove={() => { setIsShowSubmit(false) }} 
+            <Upload.Dragger
+                multiple
+                fileList={fileList ? fileList : []}
+                className="attachments"
+                onChange={async (info) => { await handleFileChange(info) }}
+                onRemove={() => { setIsShowSubmit(false) }}
                 style={{ marginTop: 20 }}>
                 <p className="ant-upload-drag-icon">
                     <UploadOutlined />
